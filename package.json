@@ -9,13 +9,36 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
-  "main": "./extension.js",
+	"activationEvents": [
+		"onLanguage:pascal"
+	],
+  "main": "./src/extension.js",
   "contributes": {
+    "languages": [
+      {
+				"id": "pascal",
+				"extensions": [
+					".pas",
+					".pp",
+					".inc",
+					".lpr"
+				]
+			}],
     "commands": [{
       "command": "castle-game-engine.helloWorld",
       "title": "Hello World"
-    }]
+    }],
+		"configuration": {
+			"type": "object",
+			"title": "Pascal Language Server",
+			"properties": {
+				"castleGameEngine.enginePath": {
+					"type": "string",
+					"default": "",
+					"description": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (CASTLE_ENGINE_PATH)."
+				}
+			}
+		}    
   },
   "scripts": {
     "lint": "eslint .",
