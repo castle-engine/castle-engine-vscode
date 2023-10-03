@@ -10,9 +10,20 @@ const vscode = require('vscode');
  */
 function activate(context) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "castle-game-engine" is now active!');
+
+	let enginePath = vscode.workspace.getConfiguration('castleGameEngine').get('enginePath');
+	console.log(`Engine path from configuration: ${enginePath}`);
+
+	if (enginePath.trim() === '') {
+		// try to get form environment variable 
+		if (process.env.CASTLE_ENGINE_PATH) {
+			enginePath = process.env.CASTLE_ENGINE_PATH
+			console.log(`Engine path from environment: ${enginePath}`);
+		}
+	}
+
+	
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
