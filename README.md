@@ -1,6 +1,6 @@
-# castle-game-engine README
+# castle-game-engine
 
-This is the README for your extension "castle-game-engine". After writing up a brief description, we recommend including the following sections.
+Castle Engine extension for Visual Studio Code.
 
 ## Features
 
