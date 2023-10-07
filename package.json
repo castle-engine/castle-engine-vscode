@@ -35,11 +35,30 @@
 			"properties": {
 				"castleGameEngine.enginePath": {
 					"type": "string",
-					"default": "",
-					"description": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (CASTLE_ENGINE_PATH)."
-				}
-			}
-		}    
+					"markdowndescription": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (`CASTLE_ENGINE_PATH`)."
+				},
+				"castleGameEngine.pascalLanguageServer.PP": {
+					"type": "string",
+					"markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`)."
+				},
+				"castleGameEngine.pascalLanguageServer.FPCDIR": {
+					"type": "string",
+					"markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`)."
+				},
+				"castleGameEngine.pascalLanguageServer.LAZARUSDIR": {
+					"type": "string",
+					"markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`)."
+				},
+				"castleGameEngine.pascalLanguageServer.FPCTARGET": {
+					"type": "string",
+					"markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for autodetection."
+				},
+				"castleGameEngine.pascalLanguageServer.FPCTARGETCPU": {
+					"type": "string",
+					"markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for autodetection."
+			  }
+		  }
+    }    
   },
   "scripts": {
     "lint": "eslint .",
