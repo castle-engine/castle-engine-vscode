@@ -1,6 +1,6 @@
-# castle-game-engine
+# Castle Game Engine extension 
 
-Castle Engine extension for Visual Studio Code.
+Castle Game Engine extension for Visual Studio Code.
 
 ## Features
 
