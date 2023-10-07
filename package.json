@@ -10,7 +10,8 @@
     "Other"
   ],
 	"activationEvents": [
-		"onLanguage:pascal"
+		"onLanguage:pascal",
+    "onStartupFinished"
 	],
   "main": "./src/extension.js",
   "contributes": {
