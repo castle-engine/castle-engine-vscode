@@ -2,9 +2,38 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
+const fs = require('fs');
+const path = require('path');
+const vscodelangclient = require('vscode-languageclient');
+
+let client;
+
+/**
+ * @param {string} envVarName
+ * @param {string} defaultValue
+ */
+function getEnvSetting(envVarName, defaultValue) {
+	// First check configuration
+	let varValue = vscode.workspace.getConfiguration('castleGameEngine.pascalLanguageServer').get(envVarName);
+
+	if (varValue.trim() === '')	{
+		// Then check enviremont variable
+		if (process.env.envVarName) {
+			varValue = process.env.envVarName;
+		}
+	}
+
+	// At least try default value
+ 	if (varValue.trim() === '')
+	{
+		varValue = defaultValue;
+	}
+
+	return varValue;
+}
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -20,10 +49,70 @@ function activate(context) {
 		if (process.env.CASTLE_ENGINE_PATH) {
 			enginePath = process.env.CASTLE_ENGINE_PATH
 			console.log(`Engine path from environment: ${enginePath}`);
+		} else {
+			vscode.window.showErrorMessage('Castle Game Engine not set, correct the configuration or set CASTLE_ENGINE_PATH environment variable.');
+			return;
 		}
 	}
 
-	
+	// Check castle engine folder exists
+	try {
+		fs.accessSync(enginePath, fs.constants.F_OK)
+	}
+	catch (err)
+	{
+		vscode.window.showErrorMessage(`Castle Game Engine not found, correct the configuration or set CASTLE_ENGINE_PATH environment variable. ${err}`);
+		return;
+	}
+
+	// find pascal server
+	let pascalServerExec = enginePath + path.sep + 'bin' + path.sep + 'pasls';
+
+
+	try {
+		fs.accessSync(pascalServerExec, fs.constants.X_OK)
+		console.log('Found Pascal Language Server: ' + pascalServerExec);
+	}
+	catch (err)
+	{
+		vscode.window.showErrorMessage(`Pascal Language Server not availble. ${err}`);
+		return;
+	}
+
+	let enviromentForPascalServer = {};
+
+	enviromentForPascalServer['PP'] = getEnvSetting('PP', '/home/and3md/fpc/fixes32/fpc/bin/x86_64-linux/fpc.sh');
+	enviromentForPascalServer['FPCDIR'] = getEnvSetting('FPCDIR', '/home/and3md/fpc/fixes32/fpcsrc/');
+	enviromentForPascalServer['LAZARUSDIR'] = getEnvSetting('LAZARUSDIR', '/home/and3md/fpc/fixes32/lazarus');
+	enviromentForPascalServer['FPCTARGET'] = getEnvSetting('FPCTARGET', 'linux');
+	enviromentForPascalServer['FPCTARGETCPU'] = getEnvSetting('FPCTARGETCPU', 'x86_64');
+
+
+	console.log(enviromentForPascalServer);
+
+	let run = {
+		command: pascalServerExec,
+		options: {
+			env: enviromentForPascalServer
+		}
+	};
+
+	let debug = run;
+	let serverOptions = {
+		run: run,
+		debug: debug
+	};
+
+	let clientOptions = {
+		documentSelector: [
+			{ scheme: 'file', language: 'pascal' },
+			{ scheme: 'untitled', language: 'pascal' }
+		]
+	}
+
+	client = new vscodelangclient.LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
+	client.start();
+	console.log(client);
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
@@ -36,10 +125,12 @@ function activate(context) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	console.log('all done');
 }
 
 // This method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
 	activate,
