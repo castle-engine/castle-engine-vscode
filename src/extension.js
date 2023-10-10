@@ -38,8 +38,7 @@ function getEnvSetting(envVarName, defaultValue) {
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-
-	console.log('Congratulations, your extension "castle-game-engine" is now active!');
+	console.log('Castle Engine Extension - Activate - START');
 
 	let enginePath = vscode.workspace.getConfiguration('castleGameEngine').get('enginePath');
 	console.log(`Engine path from configuration: ${enginePath}`);
@@ -141,7 +140,7 @@ function activate(context) {
 
 	context.subscriptions.push(disposable);
 
-	console.log('all done');
+	console.log('Castle Engine Extension - Activate - DONE');
 }
 
 // This method is called when your extension is deactivated
