@@ -90,7 +90,18 @@ function activate(context) {
 		fpcDefaultTarget = 'windows'
 	console.log('fpcDefaultTarget', fpcDefaultTarget);
 	enviromentForPascalServer['FPCTARGET'] = getEnvSetting('FPCTARGET', fpcDefaultTarget);
-	enviromentForPascalServer['FPCTARGETCPU'] = getEnvSetting('FPCTARGETCPU', 'x86_64');
+	// try to detect default architecture
+	let fpcDefaultArch = process.arch;
+	if (fpcDefaultArch === 'x64')
+		fpcDefaultArch = 'x86_64';
+	else if (fpcDefaultArch === 'arm64')
+		fpcDefaultArch = 'aarch64';
+	else if (fpcDefaultArch === 'x32')
+		fpcDefaultArch = 'i386';
+	else
+		fpcDefaultArch = '';
+	console.log('fpcDefaultArch', fpcDefaultArch);
+	enviromentForPascalServer['FPCTARGETCPU'] = getEnvSetting('FPCTARGETCPU', 'fpcDefaultArch');
 
 	console.log(enviromentForPascalServer);
 
