@@ -85,7 +85,8 @@ function activate(context) {
 	enviromentForPascalServer['FPCDIR'] = getEnvSetting('FPCDIR', '/home/and3md/fpc/fixes32/fpcsrc/');
 	enviromentForPascalServer['LAZARUSDIR'] = getEnvSetting('LAZARUSDIR', '/home/and3md/fpc/fixes32/lazarus');
 	let fpcDefaultTarget = process.platform;
-	if (fpcDefaultTarget === 'win32')
+	// win32 can be 32 or 64 bit windows
+	if (fpcDefaultTarget === 'win32') 
 		fpcDefaultTarget = 'windows'
 	console.log('fpcDefaultTarget', fpcDefaultTarget);
 	enviromentForPascalServer['FPCTARGET'] = getEnvSetting('FPCTARGET', fpcDefaultTarget);
