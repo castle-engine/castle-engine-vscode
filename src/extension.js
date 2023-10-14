@@ -56,6 +56,42 @@ async function executeCommandAndReturnValue(command) {
 	}
 }
 
+/**
+ * 
+ * @param {string} fpcCompilerExec path to fpc
+ * @returns path to fpc sources
+ */
+async function tryToFindFpcSources(fpcCompilerExec) {
+	if (fpcCompilerExec === '')
+		return '';
+
+	if (process.platform === 'linux')
+	{
+		// check current fpc is not done by fpcupdeluxe
+		let sourcesDir = fpcCompilerExec;
+		let index = sourcesDir.indexOf('fpc/bin');
+		if (index > 0) 
+		{
+			sourcesDir = sourcesDir.substring(0, index) + 'fpcsrc';
+			try {
+				fs.accessSync(sourcesDir, fs.constants.F_OK)
+				fs.accessSync(sourcesDir + '/fpmake.pp', fs.constants.F_OK)
+				fs.accessSync(sourcesDir + '/compiler', fs.constants.F_OK)
+				fs.accessSync(sourcesDir + '/packages', fs.constants.F_OK)
+				console.log('Found fpc sources:', sourcesDir);
+				return sourcesDir;
+			}
+			catch (err)
+			{
+				// do nothing test another case
+			}
+		}
+
+		// TODO: check default linux folders
+	}
+	
+}
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 /**
@@ -123,7 +159,13 @@ async function activate(context) {
 	let realCompilerPath = await executeCommandAndReturnValue(enviromentForPascalServer['PP'] + ' -PB');
 	console.log('realCompilerPath', realCompilerPath);
 
-	enviromentForPascalServer['FPCDIR'] = getEnvSetting('FPCDIR', '/home/and3md/fpc/fixes32/fpcsrc/');
+	enviromentForPascalServer['FPCDIR'] = getEnvSetting('FPCDIR', '');
+
+	if (enviromentForPascalServer['FPCDIR'] === '') {
+		// try to find fpc sources
+		enviromentForPascalServer['FPCDIR'] = await tryToFindFpcSources(realCompilerPath);
+	}
+
 	enviromentForPascalServer['LAZARUSDIR'] = getEnvSetting('LAZARUSDIR', '/home/and3md/fpc/fixes32/lazarus');
 	let fpcDefaultTarget = process.platform;
 	// win32 can be 32 or 64 bit windows
