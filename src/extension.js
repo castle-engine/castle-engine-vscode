@@ -6,6 +6,10 @@ const fs = require('fs');
 const path = require('path');
 const vscodelangclient = require('vscode-languageclient');
 
+// https://stackoverflow.com/questions/30763496/how-to-promisify-nodes-child-process-exec-and-child-process-execfile-functions
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
 let client;
 
 /**
@@ -32,12 +36,32 @@ function getEnvSetting(envVarName, defaultValue) {
 	return varValue;
 }
 
+/**
+ * @param {string} command command to run
+ * @returns {string} stdout or empty string on error
+ */
+async function executeCommandAndReturnValue(command) {
+	let result = '';
+	try {
+		const { stdout, stderr } = await exec(command);
+		console.log('stderr:', stderr);
+
+    	result = stdout.trim();
+		console.log('PPdef1 ', result);
+		return result;
+
+	} catch (e) {
+		vscode.window.showErrorMessage(`Error: ${e.message}`);
+		return result;
+	}
+}
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 /**
  * @param {vscode.ExtensionContext} context
  */
-function activate(context) {
+async function activate(context) {
 	console.log('Castle Engine Extension - Activate - START');
 
 	let enginePath = vscode.workspace.getConfiguration('castleGameEngine').get('enginePath');
@@ -80,7 +104,12 @@ function activate(context) {
 
 	let enviromentForPascalServer = {};
 
-	enviromentForPascalServer['PP'] = getEnvSetting('PP', '/home/and3md/fpc/fixes32/fpc/bin/x86_64-linux/fpc.sh');
+	let buildTool = enginePath + path.sep + 'bin' + path.sep + 'castle-engine';
+
+	let defaultCompilerExePath = await executeCommandAndReturnValue(buildTool + ' output-environment fpc-exe');
+	vscode.window.showInformationMessage(`Default path to fpc compiler: ${defaultCompilerExePath}`);
+
+	enviromentForPascalServer['PP'] = getEnvSetting('PP', defaultCompilerExePath);
 	enviromentForPascalServer['FPCDIR'] = getEnvSetting('FPCDIR', '/home/and3md/fpc/fixes32/fpcsrc/');
 	enviromentForPascalServer['LAZARUSDIR'] = getEnvSetting('LAZARUSDIR', '/home/and3md/fpc/fixes32/lazarus');
 	let fpcDefaultTarget = process.platform;
