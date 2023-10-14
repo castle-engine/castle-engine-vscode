@@ -110,6 +110,19 @@ async function activate(context) {
 	vscode.window.showInformationMessage(`Default path to fpc compiler: ${defaultCompilerExePath}`);
 
 	enviromentForPascalServer['PP'] = getEnvSetting('PP', defaultCompilerExePath);
+	// Check compiler really exists and can be executed
+	try {
+		fs.accessSync(enviromentForPascalServer['PP'], fs.constants.X_OK)
+	}
+	catch (err)
+	{
+		vscode.window.showErrorMessage(`FPC compiler executable can't be executed. ${err}`);
+		return;
+	}
+
+	let realCompilerPath = await executeCommandAndReturnValue(enviromentForPascalServer['PP'] + ' -PB');
+	console.log('realCompilerPath', realCompilerPath);
+
 	enviromentForPascalServer['FPCDIR'] = getEnvSetting('FPCDIR', '/home/and3md/fpc/fixes32/fpcsrc/');
 	enviromentForPascalServer['LAZARUSDIR'] = getEnvSetting('LAZARUSDIR', '/home/and3md/fpc/fixes32/lazarus');
 	let fpcDefaultTarget = process.platform;
