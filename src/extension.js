@@ -59,7 +59,7 @@ async function executeCommandAndReturnValue(command) {
 /**
  * 
  * @param {string} fpcCompilerExec path to fpc
- * @returns path to fpc sources
+ * @returns {string} path to fpc sources
  */
 async function tryToFindFpcSources(fpcCompilerExec) {
 	if (fpcCompilerExec === '')
@@ -89,10 +89,49 @@ async function tryToFindFpcSources(fpcCompilerExec) {
 
 		// TODO: check default linux folders
 	}
+	// TODO: another OSes
+}
+
+
+/**
+ * 
+ * @param {string} fpcCompilerExec path to fpc
+ * @returns path to lazarus sources
+ */
+async function tryToFindLazarusSources(fpcCompilerExec) {
+	if (fpcCompilerExec === '')
+		return '';
+
+	if (process.platform === 'linux')
+	{
+		// check current fpc is not done by fpcupdeluxe then lazarus is in lazarus subfolder
+		let sourcesDir = fpcCompilerExec;
+		let index = sourcesDir.indexOf('fpc/bin');
+		if (index > 0) 
+		{
+			sourcesDir = sourcesDir.substring(0, index) + 'lazarus';
+			try {
+				fs.accessSync(sourcesDir, fs.constants.F_OK)
+				fs.accessSync(sourcesDir + '/lazarus', fs.constants.X_OK)
+				fs.accessSync(sourcesDir + '/lcl', fs.constants.F_OK)
+				fs.accessSync(sourcesDir + '/fpmake.pp', fs.constants.F_OK)
+				fs.accessSync(sourcesDir + '/components', fs.constants.F_OK)
+				console.log('Found lazarus sources:', sourcesDir);
+				return sourcesDir;
+			}
+			catch (err)
+			{
+				// do nothing test another case
+			}
+		}
+
+		// TODO: check default linux folders
+	}
 
 	// TODO: another OSes
 	
 }
+
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -168,7 +207,12 @@ async function activate(context) {
 		enviromentForPascalServer['FPCDIR'] = await tryToFindFpcSources(realCompilerPath);
 	}
 
-	enviromentForPascalServer['LAZARUSDIR'] = getEnvSetting('LAZARUSDIR', '/home/and3md/fpc/fixes32/lazarus');
+	enviromentForPascalServer['LAZARUSDIR'] = getEnvSetting('LAZARUSDIR', '');
+
+	if (enviromentForPascalServer['LAZARUSDIR'] === '') {
+		enviromentForPascalServer['LAZARUSDIR'] = await tryToFindLazarusSources(realCompilerPath);
+	}
+
 	let fpcDefaultTarget = process.platform;
 	// win32 can be 32 or 64 bit windows
 	if (fpcDefaultTarget === 'win32') 
