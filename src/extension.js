@@ -89,6 +89,8 @@ async function tryToFindFpcSources(fpcCompilerExec) {
 
 		// TODO: check default linux folders
 	}
+
+	// TODO: another OSes
 	
 }
 
