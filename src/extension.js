@@ -20,7 +20,7 @@ function getEnvSetting(envVarName, defaultValue) {
 	// First check configuration
 	let varValue = vscode.workspace.getConfiguration('castleGameEngine.pascalLanguageServer').get(envVarName);
 
-	if (varValue.trim() === '')	{
+	if (varValue.trim() === '') {
 		// Then check enviremont variable
 		if (process.env.envVarName) {
 			varValue = process.env.envVarName;
@@ -28,8 +28,7 @@ function getEnvSetting(envVarName, defaultValue) {
 	}
 
 	// At least try default value
- 	if (varValue.trim() === '')
-	{
+	if (varValue.trim() === '') {
 		varValue = defaultValue;
 	}
 
@@ -46,7 +45,7 @@ async function executeCommandAndReturnValue(command) {
 		const { stdout, stderr } = await exec(command);
 		console.log('stderr:', stderr);
 
-    	result = stdout.trim();
+		result = stdout.trim();
 		console.log('PPdef1 ', result);
 		return result;
 
@@ -70,8 +69,7 @@ function isCompilerSourcesFolder(folder) {
 		fs.accessSync(folder + '/packages', fs.constants.F_OK)
 		return true;
 	}
-	catch (err)
-	{
+	catch (err) {
 		return false;
 	}
 }
@@ -85,16 +83,13 @@ async function tryToFindFpcSources(fpcCompilerExec) {
 	if (fpcCompilerExec === '')
 		return '';
 
-	if (process.platform === 'linux')
-	{
+	if (process.platform === 'linux') {
 		// check current fpc is not done by fpcupdeluxe
 		let sourcesDir = fpcCompilerExec;
 		let index = sourcesDir.indexOf('fpc/bin');
-		if (index > 0) 
-		{
+		if (index > 0) {
 			sourcesDir = sourcesDir.substring(0, index) + 'fpcsrc';
-			if (isCompilerSourcesFolder(sourcesDir))
-			{
+			if (isCompilerSourcesFolder(sourcesDir)) {
 				console.log('Found fpc sources:', sourcesDir);
 				return sourcesDir;
 			}
@@ -106,8 +101,7 @@ async function tryToFindFpcSources(fpcCompilerExec) {
 		let compilerVersion = await executeCommandAndReturnValue(fpcCompilerExec + ' -iV');
 		console.log('Compiler Version', compilerVersion);
 		sourcesDir = '/usr/share/fpcsrc/' + compilerVersion + '/';
-		if (isCompilerSourcesFolder(sourcesDir))
-		{
+		if (isCompilerSourcesFolder(sourcesDir)) {
 			console.log('Found lazarus sources:', sourcesDir);
 			return sourcesDir;
 		}
@@ -132,8 +126,7 @@ function isLazarusSourcesFolder(folder) {
 		fs.accessSync(folder + '/components', fs.constants.F_OK)
 		return true;
 	}
-	catch (err)
-	{
+	catch (err) {
 		return false;
 	}
 }
@@ -145,26 +138,23 @@ function isLazarusSourcesFolder(folder) {
  * @returns 
  */
 function findFullLazarusSourcesFolder(folder) {
-	
+
 	try {
 		fs.accessSync(folder, fs.constants.O_DIRECTORY)
 	}
-	catch (err)
-	{
+	catch (err) {
 		return '';
 	}
 
 	try {
 		const items = fs.readdirSync(folder);
-		for( const item of items ) {
-			if (isLazarusSourcesFolder(folder+item))
-			{
-				return folder+item;
+		for (const item of items) {
+			if (isLazarusSourcesFolder(folder + item)) {
+				return folder + item;
 			}
 		}
 	}
-	catch (err)
-	{
+	catch (err) {
 		return '';
 	}
 }
@@ -178,13 +168,11 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 	if (fpcCompilerExec === '')
 		return '';
 
-	if (process.platform === 'linux')
-	{
+	if (process.platform === 'linux') {
 		// check current fpc is not done by fpcupdeluxe then lazarus is in lazarus subfolder
 		let sourcesDir = fpcCompilerExec;
 		let index = sourcesDir.indexOf('fpc/bin');
-		if (index > 0) 
-		{
+		if (index > 0) {
 			/*
 			sourcesDir = sourcesDir.substring(0, index) + 'lazarus';
 			try {
@@ -212,7 +200,7 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 		return sourcesDir;
 	}
 	// TODO: another OSes
-	
+
 }
 
 
@@ -242,8 +230,7 @@ async function activate(context) {
 	try {
 		fs.accessSync(enginePath, fs.constants.F_OK)
 	}
-	catch (err)
-	{
+	catch (err) {
 		vscode.window.showErrorMessage(`Castle Game Engine not found, correct the configuration or set CASTLE_ENGINE_PATH environment variable. ${err}`);
 		return;
 	}
@@ -256,8 +243,7 @@ async function activate(context) {
 		fs.accessSync(pascalServerExec, fs.constants.X_OK)
 		console.log('Found Pascal Language Server: ' + pascalServerExec);
 	}
-	catch (err)
-	{
+	catch (err) {
 		vscode.window.showErrorMessage(`Pascal Language Server not availble. ${err}`);
 		return;
 	}
@@ -274,8 +260,7 @@ async function activate(context) {
 	try {
 		fs.accessSync(enviromentForPascalServer['PP'], fs.constants.X_OK)
 	}
-	catch (err)
-	{
+	catch (err) {
 		vscode.window.showErrorMessage(`FPC compiler executable can't be executed. ${err}`);
 		return;
 	}
@@ -298,7 +283,7 @@ async function activate(context) {
 
 	let fpcDefaultTarget = process.platform;
 	// win32 can be 32 or 64 bit windows
-	if (fpcDefaultTarget === 'win32') 
+	if (fpcDefaultTarget === 'win32')
 		fpcDefaultTarget = 'windows'
 	console.log('fpcDefaultTarget', fpcDefaultTarget);
 	enviromentForPascalServer['FPCTARGET'] = getEnvSetting('FPCTARGET', fpcDefaultTarget);
