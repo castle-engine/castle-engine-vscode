@@ -118,6 +118,37 @@ async function tryToFindFpcSources(fpcCompilerExec) {
 	// TODO: another OSes
 }
 
+/**
+ * Checks given folder is lazarus sources folder
+ * @param {string} folder directory to check
+ * @retval true looks like a source folder
+ * @retval false does not look like lazarus source folder 
+ */
+function isLazarusSourcesFolder(folder) {
+	try {
+		fs.accessSync(folder, fs.constants.F_OK)
+		fs.accessSync(folder + '/lcl', fs.constants.F_OK)
+		fs.accessSync(folder + '/ide', fs.constants.F_OK)
+		fs.accessSync(folder + '/components', fs.constants.F_OK)
+		return true;
+	}
+	catch (err)
+	{
+		return false;
+	}
+}
+
+function iteratefolderForLazarusSources(folder) {
+
+	const items = fs.readdirSync(folder);
+	for( const item of items ) {
+		if (isLazarusSourcesFolder(folder+item))
+		{
+			return folder+item;
+		}
+	}
+	return '';
+}
 
 /**
  * 
@@ -135,6 +166,7 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 		let index = sourcesDir.indexOf('fpc/bin');
 		if (index > 0) 
 		{
+			/*
 			sourcesDir = sourcesDir.substring(0, index) + 'lazarus';
 			try {
 				fs.accessSync(sourcesDir, fs.constants.F_OK)
@@ -149,11 +181,16 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 			{
 				// do nothing test another case
 			}
+			*/
 		}
 
-		// TODO: check default linux folders
+		// check default lazarus sources folder in debian
+		// path looks like /usr/lib/lazarus/2.2.6/
+		sourcesDir = iteratefolderForLazarusSources('/usr/lib/lazarus/');
+		if (sourcesDir !== '')
+			console.log('Found lazarus sources:', sourcesDir);
+		return sourcesDir;
 	}
-
 	// TODO: another OSes
 	
 }
