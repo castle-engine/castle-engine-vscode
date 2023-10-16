@@ -56,6 +56,26 @@ async function executeCommandAndReturnValue(command) {
 	}
 }
 
+
+/**
+ * Checks the folder is Free Pascal Compiller sources directory
+ * @param {string} folder directory to check
+ * @retval true looks like a sources folder
+ * @retval false does not look like fpc sources folder 
+ */
+function isCompilerSourcesFolder(folder) {
+	try {
+		fs.accessSync(folder, fs.constants.F_OK)
+		fs.accessSync(folder + '/compiler', fs.constants.F_OK)
+		fs.accessSync(folder + '/packages', fs.constants.F_OK)
+		return true;
+	}
+	catch (err)
+	{
+		return false;
+	}
+}
+
 /**
  * 
  * @param {string} fpcCompilerExec path to fpc
@@ -73,21 +93,27 @@ async function tryToFindFpcSources(fpcCompilerExec) {
 		if (index > 0) 
 		{
 			sourcesDir = sourcesDir.substring(0, index) + 'fpcsrc';
-			try {
-				fs.accessSync(sourcesDir, fs.constants.F_OK)
-				fs.accessSync(sourcesDir + '/fpmake.pp', fs.constants.F_OK)
-				fs.accessSync(sourcesDir + '/compiler', fs.constants.F_OK)
-				fs.accessSync(sourcesDir + '/packages', fs.constants.F_OK)
+			if (isCompilerSourcesFolder(sourcesDir))
+			{
 				console.log('Found fpc sources:', sourcesDir);
 				return sourcesDir;
 			}
-			catch (err)
-			{
-				// do nothing test another case
-			}
 		}
 
-		// TODO: check default linux folders
+		// when fpc-src is installed from fpc-src debian package
+		// sources are in directory like /usr/share/fpcsrc/3.2.2/
+		// https://packages.debian.org/bookworm/all/fpc-source-3.2.2/filelist
+		let compilerVersion = await executeCommandAndReturnValue(fpcCompilerExec + ' -iV');
+		console.log('Compiler Version', compilerVersion);
+		sourcesDir = '/usr/share/fpcsrc/' + compilerVersion + '/';
+		if (isCompilerSourcesFolder(sourcesDir))
+		{
+			console.log('Found lazarus sources:', sourcesDir);
+			return sourcesDir;
+		}
+
+		// sources not found
+		return '';
 	}
 	// TODO: another OSes
 }
