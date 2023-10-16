@@ -132,10 +132,10 @@ function isLazarusSourcesFolder(folder) {
 }
 
 /**
- * 
- * 
- * @param {*} folder 
- * @returns 
+ * This function gets directory like /usr/lib/lazarus/ and seraches for
+ * version directory e.g. /usr/lib/lazarus/2.2.6/
+ * @param {string} folder directory in which we want to check the subdirectories
+ * @returns Lazarus source directory or empty string
  */
 function findFullLazarusSourcesFolder(folder) {
 
@@ -194,6 +194,7 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 		// default lazarus sources folder path in debian
 		// looks like /usr/lib/lazarus/2.2.6/
 		// so we need iterate all items in that directory 
+		// https://packages.debian.org/bookworm/all/lazarus-src-2.2/filelist
 		sourcesDir = findFullLazarusSourcesFolder('/usr/lib/lazarus/');
 		if (sourcesDir !== '')
 			console.log('Found lazarus sources:', sourcesDir);
