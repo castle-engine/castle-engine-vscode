@@ -173,22 +173,12 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 		let sourcesDir = fpcCompilerExec;
 		let index = sourcesDir.indexOf('fpc/bin');
 		if (index > 0) {
-			/*
+
 			sourcesDir = sourcesDir.substring(0, index) + 'lazarus';
-			try {
-				fs.accessSync(sourcesDir, fs.constants.F_OK)
-				fs.accessSync(sourcesDir + '/lazarus', fs.constants.X_OK)
-				fs.accessSync(sourcesDir + '/lcl', fs.constants.F_OK)
-				fs.accessSync(sourcesDir + '/fpmake.pp', fs.constants.F_OK)
-				fs.accessSync(sourcesDir + '/components', fs.constants.F_OK)
+			if (isLazarusSourcesFolder(sourcesDir)) {
 				console.log('Found lazarus sources:', sourcesDir);
 				return sourcesDir;
 			}
-			catch (err)
-			{
-				// do nothing test another case
-			}
-			*/
 		}
 
 		// default lazarus sources folder path in debian
