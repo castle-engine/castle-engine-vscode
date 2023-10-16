@@ -138,16 +138,35 @@ function isLazarusSourcesFolder(folder) {
 	}
 }
 
-function iteratefolderForLazarusSources(folder) {
+/**
+ * 
+ * 
+ * @param {*} folder 
+ * @returns 
+ */
+function findFullLazarusSourcesFolder(folder) {
+	
+	try {
+		fs.accessSync(folder, fs.constants.O_DIRECTORY)
+	}
+	catch (err)
+	{
+		return '';
+	}
 
-	const items = fs.readdirSync(folder);
-	for( const item of items ) {
-		if (isLazarusSourcesFolder(folder+item))
-		{
-			return folder+item;
+	try {
+		const items = fs.readdirSync(folder);
+		for( const item of items ) {
+			if (isLazarusSourcesFolder(folder+item))
+			{
+				return folder+item;
+			}
 		}
 	}
-	return '';
+	catch (err)
+	{
+		return '';
+	}
 }
 
 /**
@@ -184,9 +203,10 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 			*/
 		}
 
-		// check default lazarus sources folder in debian
-		// path looks like /usr/lib/lazarus/2.2.6/
-		sourcesDir = iteratefolderForLazarusSources('/usr/lib/lazarus/');
+		// default lazarus sources folder path in debian
+		// looks like /usr/lib/lazarus/2.2.6/
+		// so we need iterate all items in that directory 
+		sourcesDir = findFullLazarusSourcesFolder('/usr/lib/lazarus/');
 		if (sourcesDir !== '')
 			console.log('Found lazarus sources:', sourcesDir);
 		return sourcesDir;
