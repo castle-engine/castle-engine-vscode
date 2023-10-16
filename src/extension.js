@@ -140,7 +140,7 @@ function isLazarusSourcesFolder(folder) {
 function findFullLazarusSourcesFolder(folder) {
 
 	try {
-		fs.accessSync(folder, fs.constants.O_DIRECTORY)
+		fs.accessSync(folder, fs.constants.R_OK)
 	}
 	catch (err) {
 		return '';
