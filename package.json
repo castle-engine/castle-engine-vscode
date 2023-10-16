@@ -7,8 +7,8 @@
   "version": "0.0.1",
   "homepage": "https://castle-engine.io",
   "repository": {
-	"type": "git",
-	"url": "https://github.com/castle-engine/castle-game-engine-vscode.git"
+    "type": "git",
+    "url": "https://github.com/castle-engine/castle-game-engine-vscode.git"
   },
   "license": "MIT",
   "engines": {
@@ -17,56 +17,59 @@
   "categories": [
     "Other"
   ],
-	"activationEvents": [
-		"onLanguage:pascal",
+  "activationEvents": [
+    "onLanguage:pascal",
     "onStartupFinished"
-	],
+  ],
   "main": "./src/extension.js",
   "contributes": {
     "languages": [
       {
-				"id": "pascal",
-				"extensions": [
-					".pas",
-					".pp",
-					".inc",
-					".lpr"
-				]
-			}],
-    "commands": [{
-      "command": "castle-game-engine.helloWorld",
-      "title": "Hello World"
-    }],
-		"configuration": {
-			"type": "object",
-			"title": "Pascal Language Server",
-			"properties": {
-				"castleGameEngine.enginePath": {
-					"type": "string",
-					"markdowndescription": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (`CASTLE_ENGINE_PATH`)."
-				},
-				"castleGameEngine.pascalLanguageServer.PP": {
-					"type": "string",
-					"markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`)."
-				},
-				"castleGameEngine.pascalLanguageServer.FPCDIR": {
-					"type": "string",
-					"markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`)."
-				},
-				"castleGameEngine.pascalLanguageServer.LAZARUSDIR": {
-					"type": "string",
-					"markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`)."
-				},
-				"castleGameEngine.pascalLanguageServer.FPCTARGET": {
-					"type": "string",
-					"markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for autodetection."
-				},
-				"castleGameEngine.pascalLanguageServer.FPCTARGETCPU": {
-					"type": "string",
-					"markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for autodetection."
-			  }
-		  }
-    }    
+        "id": "pascal",
+        "extensions": [
+          ".pas",
+          ".pp",
+          ".inc",
+          ".lpr"
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "castle-game-engine.helloWorld",
+        "title": "Hello World"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Pascal Language Server",
+      "properties": {
+        "castleGameEngine.enginePath": {
+          "type": "string",
+          "markdowndescription": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (`CASTLE_ENGINE_PATH`)."
+        },
+        "castleGameEngine.pascalLanguageServer.PP": {
+          "type": "string",
+          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`)."
+        },
+        "castleGameEngine.pascalLanguageServer.FPCDIR": {
+          "type": "string",
+          "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`)."
+        },
+        "castleGameEngine.pascalLanguageServer.LAZARUSDIR": {
+          "type": "string",
+          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`)."
+        },
+        "castleGameEngine.pascalLanguageServer.FPCTARGET": {
+          "type": "string",
+          "markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for autodetection."
+        },
+        "castleGameEngine.pascalLanguageServer.FPCTARGETCPU": {
+          "type": "string",
+          "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for autodetection."
+        }
+      }
+    }
   },
   "scripts": {
     "lint": "eslint .",
@@ -74,8 +77,8 @@
     "test": "node ./test/runTest.js"
   },
   "dependencies": {
-		"vscode-languageclient": "^9.0.0"
-	},
+    "vscode-languageclient": "^9.0.0"
+  },
   "devDependencies": {
     "@types/vscode": "^1.82.0",
     "@types/mocha": "^10.0.1",
@@ -87,7 +90,7 @@
     "@vscode/test-electron": "^2.3.4"
   },
   "extensionPack": [
-    "theangryepicbanana.language-pascal", 
-	"cnoc.fpdebug"
+    "theangryepicbanana.language-pascal",
+    "cnoc.fpdebug"
   ]
 }
