@@ -11,6 +11,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 let client;
+let castleTaskProvider;
 
 /**
  * @param {string} envVarName
@@ -194,6 +195,39 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 
 }
 
+class CastleTaskProvder {
+
+	get compileGameTask() {
+		console.log(this._compileGameTask);
+		return this._compileGameTask;
+	}
+
+	provideTasks() {
+		console.log('provideTasks - START');
+		try
+		{
+			this._compileGameTask = new vscode.Task(
+				{ type: 'cge-tasks'},
+				vscode.workspace.workspaceFolders[0],
+				'Compile CGE Game Task', // task name
+				'CGE', // prefix for all tasks
+				new vscode.ShellExecution('castle-engine compile --mode=debug'), // what to do
+			)
+			console.log('provideTasks - STOP');
+
+			return [this._compileGameTask];
+		}
+		catch (err) {
+			vscode.window.showErrorMessage(`provideTasks - EXCEPTION: ${err}`);
+			return;
+		}		
+	} 
+
+	resolveTask(_task) {
+		console.log("resolveTask - START");
+		return _task;
+    }
+}
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -317,10 +351,22 @@ async function activate(context) {
 	client.start();
 	console.log(client);
 
+	castleTaskProvider = new CastleTaskProvder();
+	console.log(castleTaskProvider);
+	let disposable = vscode.tasks.registerTaskProvider('cge-tasks', castleTaskProvider);
+    context.subscriptions.push(disposable);
+
+	disposable = vscode.commands.registerCommand('castle-game-engine.compileGame', () => {
+        console.log('compile Game - START');
+        vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
+    });
+	
+	context.subscriptions.push(disposable);
+
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('castle-game-engine.helloWorld', function () {
+	disposable = vscode.commands.registerCommand('castle-game-engine.helloWorld', function () {
 		// The code you place here will be executed every time your command is executed
 
 		// Display a message box to the user

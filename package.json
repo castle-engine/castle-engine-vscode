@@ -38,6 +38,10 @@
       {
         "command": "castle-game-engine.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "castle-game-engine.compileGame",
+        "title": "Compile Game (CGE)"
       }
     ],
     "configuration": {
@@ -69,7 +73,16 @@
           "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for autodetection."
         }
       }
-    }
+    },
+    "taskDefinitions": [
+			{
+				"type": "cge-tasks",
+				"required": [
+				],
+				"properties": {
+				}
+			}    
+    ]
   },
   "scripts": {
     "lint": "eslint .",
