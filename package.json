@@ -42,6 +42,10 @@
       {
         "command": "castle-game-engine.compileGame",
         "title": "Compile Game (CGE)"
+      },
+      {
+        "command": "castle-game-engine.runGame",
+        "title": "Run Game (CGE)"
       }
     ],
     "configuration": {

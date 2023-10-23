@@ -373,8 +373,14 @@ async function activate(context) {
 		console.log('compile Game - START');
 		vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
 	});
-
 	context.subscriptions.push(disposable);
+
+	disposable = vscode.commands.registerCommand('castle-game-engine.runGame', () => {
+		console.log('run Game - START');
+		vscode.tasks.executeTask(castleTaskProvider.runGameTask);
+	});
+	context.subscriptions.push(disposable);
+
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
