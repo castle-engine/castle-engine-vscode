@@ -233,13 +233,13 @@ class CastleTaskProvder {
 		catch (err) {
 			vscode.window.showErrorMessage(`provideTasks - EXCEPTION: ${err}`);
 			return;
-		}		
-	} 
+		}
+	}
 
 	resolveTask(_task) {
 		console.log("resolveTask - START");
 		return _task;
-    }
+	}
 }
 
 // This method is called when your extension is activated
@@ -367,13 +367,13 @@ async function activate(context) {
 	castleTaskProvider = new CastleTaskProvder();
 	console.log(castleTaskProvider);
 	let disposable = vscode.tasks.registerTaskProvider('cge-tasks', castleTaskProvider);
-    context.subscriptions.push(disposable);
+	context.subscriptions.push(disposable);
 
 	disposable = vscode.commands.registerCommand('castle-game-engine.compileGame', () => {
-        console.log('compile Game - START');
-        vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
-    });
-	
+		console.log('compile Game - START');
+		vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
+	});
+
 	context.subscriptions.push(disposable);
 
 	// The command has been defined in the package.json file

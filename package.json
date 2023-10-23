@@ -82,6 +82,14 @@
 				"properties": {
 				}
 			}    
+    ],
+    "keybindings": [
+      { 
+        "command": "castle-game-engine.compileGame",
+        "key": "ctrl+f9",
+        "mac": "cmd+f9",
+        "when": "editorTextFocus"
+      }
     ]
   },
   "scripts": {
