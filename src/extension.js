@@ -197,6 +197,27 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 
 class CastleTaskProvder {
 
+	constructor() {
+		this.createTasks();
+	}
+
+	createTasks() {
+		try {
+			this._compileGameTask = new vscode.Task(
+				{ type: 'cge-tasks' },
+				vscode.workspace.workspaceFolders[0],
+				'compile-cge-game-task', // task name
+				'CGE', // prefix for all tasks
+				new vscode.ShellExecution('castle-engine compile --mode=debug'), // what to do
+			);
+		}
+		catch (err) {
+			vscode.window.showErrorMessage(`createTasks - EXCEPTION: ${err}`);
+			return;
+		}
+
+	}
+
 	get compileGameTask() {
 		console.log(this._compileGameTask);
 		return this._compileGameTask;
@@ -204,15 +225,7 @@ class CastleTaskProvder {
 
 	provideTasks() {
 		console.log('provideTasks - START');
-		try
-		{
-			this._compileGameTask = new vscode.Task(
-				{ type: 'cge-tasks'},
-				vscode.workspace.workspaceFolders[0],
-				'Compile CGE Game Task', // task name
-				'CGE', // prefix for all tasks
-				new vscode.ShellExecution('castle-engine compile --mode=debug'), // what to do
-			)
+		try {
 			console.log('provideTasks - STOP');
 
 			return [this._compileGameTask];
