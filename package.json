@@ -93,6 +93,11 @@
         "key": "ctrl+f9",
         "mac": "cmd+f9",
         "when": "editorTextFocus"
+      },
+      { 
+        "command": "castle-game-engine.runGame",
+        "key": "shift+f9",
+        "when": "editorTextFocus"
       }
     ]
   },

@@ -210,6 +210,14 @@ class CastleTaskProvder {
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution('castle-engine compile --mode=debug'), // what to do
 			);
+
+			this._runGameTask = new vscode.Task(
+				{ type: 'cge-tasks' },
+				vscode.workspace.workspaceFolders[0],
+				'run-cge-game-task', // task name
+				'CGE', // prefix for all tasks
+				new vscode.ShellExecution('castle-engine run --mode=debug'), // what to do
+			);
 		}
 		catch (err) {
 			vscode.window.showErrorMessage(`createTasks - EXCEPTION: ${err}`);
@@ -219,8 +227,11 @@ class CastleTaskProvder {
 	}
 
 	get compileGameTask() {
-		console.log(this._compileGameTask);
 		return this._compileGameTask;
+	}
+
+	get runGameTask() {
+		return this._runGameTask;
 	}
 
 	provideTasks() {
@@ -228,7 +239,7 @@ class CastleTaskProvder {
 		try {
 			console.log('provideTasks - STOP');
 
-			return [this._compileGameTask];
+			return [this._compileGameTask, this._runGameTask];
 		}
 		catch (err) {
 			vscode.window.showErrorMessage(`provideTasks - EXCEPTION: ${err}`);
