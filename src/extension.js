@@ -218,6 +218,14 @@ class CastleTaskProvder {
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution('castle-engine run --mode=debug'), // what to do
 			);
+
+			this._cleanGameTask = new vscode.Task(
+				{ type: 'cge-tasks' },
+				vscode.workspace.workspaceFolders[0],
+				'clean-cge-game-task', // task name
+				'CGE', // prefix for all tasks
+				new vscode.ShellExecution('castle-engine clean'), // what to do
+			);
 		}
 		catch (err) {
 			vscode.window.showErrorMessage(`createTasks - EXCEPTION: ${err}`);
@@ -234,12 +242,16 @@ class CastleTaskProvder {
 		return this._runGameTask;
 	}
 
+	get cleanGameTask() {
+		return this._cleanGameTask;
+	}
+
 	provideTasks() {
 		console.log('provideTasks - START');
 		try {
 			console.log('provideTasks - STOP');
 
-			return [this._compileGameTask, this._runGameTask];
+			return [this._compileGameTask, this._runGameTask, this._cleanGameTask];
 		}
 		catch (err) {
 			vscode.window.showErrorMessage(`provideTasks - EXCEPTION: ${err}`);
@@ -389,6 +401,12 @@ async function activate(context) {
 	disposable = vscode.commands.registerCommand('castle-game-engine.runGame', () => {
 		console.log('run Game - START');
 		vscode.tasks.executeTask(castleTaskProvider.runGameTask);
+	});
+	context.subscriptions.push(disposable);
+
+	disposable = vscode.commands.registerCommand('castle-game-engine.cleanGame', () => {
+		console.log('clean Game - START');
+		vscode.tasks.executeTask(castleTaskProvider.cleanGameTask);
 	});
 	context.subscriptions.push(disposable);
 

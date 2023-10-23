@@ -46,6 +46,10 @@
       {
         "command": "castle-game-engine.runGame",
         "title": "Run Game (CGE)"
+      },
+      {
+        "command": "castle-game-engine.cleanGame",
+        "title": "Clean Game (CGE)"
       }
     ],
     "configuration": {
