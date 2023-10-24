@@ -82,23 +82,37 @@
         }
       }
     },
+    "problemMatchers": [
+      {
+        "name": "cge-problem-matcher",
+        "fileLocation": "autoDetect",
+        "pattern": [
+          {
+            "regexp": "^([^\\(]+)\\(([\\d+,]+)\\)\\s+(Fatal|Warning|Error|Note|Hint):\\s+((?!\\(10026\\) There were)(?!There were)(?!Found declaration: )(?!\\(5088\\)Found declaration: ).*)$",
+            "file": 1,
+            "location": 2,
+            "severity": 3,
+            "message": 4
+          }
+        ],
+        "owner": "cge"
+      }
+    ],
     "taskDefinitions": [
-			{
-				"type": "cge-tasks",
-				"required": [
-				],
-				"properties": {
-				}
-			}    
+      {
+        "type": "cge-tasks",
+        "required": [],
+        "properties": {}
+      }
     ],
     "keybindings": [
-      { 
+      {
         "command": "castle-game-engine.compileGame",
         "key": "ctrl+f9",
         "mac": "cmd+f9",
         "when": "editorTextFocus"
       },
-      { 
+      {
         "command": "castle-game-engine.runGame",
         "key": "shift+f9",
         "when": "editorTextFocus"

@@ -209,6 +209,7 @@ class CastleTaskProvder {
 				'compile-cge-game-task', // task name
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution('castle-engine compile --mode=debug'), // what to do
+				'$cge-problem-matcher'
 			);
 
 			this._runGameTask = new vscode.Task(
@@ -217,6 +218,7 @@ class CastleTaskProvder {
 				'run-cge-game-task', // task name
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution('castle-engine run --mode=debug'), // what to do
+				'$cge-problem-matcher'
 			);
 
 			this._cleanGameTask = new vscode.Task(
@@ -225,6 +227,7 @@ class CastleTaskProvder {
 				'clean-cge-game-task', // task name
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution('castle-engine clean'), // what to do
+				'$cge-problem-matcher'
 			);
 		}
 		catch (err) {
