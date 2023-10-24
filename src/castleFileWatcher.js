@@ -29,6 +29,19 @@ class CastleFileWatcher {
         });
 
         context.subscriptions.push(this._vsFileSystemWatcher);
+
+
+        // reaction to game compilation task
+        vscode.tasks.onDidEndTaskProcess((atask) => {
+            if (atask.execution.task.name === "compile-cge-game-task") {
+                if (atask.exitCode === 0) {
+                    console.log("Compilation success");
+                    this.recompilationNeeded = false;
+                } else {
+                    console.error("Compilation failed");
+                }
+            }
+        });
     }
 }
 
