@@ -214,6 +214,7 @@ class CastleTaskProvder {
 				new vscode.ShellExecution('castle-engine compile --mode=debug'), // what to do
 				'$cge-problem-matcher'
 			);
+			this._compileGameTask.group = vscode.TaskGroup.Build;
 
 			this._runGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
@@ -232,6 +233,7 @@ class CastleTaskProvder {
 				new vscode.ShellExecution('castle-engine clean'), // what to do
 				'$cge-problem-matcher'
 			);
+			this._cleanGameTask.group = vscode.TaskGroup.Clean;
 		}
 		catch (err) {
 			vscode.window.showErrorMessage(`createTasks - EXCEPTION: ${err}`);
