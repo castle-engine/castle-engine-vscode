@@ -37,8 +37,10 @@ class CastleFileWatcher {
                 if (atask.exitCode === 0) {
                     console.log("Compilation success");
                     this.recompilationNeeded = false;
+                    vscode.window.showInformationMessage("CGE: Compilation success");
                 } else {
                     console.error("Compilation failed");
+                    vscode.window.showErrorMessage("CGE: Compilation failed");
                 }
             }
         });
