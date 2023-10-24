@@ -6,12 +6,15 @@ const fs = require('fs');
 const path = require('path');
 const vscodelangclient = require('vscode-languageclient');
 
+const CastleFileWatcher = require("./castleFileWatcher.js");
+
 // https://stackoverflow.com/questions/30763496/how-to-promisify-nodes-child-process-exec-and-child-process-execfile-functions
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 let client;
 let castleTaskProvider;
+let castleFileWatcher;
 
 /**
  * @param {string} envVarName
@@ -389,6 +392,8 @@ async function activate(context) {
 	client = new vscodelangclient.LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
 	client.start();
 	console.log(client);
+
+	castleFileWatcher = new CastleFileWatcher(context);
 
 	castleTaskProvider = new CastleTaskProvder();
 	console.log(castleTaskProvider);
