@@ -19,7 +19,8 @@
   ],
   "activationEvents": [
     "onLanguage:pascal",
-    "onStartupFinished"
+    "onStartupFinished",
+    "onDebug"
   ],
   "main": "./src/extension.js",
   "contributes": {
@@ -32,6 +33,12 @@
           ".inc",
           ".lpr"
         ]
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "cgedebug",
+        "languages": ["pascal"]
       }
     ],
     "commands": [

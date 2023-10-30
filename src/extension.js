@@ -15,6 +15,7 @@ const exec = util.promisify(require('child_process').exec);
 let client;
 let castleTaskProvider;
 let castleFileWatcher;
+let castleDebugProvider;
 
 /**
  * @param {string} envVarName
@@ -225,6 +226,21 @@ class CastleTaskProvder {
 				'$cge-problem-matcher'
 			);
 
+			/*this._runGameTask = new vscode.Task(
+				{ type: 'cge-tasks' },
+				vscode.workspace.workspaceFolders[0],
+				'run-cge-game-task', // task name
+				'CGE', // prefix for all tasks
+
+				new vscode.CustomExecution(
+					async () => {
+						// When the task is executed, this callback will run. Here, we setup for running the task.
+						return new RunTaskPseudoTerminal();
+					}
+				),
+				'$cge-problem-matcher'
+			);*/
+
 			this._cleanGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
 				vscode.workspace.workspaceFolders[0],
@@ -273,6 +289,73 @@ class CastleTaskProvder {
 	}
 }
 
+class RunTaskPseudoTerminal {
+
+	constructor() {
+		this.writeEmitter = new vscode.EventEmitter();
+		this.onDidWrite = this.writeEmitter.event;
+	}
+
+	async open() {
+		console.log('open');
+		if (castleFileWatcher.recompilationNeeded)
+		{
+			console.log('recompilationNeeded');
+				await vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
+				if (castleFileWatcher.recompilationNeeded)
+					return;
+		}
+
+		console.log('can run');
+		vscode.window.showInformationMessage('run');
+	}
+
+
+	close() {
+		console.log('close');
+	}
+
+	handleInput(data) {
+		this.writeEmitter.fire(data);
+	}
+
+}
+
+
+class CastleDebugProvider {
+	provideDebugConfigurations(folder, token) {
+		console.log('provideDebugConfigurations - START');
+
+	}
+
+	resolveDebugConfiguration(folder, config, token) {
+		console.log('resolveDebugConfiguration - START');
+		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined))
+		{
+			const editor = vscode.window.activeTextEditor;
+			if (editor !== undefined && editor.document.languageId === 'pascal') 
+			{
+				console.log('Editor with pascal sources');
+				config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
+				config.name = 'Debug game with fpDebug';
+				config.request = 'launch';
+				config.program = '${workspaceFolder}/physics_asteroids';
+				config.stopOnEntry = true;
+				config.workingdirectory = '${workspaceFolder}'
+			}
+
+			if (!config.program) {
+				return vscode.window.showInformationMessage("Cannot find a program to debug").then(_ => {
+					return undefined;	// abort launch
+				});
+			}
+	
+			return config;			
+
+		}
+	}
+
+}
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 /**
@@ -431,6 +514,41 @@ async function activate(context) {
 		vscode.window.showInformationMessage('Hello World from Castle Game Engine!');
 	});
 
+	context.subscriptions.push(disposable);
+
+
+	/*vscode.tasks.onDidStartTask((atask) => {
+		if (atask.execution.task.name === "run-cge-game-task") {
+			if (castleFileWatcher.recompilationNeeded = true)
+			{
+				atask.execution.terminate(); 
+				//await vscode.tasks.executeTask()
+				vscode.window.showErrorMessage('Need recompile sources');
+				//
+			}
+		}
+	});*/
+
+	const customDebugConfiguration = {
+        type: 'fpDebug',
+        request: 'launch',
+        name: 'Debug with fpDebug',
+        program: '${workspaceFolder}/physics_asteroids',
+		workingdirectory: "${workspaceFolder}"
+    };	
+
+	castleDebugProvider = new CastleDebugProvider();
+
+	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
+	//vscode.debug.
+	/*disposable = vscode.debug.registerDebugConfigurationProvider('CGE Game Debug', {
+        provideDebugConfigurations: () => {
+            return [customDebugConfiguration];
+        },
+		resolveDebugConfiguration: () => {
+			return [customDebugConfiguration];
+		}
+    }/*,vscode.DebugConfigurationProviderTriggerKind.Initial);	*/
 	context.subscriptions.push(disposable);
 
 	console.log('Castle Engine Extension - Activate - DONE');
