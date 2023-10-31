@@ -298,12 +298,11 @@ class RunTaskPseudoTerminal {
 
 	async open() {
 		console.log('open');
-		if (castleFileWatcher.recompilationNeeded)
-		{
+		if (castleFileWatcher.recompilationNeeded) {
 			console.log('recompilationNeeded');
-				await vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
-				if (castleFileWatcher.recompilationNeeded)
-					return;
+			await vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
+			if (castleFileWatcher.recompilationNeeded)
+				return;
 		}
 
 		console.log('can run');
@@ -330,11 +329,9 @@ class CastleDebugProvider {
 
 	resolveDebugConfiguration(folder, config, token) {
 		console.log('resolveDebugConfiguration - START');
-		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined))
-		{
+		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
 			const editor = vscode.window.activeTextEditor;
-			if (editor !== undefined && editor.document.languageId === 'pascal') 
-			{
+			if (editor !== undefined && editor.document.languageId === 'pascal') {
 				console.log('Editor with pascal sources');
 				config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
 				config.name = 'Debug game with fpDebug';
@@ -349,8 +346,8 @@ class CastleDebugProvider {
 					return undefined;	// abort launch
 				});
 			}
-	
-			return config;			
+
+			return config;
 
 		}
 	}
@@ -530,25 +527,25 @@ async function activate(context) {
 	});*/
 
 	const customDebugConfiguration = {
-        type: 'fpDebug',
-        request: 'launch',
-        name: 'Debug with fpDebug',
-        program: '${workspaceFolder}/physics_asteroids',
+		type: 'fpDebug',
+		request: 'launch',
+		name: 'Debug with fpDebug',
+		program: '${workspaceFolder}/physics_asteroids',
 		workingdirectory: "${workspaceFolder}"
-    };	
+	};
 
 	castleDebugProvider = new CastleDebugProvider();
 
 	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
 	//vscode.debug.
 	/*disposable = vscode.debug.registerDebugConfigurationProvider('CGE Game Debug', {
-        provideDebugConfigurations: () => {
-            return [customDebugConfiguration];
-        },
+		provideDebugConfigurations: () => {
+			return [customDebugConfiguration];
+		},
 		resolveDebugConfiguration: () => {
 			return [customDebugConfiguration];
 		}
-    }/*,vscode.DebugConfigurationProviderTriggerKind.Initial);	*/
+	}/*,vscode.DebugConfigurationProviderTriggerKind.Initial);	*/
 	context.subscriptions.push(disposable);
 
 	console.log('Castle Engine Extension - Activate - DONE');
