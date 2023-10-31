@@ -46,8 +46,16 @@ function getEnvSetting(envVarName, defaultValue) {
  */
 async function executeCommandAndReturnValue(command) {
 	let result = '';
+
+	let options = {};
+
+	if (vscode.workspace.workspaceFolders !== undefined) {
+		console.log(vscode.workspace.workspaceFolders[0].uri.path);
+		options.cwd = vscode.workspace.workspaceFolders[0].uri.path;
+	}
+
 	try {
-		const { stdout, stderr } = await exec(command);
+		const { stdout, stderr } = await exec(command, options);
 		console.log('stderr:', stderr);
 
 		result = stdout.trim();
