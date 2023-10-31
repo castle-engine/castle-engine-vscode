@@ -467,6 +467,7 @@ async function activate(context) {
 
 	disposable = vscode.commands.registerCommand('castle-game-engine.runGame', () => {
 		console.log('run Game - START');
+		castleTaskProvider.updateCastleTasks();
 		vscode.tasks.executeTask(castleTaskProvider.runGameTask);
 	});
 	context.subscriptions.push(disposable);
@@ -478,7 +479,7 @@ async function activate(context) {
 	context.subscriptions.push(disposable);
 
 	castleDebugProvider = new CastleDebugProvider();
-	
+
 	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
 	context.subscriptions.push(disposable);
 
