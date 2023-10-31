@@ -40,10 +40,17 @@ class CastleFileWatcher {
                     vscode.window.showInformationMessage("CGE: Compilation success");
                 } else {
                     console.error("Compilation failed");
+                    this.recompilationNeeded = true;
                     vscode.window.showErrorMessage("CGE: Compilation failed");
                 }
-            }
+            } else
+                if (atask.execution.task.name === "clean-cge-game-task") {
+                    this.recompilationNeeded = true;
+                }
+
         });
+
+
     }
 }
 
