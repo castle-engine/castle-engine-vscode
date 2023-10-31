@@ -6,11 +6,9 @@ const fs = require('fs');
 const path = require('path');
 const vscodelangclient = require('vscode-languageclient');
 
-const CastleFileWatcher = require("./castleFileWatcher.js");
-
-// https://stackoverflow.com/questions/30763496/how-to-promisify-nodes-child-process-exec-and-child-process-execfile-functions
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const CastleFileWatcher = require('./castleFileWatcher.js');
+const castleExec = require('./castleExec.js');
+const CastleDebugProvider = require('./castleDebugProvider.js');
 
 let client;
 let castleTaskProvider;
@@ -42,33 +40,6 @@ function getEnvSetting(envVarName, defaultValue) {
 	return varValue;
 }
 
-/**
- * @param {string} command command to run
- * @returns {string} stdout or empty string on error
- */
-async function executeCommandAndReturnValue(command) {
-	let result = '';
-
-	let options = {};
-
-	if (vscode.workspace.workspaceFolders !== undefined) {
-		console.log(vscode.workspace.workspaceFolders[0].uri.path);
-		options.cwd = vscode.workspace.workspaceFolders[0].uri.path;
-	}
-
-	try {
-		const { stdout, stderr } = await exec(command, options);
-		console.log('stderr:', stderr);
-
-		result = stdout.trim();
-		console.log('PPdef1 ', result);
-		return result;
-
-	} catch (e) {
-		vscode.window.showErrorMessage(`Error: ${e.message}`);
-		return result;
-	}
-}
 
 
 /**
@@ -113,7 +84,7 @@ async function tryToFindFpcSources(fpcCompilerExec) {
 		// when fpc-src is installed from fpc-src debian package
 		// sources are in directory like /usr/share/fpcsrc/3.2.2/
 		// https://packages.debian.org/bookworm/all/fpc-source-3.2.2/filelist
-		let compilerVersion = await executeCommandAndReturnValue(fpcCompilerExec + ' -iV');
+		let compilerVersion = await castleExec.executeCommandAndReturnValue(fpcCompilerExec + ' -iV');
 		console.log('Compiler Version', compilerVersion);
 		sourcesDir = '/usr/share/fpcsrc/' + compilerVersion + '/';
 		if (isCompilerSourcesFolder(sourcesDir)) {
@@ -293,42 +264,6 @@ class CastleTaskProvder {
 }
 
 
-class CastleDebugProvider {
-
-	provideDebugConfigurations(folder, token) {
-		console.log('provideDebugConfigurations - START');
-
-	}
-
-	async resolveDebugConfiguration(folder, config, token) {
-		console.log('resolveDebugConfiguration - START');
-		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
-			const editor = vscode.window.activeTextEditor;
-			if (editor !== undefined && editor.document.languageId === 'pascal') {
-				console.log('Editor with pascal sources');
-				config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
-				config.name = 'Debug game with fpDebug';
-				config.request = 'launch';
-				let executableName = await executeCommandAndReturnValue(buildTool + ' output executable-name');
-				config.program = '${workspaceFolder}/' + executableName;
-				config.stopOnEntry = true;
-				config.workingdirectory = '${workspaceFolder}'
-				// we run compilation only when is needed
-				if (castleFileWatcher.recompilationNeeded)
-					config.preLaunchTask = 'CGE: compile-cge-game-task';
-			}
-
-			if (!config.program) {
-				return vscode.window.showInformationMessage("Cannot find a program to debug").then(_ => {
-					return undefined;	// abort launch
-				});
-			}
-
-			return config;
-
-		}
-	}
-}
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -378,7 +313,7 @@ async function activate(context) {
 
 	buildTool = enginePath + path.sep + 'bin' + path.sep + 'castle-engine';
 
-	let defaultCompilerExePath = await executeCommandAndReturnValue(buildTool + ' output-environment fpc-exe');
+	let defaultCompilerExePath = await castleExec.executeCommandAndReturnValue(buildTool + ' output-environment fpc-exe');
 	vscode.window.showInformationMessage(`Default path to fpc compiler: ${defaultCompilerExePath}`);
 
 	enviromentForPascalServer['PP'] = getEnvSetting('PP', defaultCompilerExePath);
@@ -391,7 +326,7 @@ async function activate(context) {
 		return;
 	}
 
-	let realCompilerPath = await executeCommandAndReturnValue(enviromentForPascalServer['PP'] + ' -PB');
+	let realCompilerPath = await castleExec.executeCommandAndReturnValue(enviromentForPascalServer['PP'] + ' -PB');
 	console.log('realCompilerPath', realCompilerPath);
 
 	enviromentForPascalServer['FPCDIR'] = getEnvSetting('FPCDIR', '');
@@ -478,7 +413,7 @@ async function activate(context) {
 	});
 	context.subscriptions.push(disposable);
 
-	castleDebugProvider = new CastleDebugProvider();
+	castleDebugProvider = new CastleDebugProvider(castleFileWatcher, buildTool);
 
 	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
 	context.subscriptions.push(disposable);
