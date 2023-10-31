@@ -339,6 +339,9 @@ class CastleDebugProvider {
 				config.program = '${workspaceFolder}/physics_asteroids';
 				config.stopOnEntry = true;
 				config.workingdirectory = '${workspaceFolder}'
+				// we run compilation only when is needed
+				if (castleFileWatcher.recompilationNeeded)
+					config.preLaunchTask = 'CGE: compile-cge-game-task';
 			}
 
 			if (!config.program) {
