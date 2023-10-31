@@ -227,16 +227,16 @@ class CastleTaskProvder {
 			);
 			this._compileGameTask.group = vscode.TaskGroup.Build;
 
-			this._runGameTask = new vscode.Task(
+			this._onlyrunGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
 				vscode.workspace.workspaceFolders[0],
-				'run-cge-game-task', // task name
+				'only-run-cge-game-task', // task name
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution('castle-engine run --mode=debug'), // what to do
 				'$cge-problem-matcher'
 			);
 
-			/*this._runGameTask = new vscode.Task(
+			this._runGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
 				vscode.workspace.workspaceFolders[0],
 				'run-cge-game-task', // task name
@@ -249,7 +249,7 @@ class CastleTaskProvder {
 					}
 				),
 				'$cge-problem-matcher'
-			);*/
+			);
 
 			this._cleanGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
@@ -273,6 +273,10 @@ class CastleTaskProvder {
 	}
 
 	get runGameTask() {
+		return this._runGameTask;
+	}
+
+	get onlyRunGameTask() {
 		return this._runGameTask;
 	}
 
@@ -301,22 +305,61 @@ class CastleTaskProvder {
 
 class RunTaskPseudoTerminal {
 
+	// https://vscode-api.js.org/interfaces/vscode.Pseudoterminal.html#onDidClose
 	constructor() {
 		this.writeEmitter = new vscode.EventEmitter();
+		this.closeEmitter = new vscode.EventEmitter();
 		this.onDidWrite = this.writeEmitter.event;
+		this.onDidWrite = this.closeEmitter.event;
+	}
+
+	// https://stackoverflow.com/questions/61428928/how-to-await-a-build-task-in-a-vs-code-extension
+	async executeCompileTask(task) {
+		const execution = await vscode.tasks.executeTask(task);
+
+		return new Promise(resolve => {
+			let disposable = vscode.tasks.onDidEndTask(e => {
+				if (e.execution.task.group === vscode.TaskGroup.Build) {
+					disposable.dispose();
+					resolve();
+				}
+			});
+		});		
 	}
 
 	async open() {
 		console.log('open');
 		if (castleFileWatcher.recompilationNeeded) {
-			console.log('recompilationNeeded');
-			await vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
-			if (castleFileWatcher.recompilationNeeded)
+			try {
+				this.writeEmitter.fire('recompilationNeeded\n\r');
+				console.log('recompilationNeeded');
+				await vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
+				//await this.executeCompileTask(castleTaskProvider.compileGameTask);
+				this.writeEmitter.fire('after recompilation \n\r');
+				console.log('after recompilation');
+				vscode.window.showInformationMessage("after compilation");
+				if (castleFileWatcher.recompilationNeeded)
+				{
+					this.writeEmitter.fire('compilation error!!!');
+					this.closeEmitter.fire();
+					return;
+				}
+					
+			}
+			catch (err) {
+				vscode.window.showInformationMessage(err);
+				this.writeEmitter.fire('err \n\r');
+				this.closeEmitter.fire();
 				return;
+			}
 		}
 
 		console.log('can run');
+		this.writeEmitter.fire('can run \n\r');
+		vscode.tasks.executeTask(castleTaskProvider.onlyRunGameTask);
+		
 		vscode.window.showInformationMessage('run');
+		this.closeEmitter.fire();
 	}
 
 
