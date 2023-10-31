@@ -227,40 +227,14 @@ class CastleTaskProvder {
 			);
 			this._compileGameTask.group = vscode.TaskGroup.Build;
 
-			this._onlyRunGameTask = new vscode.Task(
-				{ type: 'cge-tasks' },
-				vscode.workspace.workspaceFolders[0],
-				'only-run-cge-game-task', // task name
-				'CGE', // prefix for all tasks
-				new vscode.ShellExecution('castle-engine run --mode=debug'), // what to do
-				'$cge-problem-matcher'
-			);
-
 			this._runGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
 				vscode.workspace.workspaceFolders[0],
 				'run-cge-game-task', // task name
 				'CGE', // prefix for all tasks
-				new vscode.ShellExecution('castle-engine run --mode=debug'), // what to do
-				//new vscode.ShellExecution('castle-engine compileandrun --mode=debug'), // what to do
+				new vscode.ShellExecution('castle-engine compileandrun --mode=debug'), // what to do
 				'$cge-problem-matcher'
 			);
-
-
-			/*this._runGameTask = new vscode.Task(
-				{ type: 'cge-tasks' },
-				vscode.workspace.workspaceFolders[0],
-				'run-cge-game-task', // task name
-				'CGE', // prefix for all tasks
-
-				new vscode.CustomExecution(
-					async () => {
-						// When the task is executed, this callback will run. Here, we setup for running the task.
-						return new RunTaskPseudoTerminal();
-					}
-				),
-				'$cge-problem-matcher'
-			);*/
 
 			this._cleanGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
@@ -294,10 +268,6 @@ class CastleTaskProvder {
 		return this._runGameTask;
 	}
 
-	get onlyRunGameTask() {
-		return this._onlyRunGameTask;
-	}
-
 	get cleanGameTask() {
 		return this._cleanGameTask;
 	}
@@ -318,85 +288,8 @@ class CastleTaskProvder {
 
 	resolveTask(_task) {
 		console.log("resolveTask - START");
-
-		/*if (_task.name === "run-cge-game-task" || _task.name === "CGE: run-cge-game-task")
-		{
-			console.log("resolveTask - run-cge-game-task");
-			_task.execution = new vscode.ShellExecution('castle-engine compileandrun --mode=debug');
-		}*/
-
 		return _task;
 	}
-}
-
-class RunTaskPseudoTerminal {
-
-	// https://vscode-api.js.org/interfaces/vscode.Pseudoterminal.html#onDidClose
-	constructor() {
-		this.writeEmitter = new vscode.EventEmitter();
-		this.closeEmitter = new vscode.EventEmitter();
-		this.onDidWrite = this.writeEmitter.event;
-		this.onDidWrite = this.closeEmitter.event;
-	}
-
-	// https://stackoverflow.com/questions/61428928/how-to-await-a-build-task-in-a-vs-code-extension
-	async executeCompileTask(task) {
-		const execution = await vscode.tasks.executeTask(task);
-
-		return new Promise(resolve => {
-			let disposable = vscode.tasks.onDidEndTask(e => {
-				if (e.execution.task.group === vscode.TaskGroup.Build) {
-					disposable.dispose();
-					resolve();
-				}
-			});
-		});		
-	}
-
-	async open() {
-		console.log('open');
-		if (castleFileWatcher.recompilationNeeded) {
-			try {
-				this.writeEmitter.fire('recompilationNeeded\n\r');
-				console.log('recompilationNeeded');
-				await vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
-				//await this.executeCompileTask(castleTaskProvider.compileGameTask);
-				this.writeEmitter.fire('after recompilation \n\r');
-				console.log('after recompilation');
-				vscode.window.showInformationMessage("after compilation");
-				if (castleFileWatcher.recompilationNeeded)
-				{
-					this.writeEmitter.fire('compilation error!!!');
-					this.closeEmitter.fire();
-					return;
-				}
-					
-			}
-			catch (err) {
-				vscode.window.showInformationMessage(err);
-				this.writeEmitter.fire('err \n\r');
-				this.closeEmitter.fire();
-				return;
-			}
-		}
-
-		console.log('can run');
-		this.writeEmitter.fire('can run \n\r');
-		vscode.tasks.executeTask(castleTaskProvider.onlyRunGameTask);
-		
-		vscode.window.showInformationMessage('run');
-		this.closeEmitter.fire();
-	}
-
-
-	close() {
-		console.log('close');
-	}
-
-	handleInput(data) {
-		this.writeEmitter.fire(data);
-	}
-
 }
 
 
@@ -584,52 +477,9 @@ async function activate(context) {
 	});
 	context.subscriptions.push(disposable);
 
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	disposable = vscode.commands.registerCommand('castle-game-engine.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Castle Game Engine!');
-	});
-
-	context.subscriptions.push(disposable);
-
-
-	/*vscode.tasks.onDidStartTask((atask) => {
-		if (atask.execution.task.name === "run-cge-game-task") {
-			if (castleFileWatcher.recompilationNeeded = true)
-			{
-				atask.execution.terminate(); 
-				//await vscode.tasks.executeTask()
-				vscode.window.showErrorMessage('Need recompile sources');
-				//
-			}
-		}
-	});*/
-
-	const customDebugConfiguration = {
-		type: 'fpDebug',
-		request: 'launch',
-		name: 'Debug with fpDebug',
-		program: '${workspaceFolder}/physics_asteroids',
-		workingdirectory: "${workspaceFolder}"
-	};
-
 	castleDebugProvider = new CastleDebugProvider();
-
+	
 	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
-	//vscode.debug.
-	/*disposable = vscode.debug.registerDebugConfigurationProvider('CGE Game Debug', {
-		provideDebugConfigurations: () => {
-			return [customDebugConfiguration];
-		},
-		resolveDebugConfiguration: () => {
-			return [customDebugConfiguration];
-		}
-	}/*,vscode.DebugConfigurationProviderTriggerKind.Initial);	*/
 	context.subscriptions.push(disposable);
 
 	console.log('Castle Engine Extension - Activate - DONE');
