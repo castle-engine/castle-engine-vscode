@@ -227,7 +227,7 @@ class CastleTaskProvder {
 			);
 			this._compileGameTask.group = vscode.TaskGroup.Build;
 
-			this._onlyrunGameTask = new vscode.Task(
+			this._onlyRunGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
 				vscode.workspace.workspaceFolders[0],
 				'only-run-cge-game-task', // task name
@@ -241,6 +241,17 @@ class CastleTaskProvder {
 				vscode.workspace.workspaceFolders[0],
 				'run-cge-game-task', // task name
 				'CGE', // prefix for all tasks
+				new vscode.ShellExecution('castle-engine run --mode=debug'), // what to do
+				//new vscode.ShellExecution('castle-engine compileandrun --mode=debug'), // what to do
+				'$cge-problem-matcher'
+			);
+
+
+			/*this._runGameTask = new vscode.Task(
+				{ type: 'cge-tasks' },
+				vscode.workspace.workspaceFolders[0],
+				'run-cge-game-task', // task name
+				'CGE', // prefix for all tasks
 
 				new vscode.CustomExecution(
 					async () => {
@@ -249,7 +260,7 @@ class CastleTaskProvder {
 					}
 				),
 				'$cge-problem-matcher'
-			);
+			);*/
 
 			this._cleanGameTask = new vscode.Task(
 				{ type: 'cge-tasks' },
@@ -268,6 +279,13 @@ class CastleTaskProvder {
 
 	}
 
+	updateCastleTasks() {
+		if (castleFileWatcher.recompilationNeeded)
+			this._runGameTask.execution = new vscode.ShellExecution('castle-engine compileandrun --mode=debug');
+		else
+			this._runGameTask.execution = new vscode.ShellExecution('castle-engine run --mode=debug');
+	}
+
 	get compileGameTask() {
 		return this._compileGameTask;
 	}
@@ -277,7 +295,7 @@ class CastleTaskProvder {
 	}
 
 	get onlyRunGameTask() {
-		return this._runGameTask;
+		return this._onlyRunGameTask;
 	}
 
 	get cleanGameTask() {
@@ -287,6 +305,7 @@ class CastleTaskProvder {
 	provideTasks() {
 		console.log('provideTasks - START');
 		try {
+			this.updateCastleTasks();
 			console.log('provideTasks - STOP');
 
 			return [this._compileGameTask, this._runGameTask, this._cleanGameTask];
@@ -299,6 +318,13 @@ class CastleTaskProvder {
 
 	resolveTask(_task) {
 		console.log("resolveTask - START");
+
+		/*if (_task.name === "run-cge-game-task" || _task.name === "CGE: run-cge-game-task")
+		{
+			console.log("resolveTask - run-cge-game-task");
+			_task.execution = new vscode.ShellExecution('castle-engine compileandrun --mode=debug');
+		}*/
+
 		return _task;
 	}
 }

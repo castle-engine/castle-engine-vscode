@@ -47,10 +47,14 @@ class CastleFileWatcher {
                 if (atask.execution.task.name === "clean-cge-game-task") {
                     this.recompilationNeeded = true;
                 }
-
+                else
+                    if (atask.execution.task.name === "run-cge-game-task") {
+                        if ((atask.execution.task.execution.commandLine.indexOf('compileandrun') > 0) && (atask.exitCode === 0)) {
+                            console.log("Compilation with running success");
+                            this.recompilationNeeded = false;
+                        }
+                    }
         });
-
-
     }
 }
 
