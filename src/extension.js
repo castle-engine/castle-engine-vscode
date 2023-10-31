@@ -17,6 +17,8 @@ let castleTaskProvider;
 let castleFileWatcher;
 let castleDebugProvider;
 
+let buildTool; // path to buildtool
+
 /**
  * @param {string} envVarName
  * @param {string} defaultValue
@@ -330,12 +332,13 @@ class RunTaskPseudoTerminal {
 
 
 class CastleDebugProvider {
+
 	provideDebugConfigurations(folder, token) {
 		console.log('provideDebugConfigurations - START');
 
 	}
 
-	resolveDebugConfiguration(folder, config, token) {
+	async resolveDebugConfiguration(folder, config, token) {
 		console.log('resolveDebugConfiguration - START');
 		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
 			const editor = vscode.window.activeTextEditor;
@@ -344,7 +347,8 @@ class CastleDebugProvider {
 				config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
 				config.name = 'Debug game with fpDebug';
 				config.request = 'launch';
-				config.program = '${workspaceFolder}/physics_asteroids';
+				let executableName = await executeCommandAndReturnValue(buildTool + ' output executable-name');
+				config.program = '${workspaceFolder}/' + executableName;
 				config.stopOnEntry = true;
 				config.workingdirectory = '${workspaceFolder}'
 				// we run compilation only when is needed
@@ -362,8 +366,8 @@ class CastleDebugProvider {
 
 		}
 	}
-
 }
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 /**
@@ -410,7 +414,7 @@ async function activate(context) {
 
 	let enviromentForPascalServer = {};
 
-	let buildTool = enginePath + path.sep + 'bin' + path.sep + 'castle-engine';
+	buildTool = enginePath + path.sep + 'bin' + path.sep + 'castle-engine';
 
 	let defaultCompilerExePath = await executeCommandAndReturnValue(buildTool + ' output-environment fpc-exe');
 	vscode.window.showInformationMessage(`Default path to fpc compiler: ${defaultCompilerExePath}`);
