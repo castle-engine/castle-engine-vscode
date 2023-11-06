@@ -9,6 +9,7 @@ const vscodelangclient = require('vscode-languageclient');
 const CastleFileWatcher = require('./castleFileWatcher.js');
 const castleExec = require('./castleExec.js');
 const CastleDebugProvider = require('./castleDebugProvider.js');
+const CastleTaskProvder = require('./castleTaskProvider.js');
 
 let client;
 let castleTaskProvider;
@@ -180,88 +181,6 @@ async function tryToFindLazarusSources(fpcCompilerExec) {
 
 }
 
-class CastleTaskProvder {
-
-	constructor() {
-		this.createTasks();
-	}
-
-	createTasks() {
-		try {
-			this._compileGameTask = new vscode.Task(
-				{ type: 'cge-tasks' },
-				vscode.workspace.workspaceFolders[0],
-				'compile-cge-game-task', // task name
-				'CGE', // prefix for all tasks
-				new vscode.ShellExecution('castle-engine compile --mode=debug'), // what to do
-				'$cge-problem-matcher'
-			);
-			this._compileGameTask.group = vscode.TaskGroup.Build;
-
-			this._runGameTask = new vscode.Task(
-				{ type: 'cge-tasks' },
-				vscode.workspace.workspaceFolders[0],
-				'run-cge-game-task', // task name
-				'CGE', // prefix for all tasks
-				new vscode.ShellExecution('castle-engine compileandrun --mode=debug'), // what to do
-				'$cge-problem-matcher'
-			);
-
-			this._cleanGameTask = new vscode.Task(
-				{ type: 'cge-tasks' },
-				vscode.workspace.workspaceFolders[0],
-				'clean-cge-game-task', // task name
-				'CGE', // prefix for all tasks
-				new vscode.ShellExecution('castle-engine clean'), // what to do
-				'$cge-problem-matcher'
-			);
-			this._cleanGameTask.group = vscode.TaskGroup.Clean;
-		}
-		catch (err) {
-			vscode.window.showErrorMessage(`createTasks - EXCEPTION: ${err}`);
-			return;
-		}
-
-	}
-
-	updateCastleTasks() {
-		if (castleFileWatcher.recompilationNeeded)
-			this._runGameTask.execution = new vscode.ShellExecution('castle-engine compileandrun --mode=debug');
-		else
-			this._runGameTask.execution = new vscode.ShellExecution('castle-engine run --mode=debug');
-	}
-
-	get compileGameTask() {
-		return this._compileGameTask;
-	}
-
-	get runGameTask() {
-		return this._runGameTask;
-	}
-
-	get cleanGameTask() {
-		return this._cleanGameTask;
-	}
-
-	provideTasks() {
-		console.log('provideTasks - START');
-		try {
-			this.updateCastleTasks();
-			console.log('provideTasks - STOP');
-
-			return [this._compileGameTask, this._runGameTask, this._cleanGameTask];
-		}
-		catch (err) {
-			vscode.window.showErrorMessage(`provideTasks - EXCEPTION: ${err}`);
-			return;
-		}
-	}
-
-	resolveTask(_task) {
-		console.log("resolveTask - START");
-		return _task;
-	}
-}
 
 
 
@@ -389,7 +308,7 @@ async function activate(context) {
 
 	castleFileWatcher = new CastleFileWatcher(context);
 
-	castleTaskProvider = new CastleTaskProvder();
+	castleTaskProvider = new CastleTaskProvder(castleFileWatcher, buildTool);
 	console.log(castleTaskProvider);
 	let disposable = vscode.tasks.registerTaskProvider('cge-tasks', castleTaskProvider);
 	context.subscriptions.push(disposable);
