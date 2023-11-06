@@ -10,7 +10,7 @@ class CastleFileWatcher {
     * @param {vscode.ExtensionContext} context
     */
     constructor(context) {
-        this._vsFileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.{pas,pp,inc}');
+        this._vsFileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.{pas,pp,inc,dpr,lpr}');
         this.recompilationNeeded = true;
 
         this._vsFileSystemWatcher.onDidChange((uri) => {
