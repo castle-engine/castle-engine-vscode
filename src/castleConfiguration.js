@@ -7,9 +7,9 @@ const CastleBuildModes = Object.freeze({
 
 class CastleConfiguration {
 
-    constructor(initialBuildMode, castleFileWatcher) {
-        this._castleFileWatcher = castleFileWatcher; 
+    constructor(initialBuildMode) {
         this._buildMode = initialBuildMode;
+        this.recompilationNeeded = true;
     }
 
     get buildMode() {
@@ -22,7 +22,7 @@ class CastleConfiguration {
             if (newValue !== this._buildMode)
             {
                 this._buildMode = newValue;
-                this._castleFileWatcher.recompilationNeeded = true;
+                this.recompilationNeeded = true;
             }
         }
         else

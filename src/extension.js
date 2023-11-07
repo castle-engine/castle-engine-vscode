@@ -310,10 +310,10 @@ async function activate(context) {
 	client.start();
 	console.log(client);
 
-	castleFileWatcher = new CastleFileWatcher(context);
-	castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG, castleFileWatcher);
+	castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
+	castleFileWatcher = new CastleFileWatcher(context, castleConfig);
 
-	castleTaskProvider = new CastleTaskProvder(castleFileWatcher, buildTool, castleConfig);
+	castleTaskProvider = new CastleTaskProvder(buildTool, castleConfig);
 	console.log(castleTaskProvider);
 	let disposable = vscode.tasks.registerTaskProvider('cge-tasks', castleTaskProvider);
 	context.subscriptions.push(disposable);
@@ -337,7 +337,7 @@ async function activate(context) {
 	});
 	context.subscriptions.push(disposable);
 
-	castleDebugProvider = new CastleDebugProvider(castleFileWatcher, buildTool, castleConfig);
+	castleDebugProvider = new CastleDebugProvider(buildTool, castleConfig);
 
 	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
 	context.subscriptions.push(disposable);

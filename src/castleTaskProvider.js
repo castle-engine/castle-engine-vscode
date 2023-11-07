@@ -4,8 +4,7 @@ const vscode = require("vscode");
 
 class CastleTaskProvder {
 
-    constructor (castleFileWatcher, buildTool, castleConfig) {
-        this._castleFileWatcher = castleFileWatcher;
+    constructor (buildTool, castleConfig) {
         this._buildTool = buildTool;
 		this._castleConfig = castleConfig;
         this.createTasks();
@@ -50,7 +49,7 @@ class CastleTaskProvder {
 	}
 
 	updateCastleTasks() {
-		if (this._castleFileWatcher.recompilationNeeded)
+		if (this._castleConfig.recompilationNeeded)
 			this._runGameTask.execution = new vscode.ShellExecution('castle-engine compileandrun --mode=' + this._castleConfig.buildMode.buildTool);
 		else
 			this._runGameTask.execution = new vscode.ShellExecution('castle-engine run --mode=' + this._castleConfig.buildMode.buildTool);

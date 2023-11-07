@@ -1,31 +1,33 @@
 const vscode = require("vscode");
 
 /**
- * Check recompilationNeeded when you run application or debugger.
- * After recompilation set it to false
+ * Observes file system for changes in files and sets castleConfig.recompilationNeeded to true 
+ * after a source file is created/deleted.modified.
+ * After recompilation set it to false.
  */
 class CastleFileWatcher {
 
     /**
     * @param {vscode.ExtensionContext} context
+    * @param {castleConfiguration.CastleConfiguration} castleConfig
     */
-    constructor(context) {
+    constructor(context, castleConfig) {
         this._vsFileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.{pas,pp,inc,dpr,lpr}');
-        this.recompilationNeeded = true;
+        this._castleConfig = castleConfig;
 
         this._vsFileSystemWatcher.onDidChange((uri) => {
             console.log(`Change in file: ${uri.fsPath}`);
-            this.recompilationNeeded = true;
+            this._castleConfig.recompilationNeeded = true;
         });
 
         this._vsFileSystemWatcher.onDidCreate((uri) => {
             console.log(`New file created: ${uri.fsPath}`);
-            this.recompilationNeeded = true;
+            this._castleConfig.recompilationNeeded = true;
         });
 
         this._vsFileSystemWatcher.onDidDelete((uri) => {
             console.log(`Source file deleted: ${uri.fsPath}`);
-            this.recompilationNeeded = true;
+            this._castleConfig.recompilationNeeded = true;
         });
 
         context.subscriptions.push(this._vsFileSystemWatcher);
@@ -36,22 +38,22 @@ class CastleFileWatcher {
             if (atask.execution.task.name === "compile-cge-game-task") {
                 if (atask.exitCode === 0) {
                     console.log("Compilation success");
-                    this.recompilationNeeded = false;
+                    this._castleConfig.recompilationNeeded = false;
                     vscode.window.showInformationMessage("CGE: Compilation success");
                 } else {
                     console.error("Compilation failed");
-                    this.recompilationNeeded = true;
+                    this._castleConfig.recompilationNeeded = true;
                     vscode.window.showErrorMessage("CGE: Compilation failed");
                 }
             } else
                 if (atask.execution.task.name === "clean-cge-game-task") {
-                    this.recompilationNeeded = true;
+                    this._castleConfig.recompilationNeeded = true;
                 }
                 else
                     if (atask.execution.task.name === "run-cge-game-task") {
                         if ((atask.execution.task.execution.commandLine.indexOf('compileandrun') > 0) && (atask.exitCode === 0)) {
                             console.log("Compilation with running success");
-                            this.recompilationNeeded = false;
+                            this._castleConfig.recompilationNeeded = false;
                         }
                     }
         });
