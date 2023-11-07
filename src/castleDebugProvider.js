@@ -1,11 +1,13 @@
 const vscode = require("vscode");
 const castleExec = require('./castleExec.js');
+const castleConfiguration = require('./castleConfiguration.js');
 
 class CastleDebugProvider {
 
-    constructor (castleFileWatcher, buildTool) {
+    constructor (castleFileWatcher, buildTool, castleConfig) {
         this._castleFileWatcher = castleFileWatcher;
         this._buildTool = buildTool;
+		this._castleConfig = castleConfig;
     }
 
 	provideDebugConfigurations(folder, token) {
@@ -26,6 +28,9 @@ class CastleDebugProvider {
 				config.program = '${workspaceFolder}/' + executableName;
 				config.stopOnEntry = true;
 				config.workingdirectory = '${workspaceFolder}'
+
+				if (this._castleConfig.buildMode === castleConfiguration.CastleBuildModes.RELEASE)
+					vscode.window.showWarningMessage('Running debuger with release build, consider to change build type.');
 				// we run compilation only when is needed
 				if (this._castleFileWatcher.recompilationNeeded)
 					config.preLaunchTask = 'CGE: compile-cge-game-task';

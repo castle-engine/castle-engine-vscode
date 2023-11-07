@@ -57,6 +57,10 @@
       {
         "command": "castle-game-engine.cleanGame",
         "title": "Clean Game (CGE)"
+      },
+      {
+        "command": "castle-game-engine.showBuildModeSelectionInStatusBar",
+        "title": "Select Build Mode (CGE)"
       }
     ],
     "configuration": {

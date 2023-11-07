@@ -4,9 +4,10 @@ const vscode = require("vscode");
 
 class CastleTaskProvder {
 
-    constructor (castleFileWatcher, buildTool) {
+    constructor (castleFileWatcher, buildTool, castleConfig) {
         this._castleFileWatcher = castleFileWatcher;
         this._buildTool = buildTool;
+		this._castleConfig = castleConfig;
         this.createTasks();
     }
 
@@ -17,7 +18,7 @@ class CastleTaskProvder {
 				vscode.workspace.workspaceFolders[0],
 				'compile-cge-game-task', // task name
 				'CGE', // prefix for all tasks
-				new vscode.ShellExecution('castle-engine compile --mode=debug'), // what to do
+				new vscode.ShellExecution('castle-engine compile --mode=' + this._castleConfig.buildMode.buildTool), // what to do
 				'$cge-problem-matcher'
 			);
 			this._compileGameTask.group = vscode.TaskGroup.Build;
@@ -27,7 +28,7 @@ class CastleTaskProvder {
 				vscode.workspace.workspaceFolders[0],
 				'run-cge-game-task', // task name
 				'CGE', // prefix for all tasks
-				new vscode.ShellExecution('castle-engine compileandrun --mode=debug'), // what to do
+				new vscode.ShellExecution('castle-engine compileandrun --mode=' + this._castleConfig.buildMode.buildTool), // what to do
 				'$cge-problem-matcher'
 			);
 
@@ -50,9 +51,11 @@ class CastleTaskProvder {
 
 	updateCastleTasks() {
 		if (this._castleFileWatcher.recompilationNeeded)
-			this._runGameTask.execution = new vscode.ShellExecution('castle-engine compileandrun --mode=debug');
+			this._runGameTask.execution = new vscode.ShellExecution('castle-engine compileandrun --mode=' + this._castleConfig.buildMode.buildTool);
 		else
-			this._runGameTask.execution = new vscode.ShellExecution('castle-engine run --mode=debug');
+			this._runGameTask.execution = new vscode.ShellExecution('castle-engine run --mode=' + this._castleConfig.buildMode.buildTool);
+
+		this._compileGameTask.execution = new vscode.ShellExecution('castle-engine compile --mode=' + this._castleConfig.buildMode.buildTool);
 	}
 
 	get compileGameTask() {

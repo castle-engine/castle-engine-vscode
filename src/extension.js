@@ -10,11 +10,15 @@ const CastleFileWatcher = require('./castleFileWatcher.js');
 const castleExec = require('./castleExec.js');
 const CastleDebugProvider = require('./castleDebugProvider.js');
 const CastleTaskProvder = require('./castleTaskProvider.js');
+const castleConfiguration = require('./castleConfiguration.js');
+const CastleStatusBar = require('./castleStatusBar.js');
 
 let client;
 let castleTaskProvider;
 let castleFileWatcher;
 let castleDebugProvider;
+let castleConfig;
+let castleStatusBar;
 
 let buildTool; // path to buildtool
 
@@ -307,8 +311,9 @@ async function activate(context) {
 	console.log(client);
 
 	castleFileWatcher = new CastleFileWatcher(context);
+	castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG, castleFileWatcher);
 
-	castleTaskProvider = new CastleTaskProvder(castleFileWatcher, buildTool);
+	castleTaskProvider = new CastleTaskProvder(castleFileWatcher, buildTool, castleConfig);
 	console.log(castleTaskProvider);
 	let disposable = vscode.tasks.registerTaskProvider('cge-tasks', castleTaskProvider);
 	context.subscriptions.push(disposable);
@@ -332,10 +337,12 @@ async function activate(context) {
 	});
 	context.subscriptions.push(disposable);
 
-	castleDebugProvider = new CastleDebugProvider(castleFileWatcher, buildTool);
+	castleDebugProvider = new CastleDebugProvider(castleFileWatcher, buildTool, castleConfig);
 
 	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
 	context.subscriptions.push(disposable);
+
+	castleStatusBar = new CastleStatusBar(context, castleConfig);
 
 	console.log('Castle Engine Extension - Activate - DONE');
 }
