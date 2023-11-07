@@ -10,6 +10,9 @@ class CastleConfiguration {
     constructor(initialBuildMode) {
         this._buildMode = initialBuildMode;
         this.recompilationNeeded = true;
+        this._commandId = {
+            showBuildModes: 'castle-game-engine.showBuildModeSelectionInStatusBar',
+        };
     }
 
     get buildMode() {
@@ -27,6 +30,10 @@ class CastleConfiguration {
         }
         else
             throw Error('Incorrect build mode.');
+    }
+
+    get commandId() {
+        return this._commandId;
     }
 }
 

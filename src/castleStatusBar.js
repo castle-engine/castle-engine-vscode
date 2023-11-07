@@ -9,8 +9,7 @@ class CastleStatusBar {
     }
 
     createBuildModeSwitch() {
-        const showBuildModesCommandId = 'castle-game-engine.showBuildModeSelectionInStatusBar';
-        let command = vscode.commands.registerCommand(showBuildModesCommandId, async () => {
+        let command = vscode.commands.registerCommand(this._castleConfig.commandId.showBuildModes, async () => {
             const choosenBuildMode = await vscode.window.showQuickPick(['Debug', 'Release'], { placeHolder: 'Select build type' });
             if (!choosenBuildMode === undefined)
                 return;
@@ -21,10 +20,10 @@ class CastleStatusBar {
             this.updateBuildModesButtonText();
         });
         this._context.subscriptions.push(command);
-        this._buildModesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+        this._buildModesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 20);
         this._context.subscriptions.push(this._buildModesButton);
 
-        this._buildModesButton.command = showBuildModesCommandId;
+        this._buildModesButton.command = this._castleConfig.commandId.showBuildModes;
         this.updateBuildModesButtonText();
         this._buildModesButton.show();
         this._buildModesButton.tooltip = 'Click to select build mode (debug or release)';
