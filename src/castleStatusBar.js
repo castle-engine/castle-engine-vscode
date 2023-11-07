@@ -78,7 +78,7 @@ class CastleStatusBar {
         this._openInEditorButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._openInEditorButton);
         this._openInEditorButton.command = this._castleConfig.commandId.openInCastleEditor;
-        this._openInEditorButton.tooltip = 'CGE: Open project in editor';
+        this._openInEditorButton.tooltip = 'CGE: Open Project in Castle Editor';
         this._openInEditorButton.text = 'Open in Editor';
         this._openInEditorButton.show();
     }
