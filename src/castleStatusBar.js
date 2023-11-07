@@ -7,6 +7,7 @@ class CastleStatusBar {
         this._context = context;
         this.createBuildModeSwitch();
         this.createCompileButton();
+        this.createDebugButton();
         this.createRunButton();
         this.createCleanButton();
     }
@@ -43,6 +44,15 @@ class CastleStatusBar {
         this._compileButton.tooltip = 'CGE: Click to compile game';
         this._compileButton.text = '$(gear) Compile';
         this._compileButton.show();
+    }
+
+    createDebugButton() {
+        this._debugButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
+        this._context.subscriptions.push(this._runButton);
+        this._debugButton.command = this._castleConfig.commandId.debugGame;
+        this._debugButton.tooltip = 'CGE: Click to start debuging your game';
+        this._debugButton.text = '$(debug-alt) Debug';
+        this._debugButton.show();
     }
 
     createRunButton() {
