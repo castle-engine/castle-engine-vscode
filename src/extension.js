@@ -314,25 +314,21 @@ async function activate(context) {
 	castleFileWatcher = new CastleFileWatcher(context, castleConfig);
 
 	castleTaskProvider = new CastleTaskProvder(buildTool, castleConfig);
-	console.log(castleTaskProvider);
 	let disposable = vscode.tasks.registerTaskProvider('cge-tasks', castleTaskProvider);
 	context.subscriptions.push(disposable);
 
-	disposable = vscode.commands.registerCommand('castle-game-engine.compileGame', () => {
-		console.log('compile Game - START');
+	disposable = vscode.commands.registerCommand(castleConfig.commandId.compileGame, () => {
 		vscode.tasks.executeTask(castleTaskProvider.compileGameTask);
 	});
 	context.subscriptions.push(disposable);
 
-	disposable = vscode.commands.registerCommand('castle-game-engine.runGame', () => {
-		console.log('run Game - START');
+	disposable = vscode.commands.registerCommand(castleConfig.commandId.runGame, () => {
 		castleTaskProvider.updateCastleTasks();
 		vscode.tasks.executeTask(castleTaskProvider.runGameTask);
 	});
 	context.subscriptions.push(disposable);
 
-	disposable = vscode.commands.registerCommand('castle-game-engine.cleanGame', () => {
-		console.log('clean Game - START');
+	disposable = vscode.commands.registerCommand(castleConfig.commandId.cleanGame, () => {
 		vscode.tasks.executeTask(castleTaskProvider.cleanGameTask);
 	});
 	context.subscriptions.push(disposable);

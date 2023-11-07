@@ -12,6 +12,9 @@ class CastleConfiguration {
         this.recompilationNeeded = true;
         this._commandId = {
             showBuildModes: 'castle-game-engine.showBuildModeSelectionInStatusBar',
+            compileGame: 'castle-game-engine.compileGame',
+            runGame: 'castle-game-engine.runGame',
+            cleanGame: 'castle-game-engine.cleanGame',
         };
     }
 
