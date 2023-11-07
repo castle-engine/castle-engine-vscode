@@ -34,4 +34,19 @@ async function executeCommandAndReturnValue(command) {
 	}
 }
 
-module.exports = {executeCommandAndReturnValue};
+async function executeCommand(command) {
+	let options = {};
+
+	if (vscode.workspace.workspaceFolders !== undefined) {
+		console.log(vscode.workspace.workspaceFolders[0].uri.path);
+		options.cwd = vscode.workspace.workspaceFolders[0].uri.path;
+	}
+
+	try {
+		await exec(command, options);
+	} catch (e) {
+		vscode.window.showErrorMessage(`Error: ${e.message}`);
+	}
+}
+
+module.exports = {executeCommandAndReturnValue, executeCommand};
