@@ -10,6 +10,7 @@ class CastleStatusBar {
         this.createDebugButton();
         this.createRunButton();
         this.createCleanButton();
+        this.createOpenInEditorButton();
     }
 
     createBuildModeSwitch() {
@@ -71,6 +72,15 @@ class CastleStatusBar {
         this._cleanButton.tooltip = 'CGE: Click to clean game files';
         this._cleanButton.text = 'Clean';
         this._cleanButton.show();
+    }
+
+    createOpenInEditorButton() {
+        this._openInEditorButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
+        this._context.subscriptions.push(this._openInEditorButton);
+        this._openInEditorButton.command = this._castleConfig.commandId.openInCastleEditor;
+        this._openInEditorButton.tooltip = 'CGE: Open project in editor';
+        this._openInEditorButton.text = 'Open in Editor';
+        this._openInEditorButton.show();
     }
 
 }

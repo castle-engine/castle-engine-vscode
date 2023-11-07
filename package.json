@@ -61,6 +61,10 @@
       {
         "command": "castle-game-engine.showBuildModeSelectionInStatusBar",
         "title": "Select Build Mode (CGE)"
+      },
+      {
+        "command": "castle-game-engine.openWorkspaceInCastleEditor",
+        "title": "Open In Castle Editor (CGE)"
       }
     ],
     "configuration": {

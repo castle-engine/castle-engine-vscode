@@ -16,6 +16,7 @@ class CastleConfiguration {
             runGame: 'castle-game-engine.runGame',
             cleanGame: 'castle-game-engine.cleanGame',
             debugGame: 'workbench.action.debug.start',
+            openInCastleEditor: 'castle-game-engine.openWorkspaceInCastleEditor',
         };
     }
 

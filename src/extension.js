@@ -333,6 +333,11 @@ async function activate(context) {
 	});
 	context.subscriptions.push(disposable);
 
+	disposable = vscode.commands.registerCommand(castleConfig.commandId.openInCastleEditor, () => {
+		castleExec.executeCommand(buildTool + ' editor');
+	});
+	context.subscriptions.push(disposable);
+
 	castleDebugProvider = new CastleDebugProvider(buildTool, castleConfig);
 
 	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
