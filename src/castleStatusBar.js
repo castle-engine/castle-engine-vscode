@@ -55,12 +55,12 @@ class CastleStatusBar {
     }
 
     createCleanButton() {
-        this._runButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
-        this._context.subscriptions.push(this._runButton);
-        this._runButton.command = this._castleConfig.commandId.cleanGame;
-        this._runButton.tooltip = 'CGE: Click to clean game files';
-        this._runButton.text = 'Clean';
-        this._runButton.show();
+        this._cleanButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
+        this._context.subscriptions.push(this._cleanButton);
+        this._cleanButton.command = this._castleConfig.commandId.cleanGame;
+        this._cleanButton.tooltip = 'CGE: Click to clean game files';
+        this._cleanButton.text = 'Clean';
+        this._cleanButton.show();
     }
 
 }
