@@ -303,7 +303,11 @@ async function activate(context) {
 		documentSelector: [
 			{ scheme: 'file', language: 'pascal' },
 			{ scheme: 'untitled', language: 'pascal' }
-		]
+		],
+//		initializationOptions : {
+//			option: 'value',
+//		}
+
 	}
 
 	client = new vscodelangclient.LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
