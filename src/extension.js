@@ -11,9 +11,11 @@ const CastleStatusBar = require('./castleStatusBar.js');
 const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
 
 let castleTaskProvider;
+// eslint-disable-next-line no-unused-vars
 let castleFileWatcher;
 let castleDebugProvider;
 let castleConfig;
+// eslint-disable-next-line no-unused-vars
 let castleStatusBar;
 let castleLanguageServer;
 
