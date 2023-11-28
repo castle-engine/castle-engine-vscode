@@ -36,8 +36,12 @@ async function activate(context) {
 			throw new Error('Castle Game Engine Extension can\'t run without build tool in bin subdirectory.');
 	}
 
-	castleLanguageServer = new CastlePascalLanguageServer(castleConfig);
-	castleLanguageServer.createLanguageClient();
+	// When there is no pascal language server we still can run the extension 
+	// but there will be no code completion etc.
+	if (castleConfig.pascalServerPath !== '') {
+		castleLanguageServer = new CastlePascalLanguageServer(castleConfig);
+		castleLanguageServer.createLanguageClient();
+	}
 
 	castleFileWatcher = new CastleFileWatcher(context, castleConfig);
 
