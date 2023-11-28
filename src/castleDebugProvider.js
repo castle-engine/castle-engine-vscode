@@ -2,6 +2,10 @@ const vscode = require("vscode");
 const castleExec = require('./castleExec.js');
 const castleConfiguration = require('./castleConfiguration.js');
 
+/**
+ * Castle Debug Provider that uses fpDebug to start debug session without 
+ * configuration. Just choose "cgedebug" after hiting F5.
+ */
 class CastleDebugProvider {
 
     constructor (buildTool, castleConfig) {
@@ -9,16 +13,17 @@ class CastleDebugProvider {
 		this._castleConfig = castleConfig;
     }
 
-	provideDebugConfigurations(folder, token) {
+	// not used
+	/*provideDebugConfigurations(folder, token) {
 		console.log('provideDebugConfigurations - START');
-	}
+	}*/
 
-	async resolveDebugConfiguration(folder, config, token) {
+	async resolveDebugConfiguration(folder, config/*, token*/) {
 		console.log('resolveDebugConfiguration - START');
 		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
 			const editor = vscode.window.activeTextEditor;
 			if (editor !== undefined && editor.document.languageId === 'pascal') {
-				console.log('Editor with pascal sources');
+				//console.log('Editor with pascal sources');
 				config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
 				config.name = 'Debug CGE Game with fpDebug';
 				config.request = 'launch';
@@ -35,7 +40,7 @@ class CastleDebugProvider {
 			}
 
 			if (!config.program) {
-				return vscode.window.showInformationMessage("Cannot find a program to debug").then(_ => {
+				return vscode.window.showInformationMessage("Cannot find a program to debug").then(() => {
 					return undefined;	// abort launch
 				});
 			}
