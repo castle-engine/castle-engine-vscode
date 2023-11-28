@@ -19,15 +19,9 @@ let castleLanguageServer;
 
 let buildTool; // path to buildtool
 
-
-
-
-
-
-
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 /**
+ * This method is called when your extension is activated. Extension is activated 
+ * the very first time the command is executed
  * @param {vscode.ExtensionContext} context
  */
 async function activate(context) {
@@ -78,7 +72,9 @@ async function activate(context) {
 	console.log('Castle Engine Extension - Activate - DONE');
 }
 
-// This method is called when your extension is deactivated
+/**
+ * Called when your extension is deactivated
+ */
 function deactivate() { }
 
 module.exports = {
