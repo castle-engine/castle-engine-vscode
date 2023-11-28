@@ -32,12 +32,9 @@ class CastleConfiguration {
             debugGame: 'workbench.action.debug.start',
             openInCastleEditor: 'castle-game-engine.openWorkspaceInCastleEditor',
         };
-        this._buildToolPath = undefined;
-        this._enginePath = undefined;
-        this._pascalServerPath = undefined;
-        this._compilerPath = undefined;
-        this._fpcSourcesPath = undefined;
-        this._lazarusSourcesPath = undefined;
+        this._buildToolPath = '';
+        this._enginePath = '';
+        this._pascalServerPath = '';
     }
 
     /**
@@ -69,21 +66,21 @@ class CastleConfiguration {
     }
 
     /**
-     * @returns {string|undefined} path to castle engine folder
+     * @returns {string} path to castle engine folder, empty string when not found
      */
     get enginePath() {
         return this._enginePath;
     }
 
     /**
-     * @returns {string|undefined} path to build tool with file name (and extension .exe on windows) or undefined when not found
+     * @returns {string} path to build tool with file name (and extension .exe on windows) or empty string when not found
      */
     get buildToolPath() {
         return this._buildToolPath;
     }
 
     /**
-     * @returns {string|undefined} path to pascal language server with file name (and extension .exe on windows) or undefined when not found
+     * @returns {string} path to pascal language server with file name (and extension .exe on windows) or empty string when not found
      */
     get pascalServerPath() {
         return this._pascalServerPath;
@@ -95,20 +92,20 @@ class CastleConfiguration {
      */
     findPaths() {
         this._enginePath = this.findEnginePath();
-        if (this._enginePath == undefined)
+        if (this._enginePath === '' )
             return false;
         this._buildToolPath = this.findBuildToolPath();
-        if (this._buildToolPath == undefined)
+        if (this._buildToolPath === '')
             return false;
         this._pascalServerPath = this.findPascalServerPath();
-        if (this._pascalServerPath == undefined)
+        if (this._pascalServerPath === '')
             return false;
     }
 
     /**
      * Searches engine path using VSCode configuration and environment variables.
      * Also shows error messages.
-     * @returns {string|undefined} path to engine or undefined when not found
+     * @returns {string} path to engine or empty string when not found
      */
     findEnginePath() {
         let enginePath = vscode.workspace.getConfiguration('castleGameEngine').get('enginePath');
@@ -121,7 +118,7 @@ class CastleConfiguration {
                 console.log(`Engine path from environment: ${enginePath}`);
             } else {
                 vscode.window.showErrorMessage('Castle Game Engine not set, correct the configuration or set CASTLE_ENGINE_PATH environment variable.');
-                return undefined;
+                return '';
             }
         }
 
@@ -131,7 +128,7 @@ class CastleConfiguration {
         }
         catch (err) {
             vscode.window.showErrorMessage(`Castle Game Engine not found, correct the configuration or set CASTLE_ENGINE_PATH environment variable. ${err}`);
-            return undefined;
+            return '';
         }
 
         return enginePath;
@@ -140,7 +137,7 @@ class CastleConfiguration {
     /**
      * Looks for Castle Game Engine build tool.
      * Also shows error message.
-     * @returns {string|undefined} path to build tool or undefined when not found
+     * @returns {string} path to build tool or empty string when not found
      */
     findBuildToolPath() {
         let buildTool = this._enginePath + path.sep + 'bin' + path.sep + 'castle-engine';
@@ -153,7 +150,7 @@ class CastleConfiguration {
         }
         catch (err) {
             vscode.window.showErrorMessage(`Build Tool for Castle Game Engine not found (${buildTool}). ${err}`);
-            return undefined;
+            return '';
         }
 
         return buildTool;
@@ -161,7 +158,7 @@ class CastleConfiguration {
 
     /**
      * Looks for Pascal language server, if it does not find it, it displays an error message
-     * @returns {string|undefined} path to pasls or undefined when not found
+     * @returns {string} path to pasls or empty string when not found
      */
     findPascalServerPath() {
         let pasServer = this._enginePath + path.sep + 'bin' + path.sep + 'pasls';
@@ -173,7 +170,7 @@ class CastleConfiguration {
         }
         catch (err) {
             vscode.window.showErrorMessage(`Pascal Language Server for Castle Game Engine not found (${pasServer}). ${err}`);
-            return undefined;
+            return '';
         }
 
         return pasServer;
