@@ -158,7 +158,7 @@ class CastlePascalLanguageServer {
     /**
      * 
      * @param {string} fpcCompilerExec path to fpc
-     * @returns {string} path to fpc sources
+     * @returns {string} path to fpc sources or '' when not found
      */
     async tryToFindFpcSources(fpcCompilerExec) {
         if (fpcCompilerExec === '')
