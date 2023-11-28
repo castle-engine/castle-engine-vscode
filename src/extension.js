@@ -37,7 +37,7 @@ async function activate(context) {
 	castleFileWatcher = new CastleFileWatcher(context, castleConfig);
 
 	buildTool = castleConfig.buildToolPath;
-	castleTaskProvider = new CastleTaskProvder(buildTool, castleConfig);
+	castleTaskProvider = new CastleTaskProvder(castleConfig);
 	let disposable = vscode.tasks.registerTaskProvider('cge-tasks', castleTaskProvider);
 	context.subscriptions.push(disposable);
 
