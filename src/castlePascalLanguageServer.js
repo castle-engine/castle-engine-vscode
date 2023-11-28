@@ -2,6 +2,7 @@ const fs = require('fs');
 const vscode = require('vscode');
 const vscodelangclient = require('vscode-languageclient');
 
+// eslint-disable-next-line no-unused-vars
 const castleConfiguration = require('./castleConfiguration.js');
 const castleExec = require('./castleExec.js');
 
