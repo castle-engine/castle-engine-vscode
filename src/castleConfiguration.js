@@ -39,6 +39,7 @@ class CastleConfiguration {
 
     /**
      * Returns current build mode
+     * @returns {CastleBuildModes}
      */
     get buildMode() {
         return this._buildMode;
@@ -46,6 +47,7 @@ class CastleConfiguration {
 
     /**
      * Sets build mode
+     * @param {CastleBuildModes} newValue new build mode
      */
     set buildMode(newValue) {
         if (newValue === CastleBuildModes.DEBUG || newValue === CastleBuildModes.RELEASE) {
@@ -92,7 +94,7 @@ class CastleConfiguration {
      */
     findPaths() {
         this._enginePath = this.findEnginePath();
-        if (this._enginePath === '' )
+        if (this._enginePath === '')
             return false;
         this._buildToolPath = this.findBuildToolPath();
         if (this._buildToolPath === '')
