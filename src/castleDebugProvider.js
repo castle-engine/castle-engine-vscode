@@ -8,8 +8,10 @@ const castleConfiguration = require('./castleConfiguration.js');
  */
 class CastleDebugProvider {
 
-    constructor (buildTool, castleConfig) {
-        this._buildTool = buildTool;
+	/**
+	 * @param {castleConfiguration.CastleConfiguration} castleConfig 
+	 */
+    constructor (castleConfig) {
 		this._castleConfig = castleConfig;
     }
 
@@ -27,7 +29,7 @@ class CastleDebugProvider {
 				config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
 				config.name = 'Debug CGE Game with fpDebug';
 				config.request = 'launch';
-				let executableName = await castleExec.executeCommandAndReturnValue(this._buildTool + ' output executable-name');
+				let executableName = await castleExec.executeCommandAndReturnValue(this._castleConfig.buildToolPath + ' output executable-name');
 				config.program = '${workspaceFolder}/' + executableName;
 				config.stopOnEntry = true;
 				config.workingdirectory = '${workspaceFolder}'

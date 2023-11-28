@@ -62,7 +62,7 @@ async function activate(context) {
 	});
 	context.subscriptions.push(disposable);
 
-	castleDebugProvider = new CastleDebugProvider(buildTool, castleConfig);
+	castleDebugProvider = new CastleDebugProvider(castleConfig);
 
 	disposable = vscode.debug.registerDebugConfigurationProvider('cgedebug', castleDebugProvider);
 	context.subscriptions.push(disposable);
