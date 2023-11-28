@@ -18,9 +18,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:pascal",
-    "onStartupFinished",
-    "onDebug"
+    "workspaceContains:CastleEngineManifest.xml"
   ],
   "main": "./src/extension.js",
   "contributes": {
