@@ -100,6 +100,7 @@ class CastleConfiguration {
         this._pascalServerPath = this.findPascalServerPath();
         if (this._pascalServerPath === '')
             return false;
+        return true;
     }
 
     /**
