@@ -17,8 +17,6 @@ let castleConfig;
 let castleStatusBar;
 let castleLanguageServer;
 
-let buildTool; // path to buildtool
-
 /**
  * This method is called when your extension is activated. Extension is activated 
  * the very first time the command is executed
@@ -36,7 +34,6 @@ async function activate(context) {
 
 	castleFileWatcher = new CastleFileWatcher(context, castleConfig);
 
-	buildTool = castleConfig.buildToolPath;
 	castleTaskProvider = new CastleTaskProvder(castleConfig);
 	let disposable = vscode.tasks.registerTaskProvider('cge-tasks', castleTaskProvider);
 	context.subscriptions.push(disposable);
@@ -58,7 +55,7 @@ async function activate(context) {
 	context.subscriptions.push(disposable);
 
 	disposable = vscode.commands.registerCommand(castleConfig.commandId.openInCastleEditor, () => {
-		castleExec.executeCommand(buildTool + ' editor');
+		castleExec.executeCommand(castleConfig.buildToolPath + ' editor');
 	});
 	context.subscriptions.push(disposable);
 
