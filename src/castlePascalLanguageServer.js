@@ -67,7 +67,7 @@ class CastlePascalLanguageServer {
         // win32 can be 32 or 64 bit windows
         if (fpcDefaultTarget === 'win32')
             fpcDefaultTarget = 'windows'
-        
+
         this.enviromentForPascalServer['FPCTARGET'] = this.getEnvSetting('FPCTARGET', fpcDefaultTarget);
 
         // try to detect default architecture
@@ -192,10 +192,25 @@ class CastlePascalLanguageServer {
                 return sourcesDir;
             }
 
-            // sources not found
-            return '';
-        }
-        // TODO: another OSes
+        } else
+            if (process.platform === 'win32') {
+                // check current fpc is not done by fpcupdeluxe
+                let sourcesDir = fpcCompilerExec;
+                let index = sourcesDir.indexOf('fpc/bin');
+                if (index > 0) {
+                    sourcesDir = sourcesDir.substring(0, index) + 'fpcsrc';
+                    if (this.isCompilerSourcesFolder(sourcesDir)) {
+                        console.log('Found fpc sources:', sourcesDir);
+                        return sourcesDir;
+                    }
+                }
+            } else
+                if (process.platform === 'darwin') {
+                    //TODO: macos support
+                }
+
+        // sources not found
+        return '';
     }
 
     /**
@@ -271,12 +286,30 @@ class CastlePascalLanguageServer {
             // so we need iterate all items in that directory 
             // https://packages.debian.org/bookworm/all/lazarus-src-2.2/filelist
             sourcesDir = this.findFullLazarusSourcesFolder('/usr/lib/lazarus/');
-            if (sourcesDir !== '')
+            if (sourcesDir !== '') {
                 console.log('Found lazarus sources:', sourcesDir);
-            return sourcesDir;
-        }
-        // TODO: another OSes
+                return sourcesDir;
+            }
+        } else
+            if (process.platform === 'win32') {
+                // check current fpc is not done by fpcupdeluxe then lazarus is in lazarus subfolder
+                let sourcesDir = fpcCompilerExec;
+                let index = sourcesDir.indexOf('fpc/bin');
+                if (index > 0) {
 
+                    sourcesDir = sourcesDir.substring(0, index) + 'lazarus';
+                    if (this.isLazarusSourcesFolder(sourcesDir)) {
+                        console.log('Found lazarus sources:', sourcesDir);
+                        return sourcesDir;
+                    }
+                }
+            } else
+                if (process.platform === 'darwin') {
+                    //TODO: macos support
+                }
+
+        // no sources dir found
+        return '';
     }
 }
 
