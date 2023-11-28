@@ -3,7 +3,7 @@ const vscode = require("vscode");
 /**
  * Observes file system for changes in files and sets castleConfig.recompilationNeeded to true 
  * after a source file is created/deleted.modified.
- * After recompilation set it to false.
+ * After recompilation sets it to false.
  */
 class CastleFileWatcher {
 
