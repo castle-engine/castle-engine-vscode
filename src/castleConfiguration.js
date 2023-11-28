@@ -179,6 +179,20 @@ class CastleConfiguration {
         return pasServer;
     }
 
+    /**
+     * Opens error message box with open configuration button.
+     * @param {string} message 
+     */
+    showErrorMessageWithConfigLink(message) {
+        let action = 'Open extension config';
+        vscode.window.showErrorMessage(message, action)
+        .then(selection => {
+            if (selection === action) {
+                vscode.commands.executeCommand('workbench.action.openSettings', 'castle-game-engine');
+            }
+        });        
+    }
+
 }
 
 module.exports = { CastleBuildModes, CastleConfiguration };
