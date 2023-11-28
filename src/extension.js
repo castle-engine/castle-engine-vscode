@@ -29,7 +29,12 @@ async function activate(context) {
 
 	castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
 
-	castleConfig.findPaths();
+	if (castleConfig.findPaths() === false) {
+		if (castleConfig.enginePath === '')
+			throw new Error('Castle Game Engine Extension can\'t run without proper engine path.');
+		if (castleConfig.buildToolPath === '')
+			throw new Error('Castle Game Engine Extension can\'t run without build tool in bin subdirectory.');
+	}
 
 	castleLanguageServer = new CastlePascalLanguageServer(castleConfig);
 	castleLanguageServer.createLanguageClient();
