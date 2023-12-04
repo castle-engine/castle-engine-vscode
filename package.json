@@ -67,7 +67,7 @@
     ],
     "configuration": {
       "type": "object",
-      "title": "Pascal Language Server",
+      "title": "Castle Game Engine",
       "properties": {
         "castleGameEngine.enginePath": {
           "type": "string",
