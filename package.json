@@ -6,6 +6,7 @@
   "icon": "images/logo.png",
   "version": "0.0.1",
   "homepage": "https://castle-engine.io",
+  "keywords": ["cge", "gamedev", "pascal", "game engine"],
   "repository": {
     "type": "git",
     "url": "https://github.com/castle-engine/castle-game-engine-vscode.git"
