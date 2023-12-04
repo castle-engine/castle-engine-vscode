@@ -120,7 +120,7 @@ class CastleConfiguration {
                 enginePath = process.env.CASTLE_ENGINE_PATH
                 console.log(`Engine path from environment: ${enginePath}`);
             } else {
-                this.showErrorMessageWithConfigLink('Castle Game Engine not set, correct the configuration or set CASTLE_ENGINE_PATH environment variable.');
+                this.showErrorMessageWithConfigLink('Path to Castle Game Engine is not set, correct the configuration or set CASTLE_ENGINE_PATH environment variable.');
                 return '';
             }
         }
@@ -130,7 +130,7 @@ class CastleConfiguration {
             fs.accessSync(enginePath, fs.constants.F_OK)
         }
         catch (err) {
-            this.showErrorMessageWithConfigLink(`Castle Game Engine not found, correct the configuration or set CASTLE_ENGINE_PATH environment variable. ${err}`);
+            this.showErrorMessageWithConfigLink(`Path to Castle Game Engine is not valid, correct the configuration or set CASTLE_ENGINE_PATH environment variable. \n\n ${err}`);
             return '';
         }
 
