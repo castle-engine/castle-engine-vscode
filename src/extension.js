@@ -31,9 +31,9 @@ async function activate(context) {
 
 	if (castleConfig.findPaths() === false) {
 		if (castleConfig.enginePath === '')
-			throw new Error('Castle Game Engine Extension can\'t run without proper engine path.');
+			throw new Error('Castle Game Engine Extension can\'t run without proper engine path');
 		if (castleConfig.buildToolPath === '')
-			throw new Error('Castle Game Engine Extension can\'t run without build tool in bin subdirectory.');
+			throw new Error('Castle Game Engine Extension can\'t run without build tool in bin subdirectory');
 	}
 
 	// When there is no pascal language server we still can run the extension 
