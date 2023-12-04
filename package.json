@@ -3,6 +3,9 @@
   "displayName": "Castle Game Engine",
   "description": "VSCode extension for Castle Game Engine",
   "publisher": "castle-game-engine-team",
+  "author": {
+    "name": "Castle Game Engine Team"
+  },
   "icon": "images/logo.png",
   "version": "0.0.1",
   "homepage": "https://castle-engine.io",
