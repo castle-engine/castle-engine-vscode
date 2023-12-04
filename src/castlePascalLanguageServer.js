@@ -36,15 +36,23 @@ class CastlePascalLanguageServer {
         if (this._castleConfig.pascalServerPath === '' || this._castleConfig.buildToolPath === '')
             return false;
 
+        // get default compiler path for build tool 
         let defaultCompilerExePath = await castleExec.executeCommandAndReturnValue(this._castleConfig.buildToolPath + ' output-environment fpc-exe');
 
+        // read settings when and fallback to defaultCompilerExePath
         this.enviromentForPascalServer['PP'] = this.getEnvSetting('PP', defaultCompilerExePath);
+
+        // when build tool did not return fpc path for example when this is old build tool
+        // try simply run fpc -PB
+        if (this.enviromentForPascalServer['PP'] === '')
+            this.enviromentForPascalServer['PP'] = await castleExec.executeCommandAndReturnValue('fpc -PB');
+
         // Check compiler really exists and can be executed
         try {
             fs.accessSync(this.enviromentForPascalServer['PP'], fs.constants.X_OK)
         }
         catch (err) {
-            vscode.window.showErrorMessage(`FPC compiler executable can't be executed. ${err}`);
+            vscode.window.showErrorMessage(`FPC compiler executable not found or can't be executed. ${err}`);
             return false;
         }
 
@@ -87,7 +95,6 @@ class CastlePascalLanguageServer {
     async createLanguageClient() {
         if (await this.loadOrDetectSettings() === false)
             return false;
-
 
         let run = {
             command: this._castleConfig.pascalServerPath,
