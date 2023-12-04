@@ -6,6 +6,9 @@
   "icon": "images/logo.png",
   "version": "0.0.1",
   "homepage": "https://castle-engine.io",
+  "sponsor": {
+    "url": "https://www.patreon.com/castleengine"
+  },
   "keywords": ["cge", "gamedev", "pascal", "game engine"],
   "repository": {
     "type": "git",
