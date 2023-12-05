@@ -126,6 +126,17 @@ class CastlePascalLanguageServer {
     }
 
     /**
+     * Destorys _pascalServerClient. Used when configuration changes.
+     */
+    async destroyLanguageClient() {
+        if (this._pascalServerClient !== undefined)
+        {
+            await this._pascalServerClient.stop();
+            this._pascalServerClient = null;
+        }
+    }
+
+    /**
      * Gets value fom vscode configuration, env variable or the default value.
      * @param {string} envVarName 
      * @param {string} defaultValue

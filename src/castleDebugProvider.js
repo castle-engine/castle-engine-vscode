@@ -22,7 +22,15 @@ class CastleDebugProvider {
 
 	async resolveDebugConfiguration(folder, config/*, token*/) {
 		console.log('resolveDebugConfiguration - START');
+
 		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
+
+			// this._castleConfig.buildToolPath can be changed when 
+			// debug configuration provider is created and 
+			// new configuration can be not valid when buildToolPath === ''
+			if (this._castleConfig.buildToolPath === '')
+				return undefined; // abort launch
+
 			const editor = vscode.window.activeTextEditor;
 			if (editor !== undefined && editor.document.languageId === 'pascal') {
 				//console.log('Editor with pascal sources');

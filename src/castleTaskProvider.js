@@ -54,7 +54,7 @@ class CastleTaskProvder {
 
 	/**
 	 * Updates compile task to use proper build mode and run game 
-	 * task when recompilationNeeded changes.
+	 * task when recompilationNeeded changes o buildToolPath changes.
 	 */
 	updateCastleTasks() {
 		if (this._castleConfig.recompilationNeeded)
@@ -63,6 +63,8 @@ class CastleTaskProvder {
 			this._runGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath + ' run --mode=' + this._castleConfig.buildMode.buildTool);
 
 		this._compileGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath + ' compile --mode=' + this._castleConfig.buildMode.buildTool);
+
+		this._cleanGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath + ' clean');
 	}
 
 	/**
@@ -88,8 +90,10 @@ class CastleTaskProvder {
 
 	provideTasks() {
 		try {
-			this.updateCastleTasks();
+			if (this._castleConfig.buildToolPath === '')
+				return [];
 
+			this.updateCastleTasks();
 			return [this._compileGameTask, this._runGameTask, this._cleanGameTask];
 		}
 		catch (err) {
