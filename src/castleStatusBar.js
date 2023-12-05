@@ -1,16 +1,20 @@
 const vscode = require("vscode");
 const castleConfiguration = require('./castleConfiguration.js');
+const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
 
 class CastleStatusBar {
-    constructor(context, castleConfig) {
+    constructor(context, castleConfig, castleLanguageServer) {
         this._castleConfig = castleConfig;
         this._context = context;
+        this._castleLanguageServer = castleLanguageServer;
         this.createBuildModeSwitch();
         this.createCompileButton();
         this.createDebugButton();
         this.createRunButton();
         this.createCleanButton();
         this.createOpenInEditorButton();
+        this.createConfigErrorButton();
+        this.updateButtonsVisibility();
     }
 
     createBuildModeSwitch() {
@@ -83,6 +87,42 @@ class CastleStatusBar {
         this._openInEditorButton.show();
     }
 
+    createConfigErrorButton() {
+        this._openSettingsButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
+        this._context.subscriptions.push(this._openSettingsButton);
+        this._openSettingsButton.command = this._castleConfig.commandId.validateAndOpenSettings;
+        this._openSettingsButton.tooltip = 'CGE: Invalid plugin configuration click to fix';
+        this._openSettingsButton.text = 'CGE: Invalid plugin config';
+        this._openSettingsButton.color = new vscode.ThemeColor('statusBarItem.errorForeground');
+        this._openSettingsButton.show();
+    }
+
+    updateButtonsVisibility() {
+        if (this._castleConfig.buildToolPath === '') {
+            this._compileButton.hide();
+            this._runButton.hide();
+            this._debugButton.hide();
+            this._cleanButton.hide();
+            this._openInEditorButton.hide();
+            // when engine path is not valid show config button
+            if (this._castleConfig.enginePath === '')
+                this._openSettingsButton.show();
+        }
+        else {
+            this._compileButton.show();
+            this._runButton.show();
+            this._debugButton.show();
+            this._cleanButton.show();
+            this._openInEditorButton.show();
+
+            // when pascalServerPath is valid but pascalServerClient is undefined or null
+            // there is problem with pasls config
+            if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined))
+                this._openSettingsButton.show();
+            else
+                this._openSettingsButton.hide();
+        }
+    }
 }
 
 module.exports = CastleStatusBar;

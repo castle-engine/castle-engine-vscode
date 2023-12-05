@@ -70,6 +70,10 @@
       {
         "command": "castle-game-engine.openWorkspaceInCastleEditor",
         "title": "Open In Castle Editor (CGE)"
+      },
+      {
+        "command": "castle-game-engine.validateAndOpenSettings",
+        "title": "Validate and open settings"
       }
     ],
     "configuration": {

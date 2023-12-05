@@ -39,7 +39,7 @@ async function activate(context) {
 		}
 	});
 	
-	castlePlugin.activatePlugin();
+	await castlePlugin.activatePlugin();
 	console.log('Castle Engine Extension - Activate - DONE');
 }
 

@@ -18,15 +18,17 @@ class CastlePlugin {
         this._context = context;
         this._taskCommandsRegistered = false;
         this._editorCommandsRegistered = false;
+        this._validateCommandsRegistered = false;
     }
 
 
-    activatePlugin() {
+    async activatePlugin() {
         this.updateConfiguration();
-        this.updateLanguageServer();
+        await this.updateLanguageServer();
         this.updateFileWatcher();
         this.updateTaskProvider();
         this.updateEditorCommand();
+        this.updateValidateAndOpenSettingsCommand();
         this.updateDebugProvider();
         this.updateStatusBar();
     }
@@ -47,18 +49,18 @@ class CastlePlugin {
         }
     }
 
-    updateLanguageServer() {
+    async updateLanguageServer() {
         // When there is no pascal language server we still can run the extension 
         // but there will be no code completion etc.
         if (this._castleConfig.pascalServerPath !== '') {
-            if (this._castleLanguageServer === undefined)
+            if (this._castleLanguageServer == undefined)
                 this._castleLanguageServer = new CastlePascalLanguageServer(this._castleConfig);
             else
                 this._castleLanguageServer.destroyLanguageClient();
-            this._castleLanguageServer.createLanguageClient();
+            await this._castleLanguageServer.createLanguageClient();
         } else {
             // when configuration changes we should rerun language client
-            if (this._castleLanguageServer !== undefined) {
+            if (this._castleLanguageServer != undefined) {
                 this._castleLanguageServer.destroyLanguageClient();
             }
         }
@@ -122,13 +124,39 @@ class CastlePlugin {
             if (this._editorCommandsRegistered) {
                 this._disposableOpenInEditor.dispose();
                 this._disposableOpenInEditor = null;
+                this._editorCommandsRegistered = false;
             }
         } else {
-            this._disposableOpenInEditor = vscode.commands.registerCommand(this._castleConfig.commandId.openInCastleEditor, () => {
-                castleExec.executeCommand(this._castleConfig.buildToolPath + ' editor');
+            if (this._editorCommandsRegistered === false) {
+                this._disposableOpenInEditor = vscode.commands.registerCommand(this._castleConfig.commandId.openInCastleEditor, () => {
+                    castleExec.executeCommand(this._castleConfig.buildToolPath + ' editor');
+                });
+                this._context.subscriptions.push(this._disposableOpenInEditor);
+                this._editorCommandsRegistered = true;
+            }
+        }
+    }
+
+    updateValidateAndOpenSettingsCommand() {
+        if (this._validateCommandsRegistered === false) {
+            let disposable = vscode.commands.registerCommand(this._castleConfig.commandId.validateAndOpenSettings, () => {
+                // TODO: validate settings and show information
+                if (this._castleConfig.enginePath === '') 
+                    vscode.window.showInformationMessage('The path to engine in not valid, check enginePath value.');
+
+                if (this._castleConfig.buildToolPath === '') 
+                    vscode.window.showInformationMessage('The path to engine is set but in bin subfolder there is no buildtool (castle-engine).');
+
+                if (this._castleConfig.pascalServerPath === '')
+                    vscode.window.showInformationMessage('The engine path is set but the pascal language server executable cannot be found in bin subfolder there is no pasls executble.');
+                
+                if ((this._castleConfig.pascalServerPath !== '') || this._castleLanguageServer.pascalServerClient == undefined)
+                    vscode.window.showInformationMessage('Path to engine and pascal language server look correct, but some pasls settings are incorrect.');
+
+                vscode.commands.executeCommand('workbench.action.openSettings', 'castle-game-engine');
             });
-            this._context.subscriptions.push(this._disposableOpenInEditor);
-            this._editorCommandsRegistered = true;
+            this._context.subscriptions.push(disposable);
+            this._validateCommandsRegistered = true;
         }
     }
 
@@ -144,12 +172,11 @@ class CastlePlugin {
     }
 
     updateStatusBar() {
-        if (this._castleStatusBar == undefined)
-        {
-            this._castleStatusBar = new CastleStatusBar(this._context, this._castleConfig);
+        if (this._castleStatusBar == undefined) {
+            this._castleStatusBar = new CastleStatusBar(this._context, this._castleConfig, this._castleLanguageServer);
         }
+        this._castleStatusBar.updateButtonsVisibility();
     }
-    
 }
 
 module.exports = CastlePlugin;
