@@ -17,9 +17,9 @@ async function activate(context) {
 	castlePlugin = new CastlePlugin(context);
 
 	// register callback when configuration changes
-	vscode.workspace.onDidChangeConfiguration((event) => {
+	vscode.workspace.onDidChangeConfiguration(async (event) => {
 		if (event.affectsConfiguration('castleGameEngine.enginePath')) {
-			castlePlugin.updatePlugin();
+			await castlePlugin.updatePlugin();
 		}
 	});
 	

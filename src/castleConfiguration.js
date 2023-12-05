@@ -90,20 +90,19 @@ class CastleConfiguration {
     }
 
     /**
-     * @returns {boolean} returns true if everything has been successfully configured,
-     * or false some features can not working.
+     * Searching the most important paths. 
      */
     findPaths() {
         this._enginePath = this.findEnginePath();
         if (this._enginePath === '')
-            return false;
+        {
+            this._buildToolPath = '';    
+            this._pascalServerPath = '';
+            return;
+        }
+            
         this._buildToolPath = this.findBuildToolPath();
-        if (this._buildToolPath === '')
-            return false;
         this._pascalServerPath = this.findPascalServerPath();
-        if (this._pascalServerPath === '')
-            return false;
-        return true;
     }
 
     /**

@@ -33,35 +33,36 @@ class CastlePlugin {
         this.updateStatusBar();
     }
 
-    updatePlugin() {
-        this.activatePlugin();
+    async updatePlugin() {
+        await this.activatePlugin();
     }
 
     updateConfiguration() {
         if (this._castleConfig === undefined)
             this._castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
 
-        if (this._castleConfig.findPaths() === false) {
+        this._castleConfig.findPaths();
+        /*if (this._castleConfig.findPaths() === false) {
             if (this._castleConfig.enginePath === '')
                 throw new Error('Castle Game Engine Extension can\'t run without proper engine path');
             if (this._castleConfig.buildToolPath === '')
                 throw new Error('Castle Game Engine Extension can\'t run without build tool in bin subdirectory');
-        }
+        }*/
     }
 
     async updateLanguageServer() {
+        if (this._castleLanguageServer == undefined)
+            this._castleLanguageServer = new CastlePascalLanguageServer(this._castleConfig);
+
         // When there is no pascal language server we still can run the extension 
         // but there will be no code completion etc.
         if (this._castleConfig.pascalServerPath !== '') {
-            if (this._castleLanguageServer == undefined)
-                this._castleLanguageServer = new CastlePascalLanguageServer(this._castleConfig);
-            else
-                this._castleLanguageServer.destroyLanguageClient();
+            await this._castleLanguageServer.destroyLanguageClient();
             await this._castleLanguageServer.createLanguageClient();
         } else {
             // when configuration changes we should rerun language client
             if (this._castleLanguageServer != undefined) {
-                this._castleLanguageServer.destroyLanguageClient();
+                await this._castleLanguageServer.destroyLanguageClient();
             }
         }
     }
@@ -150,7 +151,7 @@ class CastlePlugin {
                 if (this._castleConfig.pascalServerPath === '')
                     vscode.window.showInformationMessage('The engine path is set but the pascal language server executable cannot be found in bin subfolder there is no pasls executble.');
                 
-                if ((this._castleConfig.pascalServerPath !== '') || this._castleLanguageServer.pascalServerClient == undefined)
+                if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined))
                     vscode.window.showInformationMessage('Path to engine and pascal language server look correct, but some pasls settings are incorrect.');
 
                 vscode.commands.executeCommand('workbench.action.openSettings', 'castle-game-engine');
