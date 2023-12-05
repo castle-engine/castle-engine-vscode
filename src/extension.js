@@ -4,23 +4,7 @@ const vscode = require('vscode');
 
 const CastlePlugin = require('./castlePlugin.js');
 
-const CastleFileWatcher = require('./castleFileWatcher.js');
-const castleExec = require('./castleExec.js');
-const CastleDebugProvider = require('./castleDebugProvider.js');
-const CastleTaskProvder = require('./castleTaskProvider.js');
-const castleConfiguration = require('./castleConfiguration.js');
-const CastleStatusBar = require('./castleStatusBar.js');
-const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
-
 let castlePlugin;
-
-async function activatePlugin(context) {
-
-}
-
-async function activateLanguageServer(context) {
-
-}
 
 /**
  * This method is called when your extension is activated. Extension is activated 
