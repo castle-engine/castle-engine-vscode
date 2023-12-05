@@ -42,12 +42,6 @@ class CastlePlugin {
             this._castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
 
         this._castleConfig.findPaths();
-        /*if (this._castleConfig.findPaths() === false) {
-            if (this._castleConfig.enginePath === '')
-                throw new Error('Castle Game Engine Extension can\'t run without proper engine path');
-            if (this._castleConfig.buildToolPath === '')
-                throw new Error('Castle Game Engine Extension can\'t run without build tool in bin subdirectory');
-        }*/
     }
 
     async updateLanguageServer() {
