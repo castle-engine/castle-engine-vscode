@@ -129,9 +129,13 @@ class CastlePascalLanguageServer {
      * Destorys _pascalServerClient. Used when configuration changes.
      */
     async destroyLanguageClient() {
-        if (this._pascalServerClient !== undefined)
-        {
-            await this._pascalServerClient.stop();
+        if (this._pascalServerClient != undefined) {
+            try {
+                await this._pascalServerClient.stop();
+
+            } catch (e) {
+                vscode.window.showErrorMessage(`Error: ${e.message}`);
+            }
             this._pascalServerClient = null;
         }
     }
