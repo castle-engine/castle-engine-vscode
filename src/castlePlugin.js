@@ -142,23 +142,39 @@ class CastlePlugin {
         if (this._validateCommandsRegistered === false) {
             let disposable = vscode.commands.registerCommand(this._castleConfig.commandId.validateAndOpenSettings, () => {
 
-                if (this._castleConfig.enginePath === '') 
+                let wasWarning = false;
+                if (this._castleConfig.enginePath === '') {
+                    wasWarning = true;
                     vscode.window.showInformationMessage('The path to engine in not valid, check enginePath value.');
+                }
+                    
 
-                if (this._castleConfig.buildToolPath === '') 
-                    vscode.window.showInformationMessage(
-                        'The path to engine is set but there is no buildtool (castle-engine' +
-                         this.executableFileExtension() + ') in bin subfolder.');
+                if (this._castleConfig.buildToolPath === '') {
+                    if (!wasWarning) {
+                        vscode.window.showInformationMessage(
+                            'The path to engine is set but there is no buildtool (castle-engine' +
+                            this.executableFileExtension() + ') in bin subfolder.');
+                        wasWarning = true;
+                    }
+                }
 
-                if (this._castleConfig.pascalServerPath === '')
-                    vscode.window.showInformationMessage(
-                        'The engine path is set but the pascal language server executable cannot be found in bin subfolder (no pasls' 
-                        + this.executableFileExtension() +').');
+                if (this._castleConfig.pascalServerPath === '') {
+                    if (!wasWarning) {
+                        vscode.window.showInformationMessage(
+                            'The engine path is set but the pascal language server executable cannot be found in bin subfolder (no pasls' 
+                            + this.executableFileExtension() +').');
+                            wasWarning = true;
+                        }
+                }
                 
-                if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined))
-                    vscode.window.showInformationMessage(
-                    'Path to engine and pascal language server look correct, but some pasls' + 
-                    this.executableFileExtension() +  ' settings are incorrect.');
+                if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined)) {
+                    if (!wasWarning) {
+                        vscode.window.showInformationMessage(
+                            'Path to engine and pascal language server look correct, but some pasls' + 
+                            this.executableFileExtension() +  ' settings are incorrect.');
+                            wasWarning = true;
+                    }
+                }
 
                 vscode.commands.executeCommand('workbench.action.openSettings', 'castle-game-engine');
             });
