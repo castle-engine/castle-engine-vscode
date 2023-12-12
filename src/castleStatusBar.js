@@ -1,5 +1,6 @@
 const vscode = require("vscode");
 const castleConfiguration = require('./castleConfiguration.js');
+// eslint-disable-next-line no-unused-vars
 const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
 
 class CastleStatusBar {
