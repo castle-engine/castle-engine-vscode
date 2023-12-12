@@ -86,15 +86,15 @@
         },
         "castleGameEngine.pascalLanguageServer.PP": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`)."
+          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or to try use autodetection."
         },
         "castleGameEngine.pascalLanguageServer.FPCDIR": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`)."
+          "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`) or to try use autodetection."
         },
         "castleGameEngine.pascalLanguageServer.LAZARUSDIR": {
           "type": "string",
-          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`)."
+          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or to try use autodetection."
         },
         "castleGameEngine.pascalLanguageServer.FPCTARGET": {
           "type": "string",
