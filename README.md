@@ -70,8 +70,6 @@ This the first extension releaase so we lack some features:
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 0.0.1
 
 Initial release.
