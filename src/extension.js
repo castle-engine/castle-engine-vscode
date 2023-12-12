@@ -20,6 +20,15 @@ async function activate(context) {
 	vscode.workspace.onDidChangeConfiguration(async (event) => {
 		if (event.affectsConfiguration('castleGameEngine.enginePath')) {
 			await castlePlugin.updatePlugin();
+		} else
+		if (event.affectsConfiguration('castleGameEngine.pascalLanguageServer.PP') ||
+			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCDIR') ||
+			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.LAZARUSDIR') ||
+			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCTARGET') ||
+			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCTARGETCPU') 
+		) {
+			await castlePlugin.updateLanguageServer();
+			castlePlugin.updateStatusBar();
 		}
 	});
 	
