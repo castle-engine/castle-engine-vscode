@@ -23,7 +23,9 @@ class CastlePlugin {
         this._validateCommandsRegistered = false;
     }
 
-
+    /**
+     * Activates plugin when activate(context) is called.
+     */
     async activatePlugin() {
         this.updateConfiguration();
         await this.updateLanguageServer();
@@ -35,14 +37,24 @@ class CastlePlugin {
         this.updateStatusBar();
     }
 
+    /**
+     * Full plugin update when configuration changes.
+     */
     async updatePlugin() {
         await this.activatePlugin();
     }
 
+    /**
+     * Deacitvates plugin when deactivate() is called.
+     */
     async deactivatePlugin() {
         await this._castleLanguageServer.destroyLanguageClient();
     }
 
+    /**
+     * When called first time creates CastleConfiguration object and reads/finds configuration. 
+     * In other cases only reloads configuration.
+     */
     updateConfiguration() {
         if (this._castleConfig == undefined)
             this._castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
@@ -50,6 +62,12 @@ class CastlePlugin {
         this._castleConfig.findPaths();
     }
 
+    /**
+     * When called first time creates CastlePascalLanguageServer object, reads/finds language server configuration and 
+     * starts pascal language server. 
+     * 
+     * In other cases reloads configuration and reruns pascal language server.
+     */
     async updateLanguageServer() {
         if (this._castleLanguageServer == undefined)
             this._castleLanguageServer = new CastlePascalLanguageServer(this._castleConfig);
@@ -67,11 +85,20 @@ class CastlePlugin {
         }
     }
 
+    /**
+     * When called first time creates CastleFileWatcher which observes file changes.
+     * Subsequent launches currently do nothing.
+     */
     updateFileWatcher() {
         if (this._castleFileWatcher == undefined)
             this._castleFileWatcher = new CastleFileWatcher(this._context, this._castleConfig);
     }
 
+    /**
+     * When called first time creates and registers CastleTaskProvder. And registers/unregisters VSCode commands.
+     * Subsequent runs update the tasks and registers/unregisters VSCode commands 
+     * depending on whether we have access to build tool.
+     */
     updateTaskProvider() {
         if (this._castleConfig.buildToolPath !== '') {
             if (this._castleTaskProvider == undefined) {
@@ -120,6 +147,10 @@ class CastlePlugin {
         }
     }
 
+    /**
+     * Registers or unregisters VSCode open in CGE editor command 
+     * depending on whether we have access to build tool.
+     */
     updateEditorCommand() {
         if (this._castleConfig.buildToolPath === '') {
             if (this._editorCommandsRegistered) {
@@ -138,6 +169,10 @@ class CastlePlugin {
         }
     }
 
+    /**
+     * Registers or unregisters VSCode validate and open settings command
+     * used by status bar button showed when configuration is not corect.
+     */
     updateValidateAndOpenSettingsCommand() {
         if (this._validateCommandsRegistered === false) {
             let disposable = vscode.commands.registerCommand(this._castleConfig.commandId.validateAndOpenSettings, () => {
@@ -183,6 +218,10 @@ class CastlePlugin {
         }
     }
 
+    /**
+     * When called first time creates and registers CastleDebugProvider. 
+     * Subsequent runs only creates and registers CastleDebugProvider when previous configuration was incorrect.
+     */
     updateDebugProvider() {
         if (this._castleConfig.buildToolPath !== '') {
             if (this._castleDebugProvider == undefined) {
@@ -194,6 +233,11 @@ class CastlePlugin {
         }
     }
 
+    /**
+     * When called first time creates CastleStatusBar object which is responsible for the buttons showed
+     * in the status bar of visual studio code.
+     * Subsequent runs only updates buttons visibility based on the current configuration state.
+     */
     updateStatusBar() {
         if (this._castleStatusBar == undefined) {
             this._castleStatusBar = new CastleStatusBar(this._context, this._castleConfig, this._castleLanguageServer);
@@ -202,6 +246,7 @@ class CastlePlugin {
     }
 
     /**
+     * Util for windows to show .exe in some places.
      * @returns {string} executable extension in current platform
      */
     executableFileExtension() {
