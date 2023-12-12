@@ -32,7 +32,7 @@ class CastleDebugProvider {
 				return undefined; // abort launch
 
 			const editor = vscode.window.activeTextEditor;
-			if (editor !== undefined && editor.document.languageId === 'pascal') {
+			if (editor != undefined && editor.document.languageId === 'pascal') {
 				//console.log('Editor with pascal sources');
 				config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
 				config.name = 'Debug CGE Game with fpDebug';

@@ -42,7 +42,7 @@ class CastlePlugin {
     }
 
     updateConfiguration() {
-        if (this._castleConfig === undefined)
+        if (this._castleConfig == undefined)
             this._castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
 
         this._castleConfig.findPaths();
@@ -66,13 +66,13 @@ class CastlePlugin {
     }
 
     updateFileWatcher() {
-        if (this._castleFileWatcher === undefined)
+        if (this._castleFileWatcher == undefined)
             this._castleFileWatcher = new CastleFileWatcher(this._context, this._castleConfig);
     }
 
     updateTaskProvider() {
         if (this._castleConfig.buildToolPath !== '') {
-            if (this._castleTaskProvider === undefined) {
+            if (this._castleTaskProvider == undefined) {
                 this._castleTaskProvider = new CastleTaskProvder(this._castleConfig);
                 let disposable = vscode.tasks.registerTaskProvider('cge-tasks', this._castleTaskProvider);
                 this._context.subscriptions.push(disposable);
