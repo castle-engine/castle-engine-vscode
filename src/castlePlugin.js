@@ -11,7 +11,9 @@ const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
 
 
 /**
- * Main class of plugin that encapsulates everything
+ * Main class of plugin that encapsulates everything and manages the plugin's state.
+ * 
+ * The most important functions are activatePlugin(), updatePlugin() and deactivatePlugin().
  */
 class CastlePlugin {
     constructor(context) {
