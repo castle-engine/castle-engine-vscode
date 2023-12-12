@@ -141,18 +141,24 @@ class CastlePlugin {
     updateValidateAndOpenSettingsCommand() {
         if (this._validateCommandsRegistered === false) {
             let disposable = vscode.commands.registerCommand(this._castleConfig.commandId.validateAndOpenSettings, () => {
-                // TODO: validate settings and show information
+
                 if (this._castleConfig.enginePath === '') 
                     vscode.window.showInformationMessage('The path to engine in not valid, check enginePath value.');
 
                 if (this._castleConfig.buildToolPath === '') 
-                    vscode.window.showInformationMessage('The path to engine is set but in bin subfolder there is no buildtool (castle-engine).');
+                    vscode.window.showInformationMessage(
+                        'The path to engine is set but there is no buildtool (castle-engine' +
+                         this.executableFileExtension() + ') in bin subfolder.');
 
                 if (this._castleConfig.pascalServerPath === '')
-                    vscode.window.showInformationMessage('The engine path is set but the pascal language server executable cannot be found in bin subfolder there is no pasls executble.');
+                    vscode.window.showInformationMessage(
+                        'The engine path is set but the pascal language server executable cannot be found in bin subfolder (no pasls' 
+                        + this.executableFileExtension() +').');
                 
                 if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined))
-                    vscode.window.showInformationMessage('Path to engine and pascal language server look correct, but some pasls settings are incorrect.');
+                    vscode.window.showInformationMessage(
+                    'Path to engine and pascal language server look correct, but some pasls' + 
+                    this.executableFileExtension() +  ' settings are incorrect.');
 
                 vscode.commands.executeCommand('workbench.action.openSettings', 'castle-game-engine');
             });
@@ -177,6 +183,16 @@ class CastlePlugin {
             this._castleStatusBar = new CastleStatusBar(this._context, this._castleConfig, this._castleLanguageServer);
         }
         this._castleStatusBar.updateButtonsVisibility();
+    }
+
+    /**
+     * @returns {string} executable extension in current platform
+     */
+    executableFileExtension() {
+        if (process.platform === 'win32') {
+            return '.exe'
+        }
+        return '';
     }
 }
 
