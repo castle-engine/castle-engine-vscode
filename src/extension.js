@@ -30,8 +30,10 @@ async function activate(context) {
 /**
  * Called when your extension is deactivated
  */
-function deactivate() {
-	console.log('deactivation');
+async function deactivate() {
+	console.log('Castle Engine Extension - Deactivation - START');
+	await castlePlugin.deactivatePlugin();
+	console.log('Castle Engine Extension - Deactivation - DONE');
  }
 
 module.exports = {

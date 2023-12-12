@@ -37,6 +37,10 @@ class CastlePlugin {
         await this.activatePlugin();
     }
 
+    async deactivatePlugin() {
+        await this._castleLanguageServer.destroyLanguageClient();
+    }
+
     updateConfiguration() {
         if (this._castleConfig === undefined)
             this._castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
