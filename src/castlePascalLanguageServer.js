@@ -89,7 +89,7 @@ class CastlePascalLanguageServer {
         else
             fpcDefaultArch = '';
 
-        this.enviromentForPascalServer['FPCTARGETCPU'] = this.getEnvSetting('FPCTARGETCPU', 'fpcDefaultArch');
+        this.enviromentForPascalServer['FPCTARGETCPU'] = this.getEnvSetting('FPCTARGETCPU', fpcDefaultArch);
     }
 
     async createLanguageClient() {
