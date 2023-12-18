@@ -31,7 +31,7 @@ class CastleTaskProvder {
 				vscode.workspace.workspaceFolders[0],
 				'run-cge-game-task', // task name
 				'CGE', // prefix for all tasks
-				new vscode.ShellExecution(this._castleConfig.buildToolPath + ' compileandrun --mode=' + this._castleConfig.buildMode.buildTool), // what to do
+				new vscode.ShellExecution(this._castleConfig.buildToolPath + ' compile-run --mode=' + this._castleConfig.buildMode.buildTool), // what to do
 				'$cge-problem-matcher'
 			);
 
@@ -58,7 +58,7 @@ class CastleTaskProvder {
 	 */
 	updateCastleTasks() {
 		if (this._castleConfig.recompilationNeeded)
-			this._runGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath + ' compileandrun --mode=' + this._castleConfig.buildMode.buildTool);
+			this._runGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath + ' compile-run --mode=' + this._castleConfig.buildMode.buildTool);
 		else
 			this._runGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath + ' run --mode=' + this._castleConfig.buildMode.buildTool);
 
