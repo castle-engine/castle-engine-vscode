@@ -147,7 +147,6 @@ class CastleConfiguration {
         if (process.platform === 'win32')
             buildTool += '.exe';
 
-
         try {
             fs.accessSync(buildTool, fs.constants.F_OK)
         }

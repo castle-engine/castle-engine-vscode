@@ -8,7 +8,7 @@ const CastleTaskProvder = require('./castleTaskProvider.js');
 const castleConfiguration = require('./castleConfiguration.js');
 const CastleStatusBar = require('./castleStatusBar.js');
 const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
-
+const castlePath = require('./castlePath.js');
 
 /**
  * Main class of plugin that encapsulates everything and manages the plugin's state.
@@ -161,7 +161,7 @@ class CastlePlugin {
         } else {
             if (this._editorCommandsRegistered === false) {
                 this._disposableOpenInEditor = vscode.commands.registerCommand(this._castleConfig.commandId.openInCastleEditor, () => {
-                    castleExec.executeCommand(this._castleConfig.buildToolPath + ' editor');
+                    castleExec.executeCommand(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' editor');
                 });
                 this._context.subscriptions.push(this._disposableOpenInEditor);
                 this._editorCommandsRegistered = true;

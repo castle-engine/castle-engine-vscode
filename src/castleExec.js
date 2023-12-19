@@ -3,6 +3,7 @@ const vscode = require("vscode");
 // https://stackoverflow.com/questions/30763496/how-to-promisify-nodes-child-process-exec-and-child-process-execfile-functions
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const castlePath = require('./castlePath.js');
 
 /**
  * Executes command and returns stdout as string (empty string on error, 
@@ -17,7 +18,7 @@ async function executeCommandAndReturnValue(command) {
 
 	if (vscode.workspace.workspaceFolders !== undefined) {
 		console.log(vscode.workspace.workspaceFolders[0].uri.path);
-		options.cwd = vscode.workspace.workspaceFolders[0].uri.path;
+		options.cwd = castlePath.pathForExecCommandCwd(vscode.workspace.workspaceFolders[0].uri.path);
 	}
 
 	try {
@@ -43,7 +44,7 @@ async function executeCommand(command) {
 
 	if (vscode.workspace.workspaceFolders !== undefined) {
 		console.log(vscode.workspace.workspaceFolders[0].uri.path);
-		options.cwd = vscode.workspace.workspaceFolders[0].uri.path;
+		options.cwd = castlePath.pathForExecCommandCwd(vscode.workspace.workspaceFolders[0].uri.path);
 	}
 
 	try {
