@@ -218,13 +218,21 @@ class CastlePascalLanguageServer {
             if (process.platform === 'win32') {
                 // check current fpc is not done by fpcupdeluxe
                 let sourcesDir = fpcCompilerExec;
-                let index = sourcesDir.indexOf('fpc/bin');
+                let index = sourcesDir.indexOf('fpc\\bin');
                 if (index > 0) {
                     sourcesDir = sourcesDir.substring(0, index) + 'fpcsrc';
                     if (this.isCompilerSourcesFolder(sourcesDir)) {
                         console.log('Found fpc sources:', sourcesDir);
                         return sourcesDir;
                     }
+                }
+                // check is it boundled fpc
+                sourcesDir = fpcCompilerExec;
+                index = sourcesDir.indexOf('bin');
+                sourcesDir = sourcesDir.substring(0, index) + 'src';
+                if (this.isCompilerSourcesFolder(sourcesDir)) {
+                    console.log('Found fpc sources:', sourcesDir);
+                    return sourcesDir;
                 }
             } else
                 if (process.platform === 'darwin') {
@@ -316,7 +324,7 @@ class CastlePascalLanguageServer {
             if (process.platform === 'win32') {
                 // check current fpc is not done by fpcupdeluxe then lazarus is in lazarus subfolder
                 let sourcesDir = fpcCompilerExec;
-                let index = sourcesDir.indexOf('fpc/bin');
+                let index = sourcesDir.indexOf('fpc\\bin');
                 if (index > 0) {
 
                     sourcesDir = sourcesDir.substring(0, index) + 'lazarus';
