@@ -40,6 +40,8 @@ class CastleDebugProvider {
 				config.request = 'launch';
 				let executableName = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output executable-name');
 				config.program = '${workspaceFolder}/' + executableName;
+				if (process.platform === 'win32')
+					config.program += '.exe';
 				config.stopOnEntry = true;
 				config.workingdirectory = '${workspaceFolder}'
 
