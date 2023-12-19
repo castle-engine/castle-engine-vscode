@@ -17,7 +17,7 @@ function pathForShellExecute (path) {
  * @returns {string} path ready to use with option.cwd
  */
 function pathForExecCommandCwd(path) {
-    if (process.platform === 'win32' && path.length > 0 && path[0] == '\\' )
+    if (process.platform === 'win32' && path.length > 0 && path[0] == '/' )
         return path.substring(1); // remove first \ from path with that exec not working on windows
 }
 
