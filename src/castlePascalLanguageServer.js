@@ -166,14 +166,14 @@ class CastlePascalLanguageServer {
 
 
     /**
-     * Checks the folder is Free Pascal Compiller sources directory
+     * Checks the folder is Free Pascal Compiler sources directory
      * @param {string} folder directory to check
      * @returns {boolean} is it looks like a sources folder? true - yes, false - no
      */
     isCompilerSourcesFolder(folder) {
         try {
             fs.accessSync(folder, fs.constants.F_OK)
-            fs.accessSync(folder + '/compiler', fs.constants.F_OK)
+            fs.accessSync(folder + '/rtl', fs.constants.F_OK)
             fs.accessSync(folder + '/packages', fs.constants.F_OK)
             return true;
         }
