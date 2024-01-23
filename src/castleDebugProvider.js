@@ -12,9 +12,9 @@ class CastleDebugProvider {
 	/**
 	 * @param {castleConfiguration.CastleConfiguration} castleConfig 
 	 */
-    constructor (castleConfig) {
+	constructor(castleConfig) {
 		this._castleConfig = castleConfig;
-    }
+	}
 
 	// not used
 	/*provideDebugConfigurations(folder, token) {
@@ -47,20 +47,23 @@ class CastleDebugProvider {
 				// config.log = true;
 
 				// workaround fpDebug 0.6 bug with fpdserver executable not set properly
-				if (process.platform === 'win32')
-				{
+				if (process.platform === 'win32') {
 					let fpDebugExtPath = vscode.extensions.getExtension("cnoc.fpdebug").extensionPath;
 					if (this._castleConfig.fpcTargetCpu === 'x86_64')
-						config.fpdserver = {executable: fpDebugExtPath + '\\bin\\fpdserver-x86_64.exe'};
+						config.fpdserver = { executable: fpDebugExtPath + '\\bin\\fpdserver-x86_64.exe' };
 					else if (this._castleConfig.fpcTargetCpu === 'i386')
-						config.fpdserver = {executable: fpDebugExtPath + '\\bin\\fpdserver-i386.exe'};
+						config.fpdserver = { executable: fpDebugExtPath + '\\bin\\fpdserver-i386.exe' };
 					else {
-						return vscode.window.showInformationMessage('fpDebug supports only x86_64 and i386 architecture').then( () => {
+						return vscode.window.showInformationMessage('fpDebug supports only x86_64 and i386 architecture on windows').then(() => {
 							return undefined; // abort launch
 						});
 					}
-				}
-				
+				} else if (process.platform === 'linux' && this._castleConfig.fpcTargetCpu !== 'x86_64')
+					return vscode.window.showInformationMessage('fpDebug supports only x86_64 architecture on linux').then(() => {
+						return undefined; // abort launch
+					});
+
+
 				if (this._castleConfig.buildMode === castleConfiguration.CastleBuildModes.RELEASE)
 					vscode.window.showWarningMessage('Running debuger with release build, consider to change build type.');
 				// we run compilation only when is needed
