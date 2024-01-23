@@ -78,18 +78,7 @@ class CastlePascalLanguageServer {
 
         this.enviromentForPascalServer['FPCTARGET'] = this.getEnvSetting('FPCTARGET', fpcDefaultTarget);
 
-        // try to detect default architecture
-        let fpcDefaultArch = process.arch;
-        if (fpcDefaultArch === 'x64')
-            fpcDefaultArch = 'x86_64';
-        else if (fpcDefaultArch === 'arm64')
-            fpcDefaultArch = 'aarch64';
-        else if (fpcDefaultArch === 'x32')
-            fpcDefaultArch = 'i386';
-        else
-            fpcDefaultArch = '';
-
-        this.enviromentForPascalServer['FPCTARGETCPU'] = this.getEnvSetting('FPCTARGETCPU', fpcDefaultArch);
+        this.enviromentForPascalServer['FPCTARGETCPU'] = this._castleConfig.fpcTargetCpu;
     }
 
     async createLanguageClient() {
@@ -146,22 +135,7 @@ class CastlePascalLanguageServer {
      * @param {string} defaultValue
      */
     getEnvSetting(envVarName, defaultValue) {
-        // First check configuration
-        let varValue = vscode.workspace.getConfiguration('castleGameEngine.pascalLanguageServer').get(envVarName);
-
-        if (varValue.trim() === '') {
-            // Then check environment variable
-            if (process.env.envVarName) {
-                varValue = process.env.envVarName;
-            }
-        }
-
-        // At least try default value
-        if (varValue.trim() === '') {
-            varValue = defaultValue;
-        }
-
-        return varValue;
+        return this._castleConfig.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', envVarName, defaultValue);
     }
 
 
