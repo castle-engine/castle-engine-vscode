@@ -39,12 +39,28 @@ class CastleDebugProvider {
 				config.name = 'Debug CGE Game with fpDebug';
 				config.request = 'launch';
 				let executableName = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output executable-name');
-				config.program = '${workspaceFolder}/' + executableName;
 				if (process.platform === 'win32')
-					config.program += '.exe';
+					executableName += '.exe';
+				config.program = '${workspaceFolder}/' + executableName;
 				config.stopOnEntry = true;
-				config.workingdirectory = '${workspaceFolder}'
+				config.workingdirectory = '${workspaceFolder}';
+				// config.log = true;
 
+				// workaround fpDebug 0.6 bug with fpdserver executable not set properly
+				if (process.platform === 'win32')
+				{
+					let fpDebugExtPath = vscode.extensions.getExtension("cnoc.fpdebug").extensionPath;
+					if (this._castleConfig.fpcTargetCpu === 'x86_64')
+						config.fpdserver = {executable: fpDebugExtPath + '\\bin\\fpdserver-x86_64.exe'};
+					else if (this._castleConfig.fpcTargetCpu === 'i386')
+						config.fpdserver = {executable: fpDebugExtPath + '\\bin\\fpdserver-i386.exe'};
+					else {
+						return vscode.window.showInformationMessage('fpDebug supports only x86_64 and i386 architecture').then( () => {
+							return undefined; // abort launch
+						});
+					}
+				}
+				
 				if (this._castleConfig.buildMode === castleConfiguration.CastleBuildModes.RELEASE)
 					vscode.window.showWarningMessage('Running debuger with release build, consider to change build type.');
 				// we run compilation only when is needed
@@ -53,7 +69,7 @@ class CastleDebugProvider {
 			}
 
 			if (!config.program) {
-				return vscode.window.showInformationMessage("Cannot find a program to debug").then(() => {
+				return vscode.window.showInformationMessage('Cannot find a program to debug').then(() => {
 					return undefined;	// abort launch
 				});
 			}
