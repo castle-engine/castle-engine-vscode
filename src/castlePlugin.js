@@ -60,6 +60,7 @@ class CastlePlugin {
             this._castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
 
         this._castleConfig.findPaths();
+        this._castleConfig.findFpcTargetCpu();
     }
 
     /**

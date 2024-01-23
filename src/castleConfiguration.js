@@ -36,6 +36,18 @@ class CastleConfiguration {
         this._buildToolPath = '';
         this._enginePath = '';
         this._pascalServerPath = '';
+
+        let fpcDefaultArch = process.arch;
+        if (fpcDefaultArch === 'x64')
+            fpcDefaultArch = 'x86_64';
+        else if (fpcDefaultArch === 'arm64')
+            fpcDefaultArch = 'aarch64';
+        else if (fpcDefaultArch === 'x32')
+            fpcDefaultArch = 'i386';
+        else
+            fpcDefaultArch = '';
+
+        this._fpcTargetCpu = ''; this.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
     }
 
     /**
@@ -87,6 +99,27 @@ class CastleConfiguration {
      */
     get pascalServerPath() {
         return this._pascalServerPath;
+    }
+
+    get fpcTargetCpu() {
+        return this._fpcTargetCpu;
+    }
+
+    /**
+     * Searching target cpu archtecture
+     */
+    findFpcTargetCpu() {
+        let fpcDefaultArch = process.arch;
+        if (fpcDefaultArch === 'x64')
+            fpcDefaultArch = 'x86_64';
+        else if (fpcDefaultArch === 'arm64')
+            fpcDefaultArch = 'aarch64';
+        else if (fpcDefaultArch === 'x32')
+            fpcDefaultArch = 'i386';
+        else
+            fpcDefaultArch = '';
+    
+        this._fpcTargetCpu = this.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
     }
 
     /**
@@ -191,6 +224,33 @@ class CastleConfiguration {
             }
         });        
     }
+
+    /**
+     * Gets value fom vscode configuration, env variable or the default value. 
+     * The name in configuration have to be the same like environment variable.
+     * @param {string} configSection configuration section where we are looking for value (envVarName)
+     * @param {string} envVarName name in configuration and name of env variable
+     * @param {string} defaultValue default value when we can't find it in config or environment
+     */
+    getConfOrEnvSetting(configSection, envVarName, defaultValue) {
+        // First check configuration
+        let varValue = vscode.workspace.getConfiguration(configSection).get(envVarName);
+
+        if (varValue.trim() === '') {
+            // Then check environment variable
+            if (process.env.envVarName) {
+                varValue = process.env.envVarName;
+            }
+        }
+
+        // At least try default value
+        if (varValue.trim() === '') {
+            varValue = defaultValue;
+        }
+
+        return varValue;
+    }
+
 
 }
 
