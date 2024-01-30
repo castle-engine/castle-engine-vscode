@@ -2,7 +2,6 @@ const vscode = require("vscode");
 
 // eslint-disable-next-line no-unused-vars
 const castleConfiguration = require('./castleConfiguration.js');
-const castlePath = require('./castlePath.js');
 
 class CastleTaskProvder {
 
@@ -21,7 +20,7 @@ class CastleTaskProvder {
 				vscode.workspace.workspaceFolders[0],
 				'compile-cge-game-task', // task name
 				'CGE', // prefix for all tasks
-				new vscode.ShellExecution(castlePath.pathForShellExecute(this._castleConfig.buildToolPath) + ' compile --mode=' + this._castleConfig.buildMode.buildTool), // what to do
+				new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile', '--mode=' + this._castleConfig.buildMode.buildTool]), // what to do
 				'$cge-problem-matcher'
 			);
 			this._compileGameTask.group = vscode.TaskGroup.Build;
@@ -31,7 +30,7 @@ class CastleTaskProvder {
 				vscode.workspace.workspaceFolders[0],
 				'run-cge-game-task', // task name
 				'CGE', // prefix for all tasks
-				new vscode.ShellExecution(castlePath.pathForShellExecute(this._castleConfig.buildToolPath) + ' compile-run --mode=' + this._castleConfig.buildMode.buildTool), // what to do
+				new vscode.ShellExecution(this._castleConfig.buildToolPath, [' compile-run', '--mode=' + this._castleConfig.buildMode.buildTool]), // what to do
 				'$cge-problem-matcher'
 			);
 
@@ -40,7 +39,7 @@ class CastleTaskProvder {
 				vscode.workspace.workspaceFolders[0],
 				'clean-cge-game-task', // task name
 				'CGE', // prefix for all tasks
-				new vscode.ShellExecution(castlePath.pathForShellExecute(this._castleConfig.buildToolPath) + ' clean'), // what to do
+				new vscode.ShellExecution(this._castleConfig.buildToolPath, ['clean']), // what to do
 				'$cge-problem-matcher'
 			);
 			this._cleanGameTask.group = vscode.TaskGroup.Clean;
@@ -58,13 +57,13 @@ class CastleTaskProvder {
 	 */
 	updateCastleTasks() {
 		if (this._castleConfig.recompilationNeeded)
-			this._runGameTask.execution = new vscode.ShellExecution(castlePath.pathForShellExecute(this._castleConfig.buildToolPath) + ' compile-run --mode=' + this._castleConfig.buildMode.buildTool);
+			this._runGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile-run', '--mode=' + this._castleConfig.buildMode.buildTool]);
 		else
-			this._runGameTask.execution = new vscode.ShellExecution(castlePath.pathForShellExecute(this._castleConfig.buildToolPath) + ' run --mode=' + this._castleConfig.buildMode.buildTool);
+			this._runGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['run', '--mode=' + this._castleConfig.buildMode.buildTool]);
 
-		this._compileGameTask.execution = new vscode.ShellExecution(castlePath.pathForShellExecute(this._castleConfig.buildToolPath) + ' compile --mode=' + this._castleConfig.buildMode.buildTool);
+		this._compileGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile', '--mode=' + this._castleConfig.buildMode.buildTool]);
 
-		this._cleanGameTask.execution = new vscode.ShellExecution(castlePath.pathForShellExecute(this._castleConfig.buildToolPath) + ' clean');
+		this._cleanGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['clean']);
 	}
 
 	/**
