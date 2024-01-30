@@ -74,19 +74,21 @@ class CastleFileWatcher {
         this._vsManifestFileWatcher = vscode.workspace.createFileSystemWatcher(filePath);
 
         this._vsManifestFileWatcher.onDidChange(async (uri) => {
-            console.log(`Change in manifest file: ${uri.fsPath}`);
+            console.log(`Manifest file changed: ${uri.fsPath}`);
             this._castleConfig.recompilationNeeded = true;
             await this._castlePlugin.updateLanguageServer();
         });
 
-        this._vsManifestFileWatcher.onDidCreate((uri) => {
+        this._vsManifestFileWatcher.onDidCreate(async (uri) => {
             console.log(`Manifest file created: ${uri.fsPath}`);
             this._castleConfig.recompilationNeeded = true;
+            await this._castlePlugin.updateLanguageServer();
         });
 
-        this._vsManifestFileWatcher.onDidDelete((uri) => {
+        this._vsManifestFileWatcher.onDidDelete(async (uri) => {
             console.log(`Manifest file deleted: ${uri.fsPath}`);
             this._castleConfig.recompilationNeeded = true;
+            await this._castlePlugin.updateLanguageServer();
         });
         
         context.subscriptions.push(this._vsManifestFileWatcher);
