@@ -106,4 +106,15 @@ async function executeFile(executableFile, args) {
 	}
 }
 
-module.exports = { executeCommandAndReturnValue, executeFileAndReturnValue, executeCommand, executeFile };
+/**
+ * Checks current platform do not need extension in executable files 
+ * @param {string} executableFile file to add extension
+ * @returns {string} file with extension when needed
+ */
+function addExtensionToExecutableFile(executableFile) {
+	if (process.platform === 'win32')
+		return executableFile += '.exe';
+	return executableFile
+}
+
+module.exports = { executeCommandAndReturnValue, executeFileAndReturnValue, executeCommand, executeFile, addExtensionToExecutableFile};

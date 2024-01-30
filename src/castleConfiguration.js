@@ -2,6 +2,8 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
+const castleExec = require('./castleExec.js');
+
 /**
  * Consts for build modes.
  * name - for showing in ui
@@ -177,8 +179,7 @@ class CastleConfiguration {
      */
     findBuildToolPath() {
         let buildTool = this._enginePath + path.sep + 'bin' + path.sep + 'castle-engine';
-        if (process.platform === 'win32')
-            buildTool += '.exe';
+        buildTool = castleExec.addExtensionToExecutableFile(buildTool);
 
         try {
             fs.accessSync(buildTool, fs.constants.F_OK)
@@ -197,8 +198,7 @@ class CastleConfiguration {
      */
     findPascalServerPath() {
         let pasServer = this._enginePath + path.sep + 'bin' + path.sep + 'pasls';
-        if (process.platform === 'win32')
-            pasServer += '.exe';
+        pasServer = castleExec.addExtensionToExecutableFile(pasServer);
 
         try {
             fs.accessSync(pasServer, fs.constants.F_OK)

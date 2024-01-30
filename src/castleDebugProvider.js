@@ -38,8 +38,7 @@ class CastleDebugProvider {
 				config.name = 'Debug CGE Game with fpDebug';
 				config.request = 'launch';
 				let executableName = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output', 'executable-name']);
-				if (process.platform === 'win32')
-					executableName += '.exe';
+				executableName = castleExec.addExtensionToExecutableFile(executableName);
 				config.program = '${workspaceFolder}/' + executableName;
 				config.stopOnEntry = true;
 				config.workingdirectory = '${workspaceFolder}';
