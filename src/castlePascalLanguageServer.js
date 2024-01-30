@@ -6,6 +6,7 @@ const vscodelangclient = require('vscode-languageclient');
 const castleConfiguration = require('./castleConfiguration.js');
 const castleExec = require('./castleExec.js');
 const castlePath = require('./castlePath.js');
+const path = require('path');
 
 /**
  * A class for managing the Pascal Language Server
@@ -81,6 +82,27 @@ class CastlePascalLanguageServer {
         this.enviromentForPascalServer['FPCTARGETCPU'] = this._castleConfig.fpcTargetCpu;
     }
 
+    /**
+     * 
+     * @param {string} fpcExecutable fpc execution file for which we are looking fpc.cfg 
+     * @returns 
+     */
+    async hasFpcCfgFile(fpcExecutable)
+    {
+        // currently checked only for windows
+        if (process.platform !== 'win32')
+            return true;
+        let realCompilerPath = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(fpcExecutable) + ' -PB');
+        let fpcCfgFile = path.dirname(realCompilerPath) + '\\fpc.cfg'
+        try {
+            fs.accessSync(fpcCfgFile, fs.constants.F_OK)
+        }
+        catch (err) {
+            return false;
+        }
+        return true;
+    }
+
     async createLanguageClient() {
         if (await this.loadOrDetectSettings() === false)
             return false;
@@ -106,7 +128,14 @@ class CastlePascalLanguageServer {
             //		initializationOptions : {
             //			option: 'value',
             //		}
+        }
 
+        let hasFpcCfg = await this.hasFpcCfgFile(this.enviromentForPascalServer['PP']);
+        if (!hasFpcCfg)
+        {
+            clientOptions.initializationOptions = {
+                fpcStandardUnitsPaths: await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output-environment fpc-standard-units-path')
+            }
         }
 
         this._pascalServerClient = new vscodelangclient.LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
