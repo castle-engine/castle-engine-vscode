@@ -83,9 +83,10 @@ class CastlePascalLanguageServer {
     }
 
     /**
-     * 
+     * Check for fpc.cfg - fixes pasls with our bundle
      * @param {string} fpcExecutable fpc execution file for which we are looking fpc.cfg 
-     * @returns 
+     * @retval true fpc installation has fpc.cfg
+     * @retval false fpc installation does not have fpc.cfg
      */
     async hasFpcCfgFile(fpcExecutable)
     {
