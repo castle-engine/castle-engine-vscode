@@ -1,6 +1,5 @@
 const vscode = require("vscode");
 const castleExec = require('./castleExec.js');
-const castlePath = require('./castlePath.js');
 const castleConfiguration = require('./castleConfiguration.js');
 
 /**
@@ -38,7 +37,7 @@ class CastleDebugProvider {
 				config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
 				config.name = 'Debug CGE Game with fpDebug';
 				config.request = 'launch';
-				let executableName = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output executable-name');
+				let executableName = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output', 'executable-name']);
 				if (process.platform === 'win32')
 					executableName += '.exe';
 				config.program = '${workspaceFolder}/' + executableName;
