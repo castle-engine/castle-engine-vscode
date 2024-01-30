@@ -162,7 +162,7 @@ class CastlePlugin {
         } else {
             if (this._editorCommandsRegistered === false) {
                 this._disposableOpenInEditor = vscode.commands.registerCommand(this._castleConfig.commandId.openInCastleEditor, () => {
-                    castleExec.executeCommand(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' editor');
+                    castleExec.executeFile(this._castleConfig.buildToolPath, ['editor']);
                 });
                 this._context.subscriptions.push(this._disposableOpenInEditor);
                 this._editorCommandsRegistered = true;
