@@ -240,7 +240,7 @@ class CastlePlugin {
      */
     updateStatusBar() {
         if (this._castleStatusBar == undefined) {
-            this._castleStatusBar = new CastleStatusBar(this._context, this._castleConfig, this._castleLanguageServer);
+            this._castleStatusBar = new CastleStatusBar(this._context, this._castleConfig, this._castleLanguageServer, this._castleTaskProvider);
         }
         this._castleStatusBar.updateButtonsVisibility();
     }

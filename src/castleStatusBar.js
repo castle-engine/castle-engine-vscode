@@ -2,12 +2,23 @@ const vscode = require("vscode");
 const castleConfiguration = require('./castleConfiguration.js');
 // eslint-disable-next-line no-unused-vars
 const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
+// eslint-disable-next-line no-unused-vars
+const CastleTaskProvder = require('./castleTaskProvider.js');
 
 class CastleStatusBar {
-    constructor(context, castleConfig, castleLanguageServer) {
+
+    /**
+     * Constructor
+     * @param {vscode.ExtensionContext} context 
+     * @param {castleConfiguration.CastleConfiguration} castleConfig 
+     * @param {castleLanguageServer.castleLanguageServer} castleLanguageServer 
+     * @param {CastleTaskProvder.castleTaskProvder} castleTaskProvder 
+     */
+    constructor(context, castleConfig, castleLanguageServer, castleTaskProvder) {
         this._castleConfig = castleConfig;
         this._context = context;
         this._castleLanguageServer = castleLanguageServer;
+        this._castleTaskProvder = castleTaskProvder;
         this.createBuildModeSwitch();
         this.createCompileButton();
         this.createDebugButton();
@@ -28,6 +39,7 @@ class CastleStatusBar {
             else
                 this._castleConfig.buildMode = castleConfiguration.CastleBuildModes.DEBUG;
             this.updateBuildModesButtonText();
+            this._castleTaskProvder.updateCastleTasks();
         });
         this._context.subscriptions.push(command);
         this._buildModesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 20);
