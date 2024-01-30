@@ -104,6 +104,19 @@ class CastlePascalLanguageServer {
         return true;
     }
 
+    async getSearchPathsFromProjectManifest() {
+        try {
+            let searchPathsFromProjectManifest = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output search-paths');
+            console.log('Project search paths: ');
+            console.log(searchPathsFromProjectManifest);
+            return searchPathsFromProjectManifest;
+        } catch (err)
+        {
+            console.log(err);
+            return '';
+        }
+    }
+
     async createLanguageClient() {
         if (await this.loadOrDetectSettings() === false)
             return false;
@@ -131,14 +144,14 @@ class CastlePascalLanguageServer {
             //		}
         }
 
+        let initializationOptions = {};
+        initializationOptions.projectSearchPaths = await this.getSearchPathsFromProjectManifest();
+
         let hasFpcCfg = await this.hasFpcCfgFile(this.enviromentForPascalServer['PP']);
         if (!hasFpcCfg)
-        {
-            clientOptions.initializationOptions = {
-                fpcStandardUnitsPaths: await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output-environment fpc-standard-units-path')
-            }
-        }
+            initializationOptions.fpcStandardUnitsPaths = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output-environment fpc-standard-units-path')
 
+        clientOptions.initializationOptions = initializationOptions;
         this._pascalServerClient = new vscodelangclient.LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
         await this._pascalServerClient.start();
         return true;
