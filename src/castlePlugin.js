@@ -92,7 +92,7 @@ class CastlePlugin {
      */
     updateFileWatcher() {
         if (this._castleFileWatcher == undefined)
-            this._castleFileWatcher = new CastleFileWatcher(this._context, this._castleConfig);
+            this._castleFileWatcher = new CastleFileWatcher(this._context, this._castleConfig, this);
     }
 
     /**
