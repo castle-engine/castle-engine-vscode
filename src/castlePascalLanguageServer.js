@@ -29,7 +29,7 @@ class CastlePascalLanguageServer {
 
     /**
      * Loads or tries to automatically detect settings
-     * @returns {boolean} result of loading settings
+     * @returns {Promise<bool>} result of loading settings
      */
     async loadOrDetectSettings() {
         this.enviromentForPascalServer = {};
@@ -106,7 +106,7 @@ class CastlePascalLanguageServer {
 
     /**
      * Reads search paths form Castle Manifest XML file.
-     * @returns {string} paths split by new line chars
+     * @returns {Promise<string>} paths split by new line chars
      */
     async getSearchPathsFromProjectManifest() {
         try {
@@ -206,7 +206,7 @@ class CastlePascalLanguageServer {
     /**
      * 
      * @param {string} fpcCompilerExec path to fpc
-     * @returns {string} path to fpc sources or '' when not found
+     * @returns {Promise<string>} path to fpc sources or '' when not found
      */
     async tryToFindFpcSources(fpcCompilerExec) {
         if (fpcCompilerExec === '')
@@ -313,7 +313,7 @@ class CastlePascalLanguageServer {
     /**
      * 
      * @param {string} fpcCompilerExec path to fpc
-     * @returns {string} path to lazarus sources
+     * @returns {Promise<string>} path to lazarus sources
      */
     async tryToFindLazarusSources(fpcCompilerExec) {
         if (fpcCompilerExec === '')
