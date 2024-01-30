@@ -104,6 +104,10 @@ class CastlePascalLanguageServer {
         return true;
     }
 
+    /**
+     * Reads search paths form Castle Manifest XML file.
+     * @returns {string} paths split by new line chars
+     */
     async getSearchPathsFromProjectManifest() {
         try {
             let searchPathsFromProjectManifest = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output search-paths');
