@@ -10,7 +10,7 @@ const castlePath = require('./castlePath.js');
  * Executes command and returns stdout as string (empty string on error, 
  * but shows showErrorMessage()). Changes current working dir to project directory.
  * @param {string} command command to run
- * @returns {string} stdout or empty string on error
+ * @returns {Promise<string>} stdout or empty string on error
  */
 async function executeCommandAndReturnValue(command) {
 	let result = '';
@@ -41,7 +41,7 @@ async function executeCommandAndReturnValue(command) {
  * but shows showErrorMessage()). Changes current working dir to project directory.
  * @param {string} executableFile file to execute
  * @param {string[]} args execution arguments
- * @returns {string} stdout or empty string on error
+ * @returns {Promise<string>} stdout or empty string on error
  */
 async function executeFileAndReturnValue(executableFile, args) {
 	let result = '';
