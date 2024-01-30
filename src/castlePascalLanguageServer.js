@@ -5,7 +5,6 @@ const vscodelangclient = require('vscode-languageclient');
 // eslint-disable-next-line no-unused-vars
 const castleConfiguration = require('./castleConfiguration.js');
 const castleExec = require('./castleExec.js');
-const castlePath = require('./castlePath.js');
 const path = require('path');
 
 /**
@@ -38,7 +37,7 @@ class CastlePascalLanguageServer {
             return false;
 
         // get default compiler path for build tool 
-        let defaultCompilerExePath = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output-environment fpc-exe');
+        let defaultCompilerExePath = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-exe']);
 
         // read settings when and fallback to defaultCompilerExePath
         this.enviromentForPascalServer['PP'] = this.getEnvSetting('PP', defaultCompilerExePath);
@@ -46,7 +45,7 @@ class CastlePascalLanguageServer {
         // when build tool did not return fpc path for example when this is old build tool
         // try simply run fpc -PB
         if (this.enviromentForPascalServer['PP'] === '')
-            this.enviromentForPascalServer['PP'] = await castleExec.executeCommandAndReturnValue('fpc -PB');
+            this.enviromentForPascalServer['PP'] = await castleExec.executeFileAndReturnValue(castleExec.addExtensionToExecutableFile('fpc'), ['-PB']);
 
         // Check compiler really exists and can be executed
         try {
@@ -61,14 +60,14 @@ class CastlePascalLanguageServer {
 
         if (this.enviromentForPascalServer['FPCDIR'] === '') {
             // try to find fpc sources
-            let realCompilerPath = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this.enviromentForPascalServer['PP']) + ' -PB');
+            let realCompilerPath = await castleExec.executeFileAndReturnValue(this.enviromentForPascalServer['PP'], ['-PB']);
             this.enviromentForPascalServer['FPCDIR'] = await this.tryToFindFpcSources(realCompilerPath);
         }
 
         this.enviromentForPascalServer['LAZARUSDIR'] = this.getEnvSetting('LAZARUSDIR', '');
 
         if (this.enviromentForPascalServer['LAZARUSDIR'] === '') {
-            let realCompilerPath = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this.enviromentForPascalServer['PP']) + ' -PB');
+            let realCompilerPath = await castleExec.executeFileAndReturnValue(this.enviromentForPascalServer['PP'], ['-PB']);
             this.enviromentForPascalServer['LAZARUSDIR'] = await this.tryToFindLazarusSources(realCompilerPath);
         }
 
@@ -85,6 +84,7 @@ class CastlePascalLanguageServer {
     /**
      * Check for fpc.cfg - fixes pasls with our bundle
      * @param {string} fpcExecutable fpc execution file for which we are looking fpc.cfg 
+     * @returns {Promise<bool>} 
      * @retval true fpc installation has fpc.cfg
      * @retval false fpc installation does not have fpc.cfg
      */
@@ -93,7 +93,7 @@ class CastlePascalLanguageServer {
         // currently checked only for windows
         if (process.platform !== 'win32')
             return true;
-        let realCompilerPath = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(fpcExecutable) + ' -PB');
+        let realCompilerPath = await castleExec.executeFileAndReturnValue(fpcExecutable, ['-PB']);
         let fpcCfgFile = path.dirname(realCompilerPath) + '\\fpc.cfg'
         try {
             fs.accessSync(fpcCfgFile, fs.constants.F_OK)
@@ -110,7 +110,7 @@ class CastlePascalLanguageServer {
      */
     async getSearchPathsFromProjectManifest() {
         try {
-            let searchPathsFromProjectManifest = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output search-paths');
+            let searchPathsFromProjectManifest = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output', 'search-paths']);
             console.log('Project search paths: ');
             console.log(searchPathsFromProjectManifest);
             return searchPathsFromProjectManifest;
@@ -153,7 +153,7 @@ class CastlePascalLanguageServer {
 
         let hasFpcCfg = await this.hasFpcCfgFile(this.enviromentForPascalServer['PP']);
         if (!hasFpcCfg)
-            initializationOptions.fpcStandardUnitsPaths = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(this._castleConfig.buildToolPath) + ' output-environment fpc-standard-units-path')
+            initializationOptions.fpcStandardUnitsPaths = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-standard-units-path']);
 
         clientOptions.initializationOptions = initializationOptions;
         this._pascalServerClient = new vscodelangclient.LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
@@ -227,7 +227,7 @@ class CastlePascalLanguageServer {
             // when fpc-src is installed from fpc-src debian package
             // sources are in directory like /usr/share/fpcsrc/3.2.2/
             // https://packages.debian.org/bookworm/all/fpc-source-3.2.2/filelist
-            let compilerVersion = await castleExec.executeCommandAndReturnValue(castlePath.pathForExecCommand(fpcCompilerExec) + ' -iV');
+            let compilerVersion = await castleExec.executeFileAndReturnValue(fpcCompilerExec, ['-iV']);
             console.log('Compiler Version', compilerVersion);
             sourcesDir = '/usr/share/fpcsrc/' + compilerVersion + '/';
             if (this.isCompilerSourcesFolder(sourcesDir)) {
