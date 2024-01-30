@@ -16,27 +16,10 @@ class CastleFileWatcher {
     * @param {CastlePlugin} castlePlugin 
     */
     constructor(context, castleConfig, castlePlugin) {
-        this._vsFileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.{pas,pp,inc,dpr,lpr}');
         this._castleConfig = castleConfig;
         this._castlePlugin = castlePlugin;
 
-        this._vsFileSystemWatcher.onDidChange((uri) => {
-            console.log(`Change in file: ${uri.fsPath}`);
-            this._castleConfig.recompilationNeeded = true;
-        });
-
-        this._vsFileSystemWatcher.onDidCreate((uri) => {
-            console.log(`New file created: ${uri.fsPath}`);
-            this._castleConfig.recompilationNeeded = true;
-        });
-
-        this._vsFileSystemWatcher.onDidDelete((uri) => {
-            console.log(`Source file deleted: ${uri.fsPath}`);
-            this._castleConfig.recompilationNeeded = true;
-        });
-
-        context.subscriptions.push(this._vsFileSystemWatcher);
-
+        this.createPascalSourceFilesWatcher(context);
         this.createManifestFileWatcher(context);
 
         // reaction to game compilation task
@@ -63,6 +46,31 @@ class CastleFileWatcher {
                         }
                     }
         });
+    }
+
+    /**
+     * Creates source files (pas,pp,inc,dpr,lpr) file watcher
+     * @param {vscode.ExtensionContext} context plugin context
+     */
+    createPascalSourceFilesWatcher(context) {
+        this._vsFileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.{pas,pp,inc,dpr,lpr}');
+
+        this._vsFileSystemWatcher.onDidChange((uri) => {
+            console.log(`Change in file: ${uri.fsPath}`);
+            this._castleConfig.recompilationNeeded = true;
+        });
+
+        this._vsFileSystemWatcher.onDidCreate((uri) => {
+            console.log(`New file created: ${uri.fsPath}`);
+            this._castleConfig.recompilationNeeded = true;
+        });
+
+        this._vsFileSystemWatcher.onDidDelete((uri) => {
+            console.log(`Source file deleted: ${uri.fsPath}`);
+            this._castleConfig.recompilationNeeded = true;
+        });
+
+        context.subscriptions.push(this._vsFileSystemWatcher);
     }
 
     /**
