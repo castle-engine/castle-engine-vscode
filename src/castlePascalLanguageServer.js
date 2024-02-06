@@ -111,6 +111,10 @@ class CastlePascalLanguageServer {
     async getSearchPathsFromProjectManifest() {
         try {
             let searchPathsFromProjectManifest = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output', 'search-paths']);
+            // In some places, code tools check paths as text, and this is significant
+            if (process.platform === 'win32') {
+                searchPathsFromProjectManifest = searchPathsFromProjectManifest.replace(/\//g, "\\");
+            }
             console.log('Project search paths: ');
             console.log(searchPathsFromProjectManifest);
             return searchPathsFromProjectManifest;
