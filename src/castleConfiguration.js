@@ -49,7 +49,7 @@ class CastleConfiguration {
         else
             fpcDefaultArch = '';
 
-        this._fpcTargetCpu = ''; this.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
+        this._fpcTargetCpu = this.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
     }
 
     /**
