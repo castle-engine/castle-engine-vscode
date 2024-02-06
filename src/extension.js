@@ -25,7 +25,8 @@ async function activate(context) {
 			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCDIR') ||
 			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.LAZARUSDIR') ||
 			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCTARGET') ||
-			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCTARGETCPU') 
+			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCTARGETCPU') ||
+			event.affectsConfiguration('castleGameEngine.engineDeveloperMode')
 		) {
 			await castlePlugin.updateLanguageServer();
 			castlePlugin.updateStatusBar();

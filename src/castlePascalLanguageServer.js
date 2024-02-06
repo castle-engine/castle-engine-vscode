@@ -154,6 +154,7 @@ class CastlePascalLanguageServer {
 
         let initializationOptions = {};
         initializationOptions.projectSearchPaths = await this.getSearchPathsFromProjectManifest();
+        initializationOptions.engineDevMode = this._castleConfig.engineDeveloperMode;
 
         let hasFpcCfg = await this.hasFpcCfgFile(this.enviromentForPascalServer['PP']);
         if (!hasFpcCfg)

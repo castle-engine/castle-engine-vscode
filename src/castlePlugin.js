@@ -60,6 +60,7 @@ class CastlePlugin {
 
         this._castleConfig.findPaths();
         this._castleConfig.findFpcTargetCpu();
+        this._castleConfig.updateDeveloperMode();
     }
 
     /**
@@ -69,6 +70,7 @@ class CastlePlugin {
      * In other cases reloads configuration and reruns pascal language server.
      */
     async updateLanguageServer() {
+        this._castleConfig.updateDeveloperMode();
         if (this._castleLanguageServer == undefined)
             this._castleLanguageServer = new CastlePascalLanguageServer(this._castleConfig);
 

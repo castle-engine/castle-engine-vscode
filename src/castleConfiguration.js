@@ -50,6 +50,7 @@ class CastleConfiguration {
             fpcDefaultArch = '';
 
         this._fpcTargetCpu = this.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
+        this._engineDeveloperMode = false;
     }
 
     /**
@@ -105,6 +106,13 @@ class CastleConfiguration {
 
     get fpcTargetCpu() {
         return this._fpcTargetCpu;
+    }
+
+    /**
+     * @returns {boolean} Is the plugin in engine develper mode? Curently only add engine sources to workspace symbols
+     */
+    get engineDeveloperMode() {
+        return this._engineDeveloperMode;
     }
 
     /**
@@ -251,7 +259,9 @@ class CastleConfiguration {
         return varValue;
     }
 
-
+    updateDeveloperMode() {
+        this._engineDeveloperMode = vscode.workspace.getConfiguration('castleGameEngine').get('engineDeveloperMode');
+    }
 }
 
 module.exports = { CastleBuildModes, CastleConfiguration };

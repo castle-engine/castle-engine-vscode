@@ -103,6 +103,10 @@
         "castleGameEngine.pascalLanguageServer.FPCTARGETCPU": {
           "type": "string",
           "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for autodetection."
+        },
+        "castleGameEngine.engineDeveloperMode": {
+          "type": "boolean",
+          "markdowndescription": "Facilities for engine developers"
         }
       }
     },
