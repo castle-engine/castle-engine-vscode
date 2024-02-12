@@ -27,6 +27,7 @@ The extension helps developing Castle Game Engine (CGE) games on many areas:
 * code completion (e.g. `Ctrl` + `Space`) thanks to Pascal Language Server
 * current file procedure list (`Ctrl` + `Shift` + `O`):
    ![Procedure list screen](images/findfilesymbol.png)
+* project procedure list (`Ctrl` + `T`)
 * open current project in editor command with shortcut in status bar:
    ![Status bar](images/vscode_status_bar.png)
 * compilation type switch button (Debug, Release)
@@ -36,6 +37,7 @@ The extension helps developing Castle Game Engine (CGE) games on many areas:
 * this extension adds two keybindings:
    * `Ctrl` + `F9` - compile game
    * `Shift` + `F9` - run game
+* engine developer mode - currently changes project procedure list to project and engine procedure list (can be turn on in settings)
 
 ## Other extension dependency
 
@@ -61,12 +63,12 @@ This extension contributes the following settings:
 * `castleGameEngine.pascalLanguageServer.LAZARUSDIR`: Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or to try use autodetection.
 * `castleGameEngine.pascalLanguageServer.FPCTARGET`: Target platform (`windows`, `linux`, `darwin`). Leave blank for autodetection.
 * `castleGameEngine.pascalLanguageServer.FPCTARGETCPU`: Target CPU (e.g. `x86_64`). Leave blank for autodetection.
+* `castleGameEngine.engineDeveloperMode`: Facilities for engine developers (`true` or `false`) - currently changes project procedure list to project and engine procedure list
 
 ## Known Issues
 
 This the first extension releaase so we lack some features:
 * [creating new project](https://castle-engine.io/build_first) - please use Castle Editor to create new project and then open project in vscode
-* searching symbol in workspace/directory `Ctrl` + `T` is not implemented, use `Ctrl` + `Shift` + `F`.
 
 ## Release Notes
 
