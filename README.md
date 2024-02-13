@@ -34,7 +34,9 @@ The extension helps developing Castle Game Engine (CGE) games on many areas:
 * watch file system changes and recompile only when needed
 * status bar buttons to make easier to run the most used functions:
    ![Status bar](images/vscode_status_bar.png)
+* searching for the word on which the cursor is positioned in the [Castle Game Engine Api Reference](https://castle-engine.io/apidoc/html/index.html)
 * this extension adds two keybindings:
+   * `Ctrl` + `F1` - search word in [Castle Game Engine Api Reference](https://castle-engine.io/apidoc/html/index.html)
    * `Ctrl` + `F9` - compile game
    * `Shift` + `F9` - run game
 * engine developer mode - currently changes project procedure list to project and engine procedure list (can be turn on in settings)
