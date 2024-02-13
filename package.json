@@ -74,6 +74,10 @@
       {
         "command": "castle-game-engine.validateAndOpenSettings",
         "title": "Validate and open settings"
+      },
+      {
+        "command": "castle-game-engine.searchInCGEApiReference",
+        "title": "Search in Api Reference (CGE)"
       }
     ],
     "configuration": {
@@ -143,6 +147,12 @@
       {
         "command": "castle-game-engine.runGame",
         "key": "shift+f9",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "castle-game-engine.searchInCGEApiReference",
+        "key": "ctrl+f1",
+        "mac": "cmd+f1",
         "when": "editorTextFocus"
       }
     ]

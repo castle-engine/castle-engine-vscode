@@ -19,7 +19,9 @@ class CastlePlugin {
         this._context = context;
         this._taskCommandsRegistered = false;
         this._editorCommandsRegistered = false;
+        this._searchInApiReferenceCommandRegistered = false;
         this._validateCommandsRegistered = false;
+        this._referencePanel = null;
     }
 
     /**
@@ -31,6 +33,7 @@ class CastlePlugin {
         this.updateFileWatcher();
         this.updateTaskProvider();
         this.updateEditorCommand();
+        this.updateSearchInApiReferenceCommand();
         this.updateValidateAndOpenSettingsCommand();
         this.updateDebugProvider();
         this.updateStatusBar();
@@ -168,6 +171,74 @@ class CastlePlugin {
                 this._context.subscriptions.push(this._disposableOpenInEditor);
                 this._editorCommandsRegistered = true;
             }
+        }
+    }
+
+    updateSearchInApiReferenceCommand()  {
+        if (this._searchInApiReferenceCommandRegistered === false) {
+            this._disposableSearchInApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.searchInCGEApiReference, () => {
+                let wordToSearch = '';
+                const editor = vscode.window.activeTextEditor;
+                if (editor) {
+                    const document = editor.document;
+                    const selection = editor.selection;
+                    const cursorWordRange = document.getWordRangeAtPosition(selection.active);
+                    if (cursorWordRange) {
+                        wordToSearch = document.getText(cursorWordRange);
+                    } else {
+                        return; //no word under cursor
+                    }
+                } else {
+                    // no active editor
+                    return
+                }
+                if (this._referencePanel == undefined) {
+                    this._referencePanel = vscode.window.createWebviewPanel('cge_api_reference', 
+                    'Castle Game Engine Api Reference', 
+                    vscode.ViewColumn.Beside, 
+                    { enableScripts: true });
+
+                    this._referencePanel.onDidDispose(
+                        () => {
+                            this._referencePanel = undefined;
+                        }
+                    )
+                }
+                this._referencePanel.webview.html = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">                        
+                    <title>Castle Game Engine Api Reference</title>
+                    <style>
+                    body, html {
+                        height: 100%;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    #cgeApiReferenceFrame {
+                        height: 100%;
+                        width: 100%;
+                        border: none;
+                    }
+                    </style>                        
+                </head>
+                <body>
+                    <script>
+                        function goBack() {
+                            window.history.back();
+                        }
+                    </script>
+                    <div id="cgeApiReferenceToolbar">
+                        <button onclick="goBack()">Back</button>
+                    </div>
+                    <iframe id="cgeApiReferenceFrame" src="https://castle-engine.io/apidoc/html/tipue_results.html?q=${wordToSearch}"></iframe>
+                </body>
+                </html>
+                `;
+
+            });
+            this._searchInApiReferenceCommandRegistered = true;
         }
     }
 
