@@ -34,7 +34,8 @@ class CastleConfiguration {
             debugGame: 'workbench.action.debug.start',
             openInCastleEditor: 'castle-game-engine.openWorkspaceInCastleEditor',
             validateAndOpenSettings: 'castle-game-engine.validateAndOpenSettings',
-            searchInCGEApiReference: 'castle-game-engine.searchInCGEApiReference'
+            searchInCGEApiReference: 'castle-game-engine.searchInCGEApiReference',
+            backInCGEApiReference: 'castle-game-engine.backInCGEApiReference'
         };
         this._buildToolPath = '';
         this._enginePath = '';

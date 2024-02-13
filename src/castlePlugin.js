@@ -19,7 +19,7 @@ class CastlePlugin {
         this._context = context;
         this._taskCommandsRegistered = false;
         this._editorCommandsRegistered = false;
-        this._searchInApiReferenceCommandRegistered = false;
+        this._searchInApiReferenceCommandsRegistered = false;
         this._validateCommandsRegistered = false;
         this._referencePanel = null;
     }
@@ -33,7 +33,7 @@ class CastlePlugin {
         this.updateFileWatcher();
         this.updateTaskProvider();
         this.updateEditorCommand();
-        this.updateSearchInApiReferenceCommand();
+        this.updateSearchInApiReferenceCommands();
         this.updateValidateAndOpenSettingsCommand();
         this.updateDebugProvider();
         this.updateStatusBar();
@@ -174,8 +174,8 @@ class CastlePlugin {
         }
     }
 
-    updateSearchInApiReferenceCommand()  {
-        if (this._searchInApiReferenceCommandRegistered === false) {
+    updateSearchInApiReferenceCommands()  {
+        if (this._searchInApiReferenceCommandsRegistered === false) {
             this._disposableSearchInApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.searchInCGEApiReference, () => {
                 let wordToSearch = '';
                 const editor = vscode.window.activeTextEditor;
@@ -228,6 +228,17 @@ class CastlePlugin {
                         function goBack() {
                             window.history.back();
                         }
+
+                        window.addEventListener('message', event => {
+
+                            const message = event.data; 
+                
+                            switch (message.command) {
+                                case 'cgeback':
+                                    goBack();
+                                    break;
+                            }
+                        });                        
                     </script>
                     <div id="cgeApiReferenceToolbar">
                         <button onclick="goBack()">Back</button>
@@ -238,7 +249,13 @@ class CastlePlugin {
                 `;
 
             });
-            this._searchInApiReferenceCommandRegistered = true;
+
+            this._disposableBackInCGEApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.backInCGEApiReference, () => {
+                if (this._referencePanel !== undefined) {
+                    this._referencePanel.webview.postMessage({command: 'cgeback'});
+                }
+            });
+            this._searchInApiReferenceCommandsRegistered = true;
         }
     }
 

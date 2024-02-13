@@ -78,6 +78,10 @@
       {
         "command": "castle-game-engine.searchInCGEApiReference",
         "title": "Search in Api Reference (CGE)"
+      },
+      {
+        "command": "castle-game-engine.backInCGEApiReference",
+        "title": "Go back in Api Reference (CGE)"
       }
     ],
     "configuration": {
@@ -113,6 +117,14 @@
           "markdowndescription": "Facilities for engine developers"
         }
       }
+    },
+    "menus": {
+      "webview/context": [
+        {
+          "command": "castle-game-engine.backInCGEApiReference",
+          "when": "webviewId == 'cge_api_reference'"
+        }
+      ]
     },
     "problemMatchers": [
       {
