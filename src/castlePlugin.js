@@ -189,9 +189,9 @@ class CastlePlugin {
                         return; //no word under cursor
                     }
                 } else {
-                    // no active editor
-                    return
+                    return; // no active editor
                 }
+                
                 if (this._referencePanel == undefined) {
                     this._referencePanel = vscode.window.createWebviewPanel('cge_api_reference', 
                     'Castle Game Engine Api Reference', 
