@@ -32,6 +32,10 @@ async function activate(context) {
 			castlePlugin.updateStatusBar();
 		}
 	});
+
+	/*vscode.workspace.onDidGrantWorkspaceTrust( () => {
+		console.log("is trusted: ", vscode.workspace.isTrusted);
+	} );*/
 	
 	await castlePlugin.activatePlugin();
 	console.log('Castle Engine Extension - Activate - DONE');

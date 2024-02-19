@@ -28,6 +28,12 @@
     "workspaceContains:CastleEngineManifest.xml"
   ],
   "main": "./src/extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "Untrusted workspaces are not supported."
+    }
+  },
   "contributes": {
     "languages": [
       {
