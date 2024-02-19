@@ -166,6 +166,12 @@
         "key": "ctrl+f1",
         "mac": "cmd+f1",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "editor.action.revealDeclaration",
+        "key": "ctrl+f12",
+        "mac": "cmd+f12",
+        "when": "editorTextFocus"
       }
     ]
   },
