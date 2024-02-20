@@ -48,8 +48,7 @@
     ],
     "debuggers": [
       {
-        "type": "cgedebug",
-        "languages": ["pascal"]
+        "type": "cgedebug"
       }
     ],
     "commands": [
