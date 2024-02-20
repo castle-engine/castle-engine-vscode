@@ -39,6 +39,7 @@ The extension helps developing Castle Game Engine (CGE) games on many areas:
    * `Ctrl` + `F1` - search word in [Castle Game Engine Api Reference](https://castle-engine.io/apidoc/html/index.html)
    * `Ctrl` + `F9` - compile game
    * `Shift` + `F9` - run game
+   * `Ctrl` + `F12` - go to declaration
 * engine developer mode - currently changes project procedure list to project and engine procedure list (can be turn on in settings)
 
 ## Other extension dependency
@@ -71,6 +72,9 @@ This extension contributes the following settings:
 
 This the first extension releaase so we lack some features:
 * [creating new project](https://castle-engine.io/build_first) - please use Castle Editor to create new project and then open project in vscode
+* cgedebug/fpDebug doesn't work on MacOS
+* the extension doesn't work in restricted mode
+* the extension doesn't support multifolder workspaces
 
 ## Release Notes
 
