@@ -12,7 +12,7 @@
   "sponsor": {
     "url": "https://www.patreon.com/castleengine"
   },
-  "keywords": ["cge", "gamedev", "pascal", "game engine"],
+  "keywords": ["castle", "game", "engine", "cge", "gamedev", "pascal", "freepascal", "fpc", "lazarus", "delphi"],
   "repository": {
     "type": "git",
     "url": "https://github.com/castle-engine/castle-game-engine-vscode.git"
@@ -119,7 +119,7 @@
         },
         "castleGameEngine.engineDeveloperMode": {
           "type": "boolean",
-          "markdowndescription": "Facilities for engine developers"
+          "markdowndescription": "Adds engine symbols to project symbols, to easily jump to engine source code."
         }
       }
     },
