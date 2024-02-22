@@ -1,7 +1,7 @@
 {
   "name": "castle-game-engine",
   "displayName": "Castle Game Engine",
-  "description": "VSCode extension for Castle Game Engine",
+  "description": "Build and debug Castle Game Engine projects, use Pascal with syntax highlighting and code completion",
   "publisher": "castle-game-engine-team",
   "author": {
     "name": "Castle Game Engine Team"
@@ -99,23 +99,23 @@
         },
         "castleGameEngine.pascalLanguageServer.PP": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or to try use autodetection."
+          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or to try use auto-detection."
         },
         "castleGameEngine.pascalLanguageServer.FPCDIR": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`) or to try use autodetection."
+          "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`) or use auto-detection."
         },
         "castleGameEngine.pascalLanguageServer.LAZARUSDIR": {
           "type": "string",
-          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or to try use autodetection."
+          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or use auto-detection."
         },
         "castleGameEngine.pascalLanguageServer.FPCTARGET": {
           "type": "string",
-          "markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for autodetection."
+          "markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for auto-detection."
         },
         "castleGameEngine.pascalLanguageServer.FPCTARGETCPU": {
           "type": "string",
-          "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for autodetection."
+          "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for auto-detection."
         },
         "castleGameEngine.engineDeveloperMode": {
           "type": "boolean",
