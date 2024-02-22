@@ -16,33 +16,50 @@ The extension uses a [Pascal Language Server](https://github.com/castle-engine/p
 
 ## Features
 
-One of the goals of this extension is to simplify the setup as much as possible so we provide a lot of heuristics to automatically configure compilation, debug and other things without need to write json files. To check everything is working open some examples from `examples` directory in your engine installation.
+We want to simplify working with _Castle Game Engine_ projects in _Visual Studio Code_ as much as possible. All of the extension features are enabled when you open a directory with a _Castle Game Engine_ project (`CastleEngineManifest.xml` file). Some of the extension features (like Pascal code completion) are available in any Pascal file, even if it's not part of a _Castle Game Engine_ project.
+
+To check that everything works, open any example from the `examples` subdirectory of your engine installation.
 
 ![VScode with Castle Game Engine extension](images/vscode_with_cge.png)
 
-The extension helps developing Castle Game Engine (CGE) applications:
+We recognize Castle Game Engine (CGE) projects and provide ready commands to:
 
-* Simplifies the setup as much as possible by providing:
-   * the ability to automatically configure compilation, build, run and clean the game/application without writing any tasks.json file
-   * the ability to automatically configure debug by choosing `castleDebug` \(it uses [Free Pascal (fpc) Debugger](https://marketplace.visualstudio.com/items?itemName=CNOC.fpdebug) extension underneath\) without writing any launch.json file
-   * Pascal Language Server (pasls) automatic configuration system
-* code completion (e.g. `Ctrl` + `Space`) thanks to Pascal Language Server
-* current file procedure list (`Ctrl` + `Shift` + `O`):
+- Compile.
+- Run.
+- Open CGE editor.
+- Switch build mode (debug / release).
+- Debug. Choose `castleDebug` when asked for debugger type. We use [Free Pascal (FPC) Debugger](https://marketplace.visualstudio.com/items?itemName=CNOC.fpdebug) under the hood. We will automatically rebuild the project if something changed before running the debug session.
+- There no need to write any `tasks.json` or `launch.json` files for above.
+- The most common commands are available on status bar:
+   ![Status bar](images/vscode_status_bar.png)
+
+We provide Pascal code highlighting and completion:
+
+- Pascal Language Server (`pasls`) as provided by CGE is automatically used for code completion.
+   - Use _Ctrl + Space_ to complete identifiers, members (properties, methods).
+   - Use _Ctrl + Shift + O_ to jump to symbol definition in current file.
    ![Procedure list screen](images/findfilesymbol.png)
-* project procedure list (`Ctrl` + `T`)
-* open current project in editor command with shortcut in status bar:
-   ![Status bar](images/vscode_status_bar.png)
-* compilation type switch button (Debug, Release)
-* watch file system changes and recompile only when needed
-* status bar buttons to make easier to run the most used functions:
-   ![Status bar](images/vscode_status_bar.png)
-* searching for the word on which the cursor is positioned in the [Castle Game Engine Api Reference](https://castle-engine.io/apidoc/html/index.html)
-* this extension adds two keybindings:
-   * `Ctrl` + `F1` - search word in [Castle Game Engine Api Reference](https://castle-engine.io/apidoc/html/index.html)
+   - Use _Ctrl + T_ to list all symbols in the project.
+   - Just to identifiers (_Ctrl + Click_).
+- [Pascal Magic](https://marketplace.visualstudio.com/items?itemName=theangryepicbanana.language-pascal) is used for syntax highlighting.
+
+Other features:
+
+* We watch for file system changes and recompile only when needed.
+
+* We can searching for the word on which the cursor is positioned in the [Castle Game Engine API Reference](https://castle-engine.io/apidoc/html/index.html).
+
+* We add keybindings consistent (to some extent) with CGE editor and typical Pascal IDEs, like Lazarus or Delphi. These are:
    * `Ctrl` + `F9` - compile game
+   * `Ctrl` + `F1` - search word in [Castle Game Engine Api Reference](https://castle-engine.io/apidoc/html/index.html)
    * `Shift` + `F9` - run game
    * `Ctrl` + `F12` - go to declaration
-* engine developer mode - currently changes project procedure list to project and engine procedure list (can be turn on in settings)
+
+* Additional "Engine Developer Mode" - to easily jump to engine source code using _Ctrl + T_ (will add engine symbols to project symbols).
+
+* Works on Windows, Linux and macOS.
+
+    macOS note: debugger on macOS is not yet functional.
 
 ## Other extensions pulled as dependencies
 
