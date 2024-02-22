@@ -7,12 +7,23 @@
     "name": "Castle Game Engine Team"
   },
   "icon": "images/logo.png",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://castle-engine.io",
   "sponsor": {
     "url": "https://www.patreon.com/castleengine"
   },
-  "keywords": ["castle", "game", "engine", "cge", "gamedev", "pascal", "freepascal", "fpc", "lazarus", "delphi"],
+  "keywords": [
+    "castle",
+    "game",
+    "engine",
+    "cge",
+    "gamedev",
+    "pascal",
+    "freepascal",
+    "fpc",
+    "lazarus",
+    "delphi"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/castle-engine/castle-engine-vscode.git"
