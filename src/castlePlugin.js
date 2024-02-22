@@ -116,21 +116,21 @@ class CastlePlugin {
             }
 
             if (this._taskCommandsRegistered === false) {
-                this._disposableCompileGame = vscode.commands.registerCommand(this._castleConfig.commandId.compileGame, () => {
-                    vscode.tasks.executeTask(this._castleTaskProvider.compileGameTask);
+                this._disposableCompile = vscode.commands.registerCommand(this._castleConfig.commandId.compile, () => {
+                    vscode.tasks.executeTask(this._castleTaskProvider.compileTask);
                 });
-                this._context.subscriptions.push(this._disposableCompileGame);
+                this._context.subscriptions.push(this._disposableCompile);
 
-                this._disposableRunGame = vscode.commands.registerCommand(this._castleConfig.commandId.runGame, () => {
+                this._disposableRun = vscode.commands.registerCommand(this._castleConfig.commandId.run, () => {
                     this._castleTaskProvider.updateCastleTasks();
-                    vscode.tasks.executeTask(this._castleTaskProvider.runGameTask);
+                    vscode.tasks.executeTask(this._castleTaskProvider.runTask);
                 });
-                this._context.subscriptions.push(this._disposableRunGame);
+                this._context.subscriptions.push(this._disposableRun);
 
-                this._disposableCleanGame = vscode.commands.registerCommand(this._castleConfig.commandId.cleanGame, () => {
-                    vscode.tasks.executeTask(this._castleTaskProvider.cleanGameTask);
+                this._disposableClean = vscode.commands.registerCommand(this._castleConfig.commandId.clean, () => {
+                    vscode.tasks.executeTask(this._castleTaskProvider.cleanTask);
                 });
-                this._context.subscriptions.push(this._disposableCleanGame);
+                this._context.subscriptions.push(this._disposableClean);
 
                 this._taskCommandsRegistered = true;
             }
@@ -138,14 +138,14 @@ class CastlePlugin {
         else {
             if (this._taskCommandsRegistered === true) {
                 // when there is no build tool availble
-                this._disposableCompileGame.dispose();
-                this._disposableCompileGame = null;
+                this._disposableCompile.dispose();
+                this._disposableCompile = null;
 
-                this._disposableRunGame.dispose();
-                this._disposableCompileGame = null;
+                this._disposableRun.dispose();
+                this._disposableRun = null;
 
-                this._disposableCleanGame.dispose();
-                this._disposableCleanGame = null;
+                this._disposableClean.dispose();
+                this._disposableClean = null;
 
                 this._taskCommandsRegistered = false;
             }
@@ -176,7 +176,7 @@ class CastlePlugin {
 
     updateSearchInApiReferenceCommands()  {
         if (this._searchInApiReferenceCommandsRegistered === false) {
-            this._disposableSearchInApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.searchInCGEApiReference, () => {
+            this._disposableSearchInApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.searchInApiReference, () => {
                 let wordToSearch = '';
                 const editor = vscode.window.activeTextEditor;
                 if (editor) {
@@ -216,7 +216,7 @@ class CastlePlugin {
                         margin: 0;
                         padding: 0;
                     }
-                    #cgeApiReferenceFrame {
+                    #ApiReferenceFrame {
                         height: 100%;
                         width: 100%;
                         border: none;
@@ -240,17 +240,17 @@ class CastlePlugin {
                             }
                         });
                     </script>
-                    <div id="cgeApiReferenceToolbar">
+                    <div id="ApiReferenceToolbar">
                         <button onclick="goBack()">Back</button>
                     </div>
-                    <iframe id="cgeApiReferenceFrame" src="https://castle-engine.io/apidoc/html/tipue_results.html?q=${wordToSearch}"></iframe>
+                    <iframe id="ApiReferenceFrame" src="https://castle-engine.io/apidoc/html/tipue_results.html?q=${wordToSearch}"></iframe>
                 </body>
                 </html>
                 `;
 
             });
 
-            this._disposableBackInCGEApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.backInCGEApiReference, () => {
+            this._disposableBackInApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.backInApiReference, () => {
                 if (this._referencePanel !== undefined) {
                     this._referencePanel.webview.postMessage({command: 'cgeback'});
                 }
@@ -317,7 +317,7 @@ class CastlePlugin {
             if (this._castleDebugProvider == undefined) {
                 this._castleDebugProvider = new CastleDebugProvider(this._castleConfig);
 
-                this._disposableDebugConfProvider = vscode.debug.registerDebugConfigurationProvider('cgedebug', this._castleDebugProvider);
+                this._disposableDebugConfProvider = vscode.debug.registerDebugConfigurationProvider('castleDebug', this._castleDebugProvider);
                 this._context.subscriptions.push(this._disposableDebugConfProvider);
             }
         }

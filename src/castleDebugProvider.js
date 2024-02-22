@@ -3,13 +3,13 @@ const castleExec = require('./castleExec.js');
 const castleConfiguration = require('./castleConfiguration.js');
 
 /**
- * Castle Debug Provider that uses fpDebug to start debug session without 
- * configuration. Just choose "cgedebug" after hiting F5.
+ * Castle Debug Provider that uses fpDebug to start debug session without
+ * configuration. Just choose "castleDebug" after hitting F5.
  */
 class CastleDebugProvider {
 
 	/**
-	 * @param {castleConfiguration.CastleConfiguration} castleConfig 
+	 * @param {castleConfiguration.CastleConfiguration} castleConfig
 	 */
 	constructor(castleConfig) {
 		this._castleConfig = castleConfig;
@@ -25,13 +25,13 @@ class CastleDebugProvider {
 
 		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
 
-			// this._castleConfig.buildToolPath can be changed when 
-			// debug configuration provider is created and 
+			// this._castleConfig.buildToolPath can be changed when
+			// debug configuration provider is created and
 			// new configuration can be not valid when buildToolPath === ''
 			if (this._castleConfig.buildToolPath === '')
 				return undefined; // abort launch
 
-			config.type = 'fpDebug'; // cgedebug is used only as alias for fpDebug
+			config.type = 'fpDebug'; // castleDebug is used only as alias for fpDebug
 			config.name = 'Debug CGE Game with fpDebug';
 			config.request = 'launch';
 			let executableName = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output', 'executable-name']);
@@ -75,14 +75,14 @@ class CastleDebugProvider {
 	}
 
 	/**
-	 * This function does nothing but must be defined to show cgedebug outside Pascal files e.g. after open folder in vscode.
-	 * @param {undefined | WorkspaceFolder} folder 
-	 * @param {CancellationToken} token 
+	 * This function does nothing but must be defined to show castleDebug outside Pascal files e.g. after open folder in vscode.
+	 * @param {undefined | WorkspaceFolder} folder
+	 * @param {CancellationToken} token
 	 */
 	provideDebugConfigurations(folder, token) {
 		console.log('provideDebugConfigurations - START');
 		console.log('provideDebugConfigurations - STOP');
-	} 
+	}
 }
 
 module.exports = CastleDebugProvider;

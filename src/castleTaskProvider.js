@@ -6,7 +6,7 @@ const castleConfiguration = require('./castleConfiguration.js');
 class CastleTaskProvder {
 
 	/**
-	 * @param {castleConfiguration.CastleConfiguration} castleConfig 
+	 * @param {castleConfiguration.CastleConfiguration} castleConfig
 	 */
 	constructor(castleConfig) {
 		this._castleConfig = castleConfig;
@@ -15,7 +15,7 @@ class CastleTaskProvder {
 
 	createTasks() {
 		try {
-			this._compileGameTask = new vscode.Task(
+			this._compileTask = new vscode.Task(
 				{ type: 'cge-tasks' },
 				vscode.workspace.workspaceFolders[0],
 				'compile-cge-game-task', // task name
@@ -23,9 +23,9 @@ class CastleTaskProvder {
 				new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile', '--mode=' + this._castleConfig.buildMode.buildTool]), // what to do
 				'$cge-problem-matcher'
 			);
-			this._compileGameTask.group = vscode.TaskGroup.Build;
+			this._compileTask.group = vscode.TaskGroup.Build;
 
-			this._runGameTask = new vscode.Task(
+			this._runTask = new vscode.Task(
 				{ type: 'cge-tasks' },
 				vscode.workspace.workspaceFolders[0],
 				'run-cge-game-task', // task name
@@ -34,7 +34,7 @@ class CastleTaskProvder {
 				'$cge-problem-matcher'
 			);
 
-			this._cleanGameTask = new vscode.Task(
+			this._cleanTask = new vscode.Task(
 				{ type: 'cge-tasks' },
 				vscode.workspace.workspaceFolders[0],
 				'clean-cge-game-task', // task name
@@ -42,7 +42,7 @@ class CastleTaskProvder {
 				new vscode.ShellExecution(this._castleConfig.buildToolPath, ['clean']), // what to do
 				'$cge-problem-matcher'
 			);
-			this._cleanGameTask.group = vscode.TaskGroup.Clean;
+			this._cleanTask.group = vscode.TaskGroup.Clean;
 		}
 		catch (err) {
 			vscode.window.showErrorMessage(`createTasks - EXCEPTION: ${err}`);
@@ -52,39 +52,39 @@ class CastleTaskProvder {
 	}
 
 	/**
-	 * Updates compile task to use proper build mode and run game 
+	 * Updates compile task to use proper build mode and run game
 	 * task when recompilationNeeded changes o buildToolPath changes.
 	 */
 	updateCastleTasks() {
 		if (this._castleConfig.recompilationNeeded)
-			this._runGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile-run', '--mode=' + this._castleConfig.buildMode.buildTool]);
+			this._runTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile-run', '--mode=' + this._castleConfig.buildMode.buildTool]);
 		else
-			this._runGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['run', '--mode=' + this._castleConfig.buildMode.buildTool]);
+			this._runTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['run', '--mode=' + this._castleConfig.buildMode.buildTool]);
 
-		this._compileGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile', '--mode=' + this._castleConfig.buildMode.buildTool]);
+		this._compileTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile', '--mode=' + this._castleConfig.buildMode.buildTool]);
 
-		this._cleanGameTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['clean']);
+		this._cleanTask.execution = new vscode.ShellExecution(this._castleConfig.buildToolPath, ['clean']);
 	}
 
 	/**
 	 * @returns {vscode.Task} compile task
 	 */
-	get compileGameTask() {
-		return this._compileGameTask;
+	get compileTask() {
+		return this._compileTask;
 	}
 
 	/**
 	 * @returns {vscode.Task} run task
 	 */
-	get runGameTask() {
-		return this._runGameTask;
+	get runTask() {
+		return this._runTask;
 	}
 
 	/**
 	  * @returns {vscode.Task} clean sources task
 	  */
-	get cleanGameTask() {
-		return this._cleanGameTask;
+	get cleanTask() {
+		return this._cleanTask;
 	}
 
 	provideTasks() {
@@ -93,7 +93,7 @@ class CastleTaskProvder {
 				return [];
 
 			this.updateCastleTasks();
-			return [this._compileGameTask, this._runGameTask, this._cleanGameTask];
+			return [this._compileTask, this._runTask, this._cleanTask];
 		}
 		catch (err) {
 			vscode.window.showErrorMessage(`provideTasks - EXCEPTION: ${err}`);

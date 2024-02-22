@@ -9,10 +9,10 @@ class CastleStatusBar {
 
     /**
      * Constructor
-     * @param {vscode.ExtensionContext} context 
-     * @param {castleConfiguration.CastleConfiguration} castleConfig 
-     * @param {castleLanguageServer.castleLanguageServer} castleLanguageServer 
-     * @param {CastleTaskProvder.castleTaskProvder} castleTaskProvder 
+     * @param {vscode.ExtensionContext} context
+     * @param {castleConfiguration.CastleConfiguration} castleConfig
+     * @param {castleLanguageServer.castleLanguageServer} castleLanguageServer
+     * @param {CastleTaskProvder.castleTaskProvder} castleTaskProvder
      */
     constructor(context, castleConfig, castleLanguageServer, castleTaskProvder) {
         this._castleConfig = castleConfig;
@@ -58,8 +58,8 @@ class CastleStatusBar {
     createCompileButton() {
         this._compileButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 19);
         this._context.subscriptions.push(this._compileButton);
-        this._compileButton.command = this._castleConfig.commandId.compileGame;
-        this._compileButton.tooltip = 'CGE: Click to compile game';
+        this._compileButton.command = this._castleConfig.commandId.compile;
+        this._compileButton.tooltip = 'Compile Castle Game Engine Project';
         this._compileButton.text = '$(gear) Compile';
         this._compileButton.show();
     }
@@ -67,8 +67,8 @@ class CastleStatusBar {
     createDebugButton() {
         this._debugButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._runButton);
-        this._debugButton.command = this._castleConfig.commandId.debugGame;
-        this._debugButton.tooltip = 'CGE: Click to start debuging your game';
+        this._debugButton.command = this._castleConfig.commandId.debug;
+        this._debugButton.tooltip = 'Start Debugging';
         this._debugButton.text = '$(debug-alt) Debug';
         this._debugButton.show();
     }
@@ -76,8 +76,8 @@ class CastleStatusBar {
     createRunButton() {
         this._runButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._runButton);
-        this._runButton.command = this._castleConfig.commandId.runGame;
-        this._runButton.tooltip = 'CGE: Click to run game';
+        this._runButton.command = this._castleConfig.commandId.run;
+        this._runButton.tooltip = 'Run Castle Game Engine Project';
         this._runButton.text = '$(run) Run';
         this._runButton.show();
     }
@@ -85,8 +85,8 @@ class CastleStatusBar {
     createCleanButton() {
         this._cleanButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._cleanButton);
-        this._cleanButton.command = this._castleConfig.commandId.cleanGame;
-        this._cleanButton.tooltip = 'CGE: Click to clean game files';
+        this._cleanButton.command = this._castleConfig.commandId.clean;
+        this._cleanButton.tooltip = 'Clean Castle Game Engine Project';
         this._cleanButton.text = 'Clean';
         this._cleanButton.show();
     }
@@ -95,7 +95,7 @@ class CastleStatusBar {
         this._openInEditorButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._openInEditorButton);
         this._openInEditorButton.command = this._castleConfig.commandId.openInCastleEditor;
-        this._openInEditorButton.tooltip = 'CGE: Open Project in Castle Editor';
+        this._openInEditorButton.tooltip = 'Open Project in Castle Game Engine Editor';
         this._openInEditorButton.text = '$(game) Open in Editor';
         this._openInEditorButton.show();
     }
@@ -104,8 +104,8 @@ class CastleStatusBar {
         this._openSettingsButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._openSettingsButton);
         this._openSettingsButton.command = this._castleConfig.commandId.validateAndOpenSettings;
-        this._openSettingsButton.tooltip = 'CGE: Invalid plugin configuration click to fix';
-        this._openSettingsButton.text = 'CGE: Invalid plugin config';
+        this._openSettingsButton.tooltip = 'Castle Game Engine: Invalid plugin configuration. Click to fix';
+        this._openSettingsButton.text = 'Castle Game Engine: Invalid plugin configuration';
         this._openSettingsButton.color = new vscode.ThemeColor('statusBarItem.errorForeground');
         this._openSettingsButton.show();
     }

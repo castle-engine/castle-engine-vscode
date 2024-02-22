@@ -28,14 +28,14 @@ class CastleConfiguration {
         this.recompilationNeeded = true;
         this._commandId = {
             showBuildModes: 'castle-engine.showBuildModeSelectionInStatusBar',
-            compileGame: 'castle-engine.compileGame',
-            runGame: 'castle-engine.runGame',
-            cleanGame: 'castle-engine.cleanGame',
-            debugGame: 'workbench.action.debug.start',
+            compile: 'castle-engine.compile',
+            run: 'castle-engine.run',
+            clean: 'castle-engine.clean',
+            debug: 'workbench.action.debug.start',
             openInCastleEditor: 'castle-engine.openWorkspaceInCastleEditor',
             validateAndOpenSettings: 'castle-engine.validateAndOpenSettings',
-            searchInCGEApiReference: 'castle-engine.searchInCGEApiReference',
-            backInCGEApiReference: 'castle-engine.backInCGEApiReference'
+            searchInApiReference: 'castle-engine.searchInApiReference',
+            backInApiReference: 'castle-engine.backInApiReference'
         };
         this._buildToolPath = '';
         this._enginePath = '';

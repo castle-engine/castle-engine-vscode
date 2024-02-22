@@ -48,41 +48,41 @@
     ],
     "debuggers": [
       {
-        "type": "cgedebug"
+        "type": "castleDebug"
       }
     ],
     "commands": [
       {
-        "command": "castle-engine.compileGame",
-        "title": "Compile Game (CGE)"
+        "command": "castle-engine.compile",
+        "title": "Compile (Castle Game Engine)"
       },
       {
-        "command": "castle-engine.runGame",
-        "title": "Run Game (CGE)"
+        "command": "castle-engine.run",
+        "title": "Run (Castle Game Engine)"
       },
       {
-        "command": "castle-engine.cleanGame",
-        "title": "Clean Game (CGE)"
+        "command": "castle-engine.clean",
+        "title": "Clean (Castle Game Engine)"
       },
       {
         "command": "castle-engine.showBuildModeSelectionInStatusBar",
-        "title": "Select Build Mode (CGE)"
+        "title": "Select Build Mode (Castle Game Engine)"
       },
       {
         "command": "castle-engine.openWorkspaceInCastleEditor",
-        "title": "Open In Castle Editor (CGE)"
+        "title": "Open In Castle Editor (Castle Game Engine)"
       },
       {
         "command": "castle-engine.validateAndOpenSettings",
-        "title": "Validate and open settings"
+        "title": "Validate and Open Settings"
       },
       {
-        "command": "castle-engine.searchInCGEApiReference",
-        "title": "Search in Api Reference (CGE)"
+        "command": "castle-engine.searchInApiReference",
+        "title": "Search in Api Reference (Castle Game Engine)"
       },
       {
-        "command": "castle-engine.backInCGEApiReference",
-        "title": "Go back in Api Reference (CGE)"
+        "command": "castle-engine.backInApiReference",
+        "title": "Go Back in Api Reference (Castle Game Engine)"
       }
     ],
     "configuration": {
@@ -122,7 +122,7 @@
     "menus": {
       "webview/context": [
         {
-          "command": "castle-engine.backInCGEApiReference",
+          "command": "castle-engine.backInApiReference",
           "when": "webviewId == 'cge_api_reference'"
         }
       ]
@@ -152,18 +152,18 @@
     ],
     "keybindings": [
       {
-        "command": "castle-engine.compileGame",
+        "command": "castle-engine.compile",
         "key": "ctrl+f9",
         "mac": "cmd+f9",
         "when": "editorTextFocus"
       },
       {
-        "command": "castle-engine.runGame",
+        "command": "castle-engine.run",
         "key": "shift+f9",
         "when": "editorTextFocus"
       },
       {
-        "command": "castle-engine.searchInCGEApiReference",
+        "command": "castle-engine.searchInApiReference",
         "key": "ctrl+f1",
         "mac": "cmd+f1",
         "when": "editorTextFocus"
