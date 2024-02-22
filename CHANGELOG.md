@@ -9,7 +9,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - Improved / simplified README.
-- Changed internal names to `castle-engine` instead of `castle-game-engine` -- simpler and more consistent with our domain.
+- Changed various internal names to `castle-engine` instead of `castle-game-engine` -- simpler and more consistent with our domain.
+- Changed debugger name `cgedebug` -> `castleDebug`.
 
 ## [0.0.1]
 
