@@ -1,8 +1,8 @@
 {
-  "name": "castle-game-engine",
+  "name": "castle-engine",
   "displayName": "Castle Game Engine",
   "description": "Build and debug Castle Game Engine projects, use Pascal with syntax highlighting and code completion",
-  "publisher": "castle-game-engine-team",
+  "publisher": "castle-engine-team",
   "author": {
     "name": "Castle Game Engine Team"
   },
@@ -53,39 +53,35 @@
     ],
     "commands": [
       {
-        "command": "castle-game-engine.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "castle-game-engine.compileGame",
+        "command": "castle-engine.compileGame",
         "title": "Compile Game (CGE)"
       },
       {
-        "command": "castle-game-engine.runGame",
+        "command": "castle-engine.runGame",
         "title": "Run Game (CGE)"
       },
       {
-        "command": "castle-game-engine.cleanGame",
+        "command": "castle-engine.cleanGame",
         "title": "Clean Game (CGE)"
       },
       {
-        "command": "castle-game-engine.showBuildModeSelectionInStatusBar",
+        "command": "castle-engine.showBuildModeSelectionInStatusBar",
         "title": "Select Build Mode (CGE)"
       },
       {
-        "command": "castle-game-engine.openWorkspaceInCastleEditor",
+        "command": "castle-engine.openWorkspaceInCastleEditor",
         "title": "Open In Castle Editor (CGE)"
       },
       {
-        "command": "castle-game-engine.validateAndOpenSettings",
+        "command": "castle-engine.validateAndOpenSettings",
         "title": "Validate and open settings"
       },
       {
-        "command": "castle-game-engine.searchInCGEApiReference",
+        "command": "castle-engine.searchInCGEApiReference",
         "title": "Search in Api Reference (CGE)"
       },
       {
-        "command": "castle-game-engine.backInCGEApiReference",
+        "command": "castle-engine.backInCGEApiReference",
         "title": "Go back in Api Reference (CGE)"
       }
     ],
@@ -93,31 +89,31 @@
       "type": "object",
       "title": "Castle Game Engine",
       "properties": {
-        "castleGameEngine.enginePath": {
+        "castleEngine.enginePath": {
           "type": "string",
           "markdowndescription": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (`CASTLE_ENGINE_PATH`)."
         },
-        "castleGameEngine.pascalLanguageServer.PP": {
+        "castleEngine.pascalLanguageServer.PP": {
           "type": "string",
           "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or to try use auto-detection."
         },
-        "castleGameEngine.pascalLanguageServer.FPCDIR": {
+        "castleEngine.pascalLanguageServer.FPCDIR": {
           "type": "string",
           "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`) or use auto-detection."
         },
-        "castleGameEngine.pascalLanguageServer.LAZARUSDIR": {
+        "castleEngine.pascalLanguageServer.LAZARUSDIR": {
           "type": "string",
           "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or use auto-detection."
         },
-        "castleGameEngine.pascalLanguageServer.FPCTARGET": {
+        "castleEngine.pascalLanguageServer.FPCTARGET": {
           "type": "string",
           "markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for auto-detection."
         },
-        "castleGameEngine.pascalLanguageServer.FPCTARGETCPU": {
+        "castleEngine.pascalLanguageServer.FPCTARGETCPU": {
           "type": "string",
           "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for auto-detection."
         },
-        "castleGameEngine.engineDeveloperMode": {
+        "castleEngine.engineDeveloperMode": {
           "type": "boolean",
           "markdowndescription": "Adds engine symbols to project symbols, to easily jump to engine source code."
         }
@@ -126,7 +122,7 @@
     "menus": {
       "webview/context": [
         {
-          "command": "castle-game-engine.backInCGEApiReference",
+          "command": "castle-engine.backInCGEApiReference",
           "when": "webviewId == 'cge_api_reference'"
         }
       ]
@@ -156,18 +152,18 @@
     ],
     "keybindings": [
       {
-        "command": "castle-game-engine.compileGame",
+        "command": "castle-engine.compileGame",
         "key": "ctrl+f9",
         "mac": "cmd+f9",
         "when": "editorTextFocus"
       },
       {
-        "command": "castle-game-engine.runGame",
+        "command": "castle-engine.runGame",
         "key": "shift+f9",
         "when": "editorTextFocus"
       },
       {
-        "command": "castle-game-engine.searchInCGEApiReference",
+        "command": "castle-engine.searchInCGEApiReference",
         "key": "ctrl+f1",
         "mac": "cmd+f1",
         "when": "editorTextFocus"

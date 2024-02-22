@@ -7,7 +7,7 @@ const CastlePlugin = require('./castlePlugin.js');
 let castlePlugin;
 
 /**
- * This method is called when your extension is activated. Extension is activated 
+ * This method is called when your extension is activated. Extension is activated
  * the very first time the command is executed
  * @param {vscode.ExtensionContext} context
  */
@@ -18,15 +18,15 @@ async function activate(context) {
 
 	// register callback when configuration changes
 	vscode.workspace.onDidChangeConfiguration(async (event) => {
-		if (event.affectsConfiguration('castleGameEngine.enginePath')) {
+		if (event.affectsConfiguration('castleEngine.enginePath')) {
 			await castlePlugin.updatePlugin();
 		} else
-		if (event.affectsConfiguration('castleGameEngine.pascalLanguageServer.PP') ||
-			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCDIR') ||
-			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.LAZARUSDIR') ||
-			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCTARGET') ||
-			event.affectsConfiguration('castleGameEngine.pascalLanguageServer.FPCTARGETCPU') ||
-			event.affectsConfiguration('castleGameEngine.engineDeveloperMode')
+		if (event.affectsConfiguration('castleEngine.pascalLanguageServer.PP') ||
+			event.affectsConfiguration('castleEngine.pascalLanguageServer.FPCDIR') ||
+			event.affectsConfiguration('castleEngine.pascalLanguageServer.LAZARUSDIR') ||
+			event.affectsConfiguration('castleEngine.pascalLanguageServer.FPCTARGET') ||
+			event.affectsConfiguration('castleEngine.pascalLanguageServer.FPCTARGETCPU') ||
+			event.affectsConfiguration('castleEngine.engineDeveloperMode')
 		) {
 			await castlePlugin.updateLanguageServer();
 			castlePlugin.updateStatusBar();
@@ -36,7 +36,7 @@ async function activate(context) {
 	/*vscode.workspace.onDidGrantWorkspaceTrust( () => {
 		console.log("is trusted: ", vscode.workspace.isTrusted);
 	} );*/
-	
+
 	await castlePlugin.activatePlugin();
 	console.log('Castle Engine Extension - Activate - DONE');
 }

@@ -20,22 +20,22 @@ const CastleBuildModes = Object.freeze({
 class CastleConfiguration {
 
     /**
-     * 
-     * @param {CastleBuildModes} initialBuildMode 
+     *
+     * @param {CastleBuildModes} initialBuildMode
      */
     constructor(initialBuildMode) {
         this._buildMode = initialBuildMode;
         this.recompilationNeeded = true;
         this._commandId = {
-            showBuildModes: 'castle-game-engine.showBuildModeSelectionInStatusBar',
-            compileGame: 'castle-game-engine.compileGame',
-            runGame: 'castle-game-engine.runGame',
-            cleanGame: 'castle-game-engine.cleanGame',
+            showBuildModes: 'castle-engine.showBuildModeSelectionInStatusBar',
+            compileGame: 'castle-engine.compileGame',
+            runGame: 'castle-engine.runGame',
+            cleanGame: 'castle-engine.cleanGame',
             debugGame: 'workbench.action.debug.start',
-            openInCastleEditor: 'castle-game-engine.openWorkspaceInCastleEditor',
-            validateAndOpenSettings: 'castle-game-engine.validateAndOpenSettings',
-            searchInCGEApiReference: 'castle-game-engine.searchInCGEApiReference',
-            backInCGEApiReference: 'castle-game-engine.backInCGEApiReference'
+            openInCastleEditor: 'castle-engine.openWorkspaceInCastleEditor',
+            validateAndOpenSettings: 'castle-engine.validateAndOpenSettings',
+            searchInCGEApiReference: 'castle-engine.searchInCGEApiReference',
+            backInCGEApiReference: 'castle-engine.backInCGEApiReference'
         };
         this._buildToolPath = '';
         this._enginePath = '';
@@ -51,7 +51,7 @@ class CastleConfiguration {
         else
             fpcDefaultArch = '';
 
-        this._fpcTargetCpu = this.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
+        this._fpcTargetCpu = this.getConfOrEnvSetting('castleEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
         this._engineDeveloperMode = false;
     }
 
@@ -130,22 +130,22 @@ class CastleConfiguration {
             fpcDefaultArch = 'i386';
         else
             fpcDefaultArch = '';
-    
-        this._fpcTargetCpu = this.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
+
+        this._fpcTargetCpu = this.getConfOrEnvSetting('castleEngine.pascalLanguageServer', 'FPCTARGETCPU', fpcDefaultArch);
     }
 
     /**
-     * Searching the most important paths. 
+     * Searching the most important paths.
      */
     findPaths() {
         this._enginePath = this.findEnginePath();
         if (this._enginePath === '')
         {
-            this._buildToolPath = '';    
+            this._buildToolPath = '';
             this._pascalServerPath = '';
             return;
         }
-            
+
         this._buildToolPath = this.findBuildToolPath();
         this._pascalServerPath = this.findPascalServerPath();
     }
@@ -156,11 +156,11 @@ class CastleConfiguration {
      * @returns {string} path to engine or empty string when not found
      */
     findEnginePath() {
-        let enginePath = vscode.workspace.getConfiguration('castleGameEngine').get('enginePath');
+        let enginePath = vscode.workspace.getConfiguration('castleEngine').get('enginePath');
         console.log(`Engine path from configuration: ${enginePath}`);
 
         if (enginePath.trim() === '') {
-            // try to get form environment variable 
+            // try to get form environment variable
             if (process.env.CASTLE_ENGINE_PATH) {
                 enginePath = process.env.CASTLE_ENGINE_PATH
                 console.log(`Engine path from environment: ${enginePath}`);
@@ -223,20 +223,20 @@ class CastleConfiguration {
 
     /**
      * Opens error message box with open configuration button.
-     * @param {string} message 
+     * @param {string} message
      */
     showErrorMessageWithConfigLink(message) {
         let action = 'Open extension config';
         vscode.window.showErrorMessage(message, action)
         .then(selection => {
             if (selection === action) {
-                vscode.commands.executeCommand('workbench.action.openSettings', 'castle-game-engine');
+                vscode.commands.executeCommand('workbench.action.openSettings', 'castle-engine');
             }
-        });        
+        });
     }
 
     /**
-     * Gets value fom vscode configuration, env variable or the default value. 
+     * Gets value fom vscode configuration, env variable or the default value.
      * The name in configuration have to be the same like environment variable.
      * @param {string} configSection configuration section where we are looking for value (envVarName)
      * @param {string} envVarName name in configuration and name of env variable
@@ -262,7 +262,7 @@ class CastleConfiguration {
     }
 
     updateDeveloperMode() {
-        this._engineDeveloperMode = vscode.workspace.getConfiguration('castleGameEngine').get('engineDeveloperMode');
+        this._engineDeveloperMode = vscode.workspace.getConfiguration('castleEngine').get('engineDeveloperMode');
     }
 }
 

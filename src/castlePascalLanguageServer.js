@@ -13,7 +13,7 @@ const path = require('path');
 class CastlePascalLanguageServer {
 
     /**
-     * @param {castleConfiguration.CastleConfiguration} castleConfig 
+     * @param {castleConfiguration.CastleConfiguration} castleConfig
      */
     constructor(castleConfig) {
         this._castleConfig = castleConfig;
@@ -36,7 +36,7 @@ class CastlePascalLanguageServer {
         if (this._castleConfig.pascalServerPath === '' || this._castleConfig.buildToolPath === '')
             return false;
 
-        // get default compiler path for build tool 
+        // get default compiler path for build tool
         let defaultCompilerExePath = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-exe']);
 
         // read settings when and fallback to defaultCompilerExePath
@@ -83,8 +83,8 @@ class CastlePascalLanguageServer {
 
     /**
      * Check for fpc.cfg - fixes pasls with our bundle
-     * @param {string} fpcExecutable fpc execution file for which we are looking fpc.cfg 
-     * @returns {Promise<bool>} 
+     * @param {string} fpcExecutable fpc execution file for which we are looking fpc.cfg
+     * @returns {Promise<bool>}
      * @retval true fpc installation has fpc.cfg
      * @retval false fpc installation does not have fpc.cfg
      */
@@ -183,11 +183,11 @@ class CastlePascalLanguageServer {
 
     /**
      * Gets value fom vscode configuration, env variable or the default value.
-     * @param {string} envVarName 
+     * @param {string} envVarName
      * @param {string} defaultValue
      */
     getEnvSetting(envVarName, defaultValue) {
-        return this._castleConfig.getConfOrEnvSetting('castleGameEngine.pascalLanguageServer', envVarName, defaultValue);
+        return this._castleConfig.getConfOrEnvSetting('castleEngine.pascalLanguageServer', envVarName, defaultValue);
     }
 
 
@@ -209,7 +209,7 @@ class CastlePascalLanguageServer {
     }
 
     /**
-     * 
+     *
      * @param {string} fpcCompilerExec path to fpc
      * @returns {Promise<string>} path to fpc sources or '' when not found
      */
@@ -316,7 +316,7 @@ class CastlePascalLanguageServer {
     }
 
     /**
-     * 
+     *
      * @param {string} fpcCompilerExec path to fpc
      * @returns {Promise<string>} path to lazarus sources
      */
@@ -339,7 +339,7 @@ class CastlePascalLanguageServer {
 
             // default lazarus sources folder path in debian
             // looks like /usr/lib/lazarus/2.2.6/
-            // so we need iterate all items in that directory 
+            // so we need iterate all items in that directory
             // https://packages.debian.org/bookworm/all/lazarus-src-2.2/filelist
             sourcesDir = this.findFullLazarusSourcesFolder('/usr/lib/lazarus/');
             if (sourcesDir !== '') {

@@ -11,7 +11,7 @@ const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
 
 /**
  * Main class of plugin that encapsulates everything and manages the plugin's state.
- * 
+ *
  * The most important functions are activatePlugin(), updatePlugin() and deactivatePlugin().
  */
 class CastlePlugin {
@@ -54,7 +54,7 @@ class CastlePlugin {
     }
 
     /**
-     * When called first time creates CastleConfiguration object and reads/finds configuration. 
+     * When called first time creates CastleConfiguration object and reads/finds configuration.
      * In other cases only reloads configuration.
      */
     updateConfiguration() {
@@ -67,9 +67,9 @@ class CastlePlugin {
     }
 
     /**
-     * When called first time creates CastlePascalLanguageServer object, reads/finds language server configuration and 
-     * starts pascal language server. 
-     * 
+     * When called first time creates CastlePascalLanguageServer object, reads/finds language server configuration and
+     * starts pascal language server.
+     *
      * In other cases reloads configuration and reruns pascal language server.
      */
     async updateLanguageServer() {
@@ -77,7 +77,7 @@ class CastlePlugin {
         if (this._castleLanguageServer == undefined)
             this._castleLanguageServer = new CastlePascalLanguageServer(this._castleConfig);
 
-        // When there is no pascal language server we still can run the extension 
+        // When there is no pascal language server we still can run the extension
         // but there will be no code completion etc.
         if (this._castleConfig.pascalServerPath !== '') {
             await this._castleLanguageServer.destroyLanguageClient();
@@ -101,7 +101,7 @@ class CastlePlugin {
 
     /**
      * When called first time creates and registers CastleTaskProvder. And registers/unregisters VSCode commands.
-     * Subsequent runs update the tasks and registers/unregisters VSCode commands 
+     * Subsequent runs update the tasks and registers/unregisters VSCode commands
      * depending on whether we have access to build tool.
      */
     updateTaskProvider() {
@@ -153,7 +153,7 @@ class CastlePlugin {
     }
 
     /**
-     * Registers or unregisters VSCode open in CGE editor command 
+     * Registers or unregisters VSCode open in CGE editor command
      * depending on whether we have access to build tool.
      */
     updateEditorCommand() {
@@ -191,11 +191,11 @@ class CastlePlugin {
                 } else {
                     return; // no active editor
                 }
-                
+
                 if (this._referencePanel == undefined) {
-                    this._referencePanel = vscode.window.createWebviewPanel('cge_api_reference', 
-                    'Castle Game Engine Api Reference', 
-                    vscode.ViewColumn.Beside, 
+                    this._referencePanel = vscode.window.createWebviewPanel('cge_api_reference',
+                    'Castle Game Engine Api Reference',
+                    vscode.ViewColumn.Beside,
                     { enableScripts: true });
 
                     this._referencePanel.onDidDispose(
@@ -208,7 +208,7 @@ class CastlePlugin {
                 <html>
                 <head>
                     <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">                        
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Castle Game Engine Api Reference</title>
                     <style>
                     body, html {
@@ -221,7 +221,7 @@ class CastlePlugin {
                         width: 100%;
                         border: none;
                     }
-                    </style>                        
+                    </style>
                 </head>
                 <body>
                     <script>
@@ -231,14 +231,14 @@ class CastlePlugin {
 
                         window.addEventListener('message', event => {
 
-                            const message = event.data; 
-                
+                            const message = event.data;
+
                             switch (message.command) {
                                 case 'cgeback':
                                     goBack();
                                     break;
                             }
-                        });                        
+                        });
                     </script>
                     <div id="cgeApiReferenceToolbar">
                         <button onclick="goBack()">Back</button>
@@ -272,7 +272,7 @@ class CastlePlugin {
                     wasWarning = true;
                     vscode.window.showInformationMessage('The path to engine in not valid, check enginePath value.');
                 }
-                    
+
 
                 if (this._castleConfig.buildToolPath === '') {
                     if (!wasWarning) {
@@ -286,22 +286,22 @@ class CastlePlugin {
                 if (this._castleConfig.pascalServerPath === '') {
                     if (!wasWarning) {
                         vscode.window.showInformationMessage(
-                            'The engine path is set but the pascal language server executable cannot be found in bin subfolder (no pasls' 
+                            'The engine path is set but the pascal language server executable cannot be found in bin subfolder (no pasls'
                             + this.executableFileExtension() +').');
                             wasWarning = true;
                         }
                 }
-                
+
                 if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined)) {
                     if (!wasWarning) {
                         vscode.window.showInformationMessage(
-                            'Path to engine and pascal language server look correct, but some pasls' + 
+                            'Path to engine and pascal language server look correct, but some pasls' +
                             this.executableFileExtension() +  ' settings are incorrect.');
                             wasWarning = true;
                     }
                 }
 
-                vscode.commands.executeCommand('workbench.action.openSettings', 'castle-game-engine');
+                vscode.commands.executeCommand('workbench.action.openSettings', 'castle-engine');
             });
             this._context.subscriptions.push(disposable);
             this._validateCommandsRegistered = true;
@@ -309,7 +309,7 @@ class CastlePlugin {
     }
 
     /**
-     * When called first time creates and registers CastleDebugProvider. 
+     * When called first time creates and registers CastleDebugProvider.
      * Subsequent runs only creates and registers CastleDebugProvider when previous configuration was incorrect.
      */
     updateDebugProvider() {
