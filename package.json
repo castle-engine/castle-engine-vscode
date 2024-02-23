@@ -104,31 +104,39 @@
       "properties": {
         "castleEngine.enginePath": {
           "type": "string",
-          "markdowndescription": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (`CASTLE_ENGINE_PATH`)."
+          "markdowndescription": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (`CASTLE_ENGINE_PATH`).",
+          "order": 0
         },
         "castleEngine.pascalLanguageServer.PP": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or to try use auto-detection."
+          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or to try use auto-detection.",
+          "order": 1
         },
         "castleEngine.pascalLanguageServer.FPCDIR": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`) or use auto-detection."
+          "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`) or use auto-detection.",
+          "order": 2
         },
         "castleEngine.pascalLanguageServer.LAZARUSDIR": {
           "type": "string",
-          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or use auto-detection."
+          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or use auto-detection.",
+          "order": 3
         },
         "castleEngine.pascalLanguageServer.FPCTARGET": {
           "type": "string",
-          "markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for auto-detection."
+          "markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for auto-detection.",
+          "order": 4
         },
         "castleEngine.pascalLanguageServer.FPCTARGETCPU": {
           "type": "string",
-          "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for auto-detection."
+          "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for auto-detection.",
+          "order": 5
         },
         "castleEngine.engineDeveloperMode": {
           "type": "boolean",
-          "markdowndescription": "Adds engine symbols to project symbols, to easily jump to engine source code."
+          "markdowndescription": "Adds engine symbols to project symbols, to easily jump to engine source code.",
+          "default": false,
+          "order": 6
         }
       }
     },
