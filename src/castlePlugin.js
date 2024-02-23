@@ -261,7 +261,7 @@ class CastlePlugin {
 
     /**
      * Registers or unregisters VSCode validate and open settings command
-     * used by status bar button showed when configuration is not corect.
+     * used by status bar button showed when configuration is not correct.
      */
     updateValidateAndOpenSettingsCommand() {
         if (this._validateCommandsRegistered === false) {

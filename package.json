@@ -59,7 +59,8 @@
     ],
     "debuggers": [
       {
-        "type": "castleDebug"
+        "type": "castleDebug",
+        "label": "Debug Castle Game Engine Project"
       }
     ],
     "commands": [

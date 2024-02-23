@@ -46,3 +46,7 @@
   - Update `CHANGELOG.md` with new version number and changes.
   - Publish using `vsce publish <new-version-number>`, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.
   - Add again `## [Unreleased]` section to `CHANGELOG.md`.
+
+- API is on https://vscode-api.js.org/ , e.g. https://vscode-api.js.org/modules/vscode.workspace.html#getWorkspaceFolder .
+
+- `package.json` options: https://code.visualstudio.com/api/references/extension-manifest

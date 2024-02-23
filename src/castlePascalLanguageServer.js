@@ -32,7 +32,7 @@ class CastlePascalLanguageServer {
      * @returns {Promise<bool>} result of loading settings
      */
     async loadOrDetectSettings() {
-        this.enviromentForPascalServer = {};
+        this.environmentForPascalServer = {};
         if (this._castleConfig.pascalServerPath === '' || this._castleConfig.buildToolPath === '')
             return false;
 
@@ -40,35 +40,35 @@ class CastlePascalLanguageServer {
         let defaultCompilerExePath = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-exe']);
 
         // read settings when and fallback to defaultCompilerExePath
-        this.enviromentForPascalServer['PP'] = this.getEnvSetting('PP', defaultCompilerExePath);
+        this.environmentForPascalServer['PP'] = this.getEnvSetting('PP', defaultCompilerExePath);
 
         // when build tool did not return fpc path for example when this is old build tool
         // try simply run fpc -PB
-        if (this.enviromentForPascalServer['PP'] === '')
-            this.enviromentForPascalServer['PP'] = await castleExec.executeFileAndReturnValue(castleExec.addExtensionToExecutableFile('fpc'), ['-PB']);
+        if (this.environmentForPascalServer['PP'] === '')
+            this.environmentForPascalServer['PP'] = await castleExec.executeFileAndReturnValue(castleExec.addExtensionToExecutableFile('fpc'), ['-PB']);
 
         // Check compiler really exists and can be executed
         try {
-            fs.accessSync(this.enviromentForPascalServer['PP'], fs.constants.X_OK)
+            fs.accessSync(this.environmentForPascalServer['PP'], fs.constants.X_OK)
         }
         catch (err) {
             vscode.window.showErrorMessage(`FPC compiler executable not found or can't be executed. ${err}`);
             return false;
         }
 
-        this.enviromentForPascalServer['FPCDIR'] = this.getEnvSetting('FPCDIR', '');
+        this.environmentForPascalServer['FPCDIR'] = this.getEnvSetting('FPCDIR', '');
 
-        if (this.enviromentForPascalServer['FPCDIR'] === '') {
+        if (this.environmentForPascalServer['FPCDIR'] === '') {
             // try to find fpc sources
-            let realCompilerPath = await castleExec.executeFileAndReturnValue(this.enviromentForPascalServer['PP'], ['-PB']);
-            this.enviromentForPascalServer['FPCDIR'] = await this.tryToFindFpcSources(realCompilerPath);
+            let realCompilerPath = await castleExec.executeFileAndReturnValue(this.environmentForPascalServer['PP'], ['-PB']);
+            this.environmentForPascalServer['FPCDIR'] = await this.tryToFindFpcSources(realCompilerPath);
         }
 
-        this.enviromentForPascalServer['LAZARUSDIR'] = this.getEnvSetting('LAZARUSDIR', '');
+        this.environmentForPascalServer['LAZARUSDIR'] = this.getEnvSetting('LAZARUSDIR', '');
 
-        if (this.enviromentForPascalServer['LAZARUSDIR'] === '') {
-            let realCompilerPath = await castleExec.executeFileAndReturnValue(this.enviromentForPascalServer['PP'], ['-PB']);
-            this.enviromentForPascalServer['LAZARUSDIR'] = await this.tryToFindLazarusSources(realCompilerPath);
+        if (this.environmentForPascalServer['LAZARUSDIR'] === '') {
+            let realCompilerPath = await castleExec.executeFileAndReturnValue(this.environmentForPascalServer['PP'], ['-PB']);
+            this.environmentForPascalServer['LAZARUSDIR'] = await this.tryToFindLazarusSources(realCompilerPath);
         }
 
         let fpcDefaultTarget = process.platform;
@@ -76,9 +76,9 @@ class CastlePascalLanguageServer {
         if (fpcDefaultTarget === 'win32')
             fpcDefaultTarget = 'windows'
 
-        this.enviromentForPascalServer['FPCTARGET'] = this.getEnvSetting('FPCTARGET', fpcDefaultTarget);
+        this.environmentForPascalServer['FPCTARGET'] = this.getEnvSetting('FPCTARGET', fpcDefaultTarget);
 
-        this.enviromentForPascalServer['FPCTARGETCPU'] = this._castleConfig.fpcTargetCpu;
+        this.environmentForPascalServer['FPCTARGETCPU'] = this._castleConfig.fpcTargetCpu;
     }
 
     /**
@@ -132,7 +132,7 @@ class CastlePascalLanguageServer {
         let run = {
             command: this._castleConfig.pascalServerPath,
             options: {
-                env: this.enviromentForPascalServer
+                env: this.environmentForPascalServer
             }
         };
 
@@ -156,7 +156,7 @@ class CastlePascalLanguageServer {
         initializationOptions.projectSearchPaths = await this.getSearchPathsFromProjectManifest();
         initializationOptions.engineDevMode = this._castleConfig.engineDeveloperMode;
 
-        let hasFpcCfg = await this.hasFpcCfgFile(this.enviromentForPascalServer['PP']);
+        let hasFpcCfg = await this.hasFpcCfgFile(this.environmentForPascalServer['PP']);
         if (!hasFpcCfg)
             initializationOptions.fpcStandardUnitsPaths = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-standard-units-path']);
 
@@ -167,7 +167,7 @@ class CastlePascalLanguageServer {
     }
 
     /**
-     * Destorys _pascalServerClient. Used when configuration changes.
+     * Destroys _pascalServerClient. Used when configuration changes.
      */
     async destroyLanguageClient() {
         if (this._pascalServerClient != undefined) {
@@ -175,7 +175,7 @@ class CastlePascalLanguageServer {
                 await this._pascalServerClient.stop();
 
             } catch (e) {
-                vscode.window.showErrorMessage(`Error: ${e.message}`);
+                vscode.window.showErrorMessage(`Error when destroying pasls client: ${e.message}`);
             }
             this._pascalServerClient = null;
         }
@@ -252,7 +252,7 @@ class CastlePascalLanguageServer {
                         return sourcesDir;
                     }
                 }
-                // check is it boundled fpc
+                // check is it bundled fpc
                 sourcesDir = fpcCompilerExec;
                 index = sourcesDir.indexOf('bin');
                 sourcesDir = sourcesDir.substring(0, index) + 'src';
@@ -288,7 +288,7 @@ class CastlePascalLanguageServer {
     }
 
     /**
-     * This function gets directory like /usr/lib/lazarus/ and seraches for
+     * This function gets directory like /usr/lib/lazarus/ and searches for
      * version directory e.g. /usr/lib/lazarus/2.2.6/
      * @param {string} folder directory in which we want to check the subdirectories
      * @returns {string} Lazarus source directory or empty string

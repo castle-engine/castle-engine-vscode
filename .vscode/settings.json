@@ -8,6 +8,7 @@
         "fpcsrc",
         "FPCTARGET",
         "FPCTARGETCPU",
+        "fpcupdeluxe",
         "fpdebug",
         "freepascal",
         "gamedev",
