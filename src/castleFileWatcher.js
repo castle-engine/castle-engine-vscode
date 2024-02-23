@@ -2,9 +2,10 @@ const vscode = require("vscode");
 const path = require('path');
 // eslint-disable-next-line no-unused-vars
 const CastlePlugin = require("./castlePlugin");
+const castlePath = require('./castlePath.js');
 
 /**
- * Observes file system for changes in files and sets castleConfig.recompilationNeeded to true 
+ * Observes file system for changes in files and sets castleConfig.recompilationNeeded to true
  * after a source file is created/deleted.modified.
  * After recompilation sets it to false.
  */
@@ -13,7 +14,7 @@ class CastleFileWatcher {
     /**
     * @param {vscode.ExtensionContext} context
     * @param {castleConfiguration.CastleConfiguration} castleConfig
-    * @param {CastlePlugin} castlePlugin 
+    * @param {CastlePlugin} castlePlugin
     */
     constructor(context, castleConfig, castlePlugin) {
         this._castleConfig = castleConfig;
@@ -75,10 +76,11 @@ class CastleFileWatcher {
 
     /**
      * Creates manifest file watcher
-     * @param {vscode.ExtensionContext} context 
+     * @param {vscode.ExtensionContext} context
      */
     createManifestFileWatcher(context) {
-        const filePath = path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, 'CastleEngineManifest.xml');
+        let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
+        const filePath = path.join(bestWorkspaceFolder.uri.fsPath, 'CastleEngineManifest.xml');
         this._vsManifestFileWatcher = vscode.workspace.createFileSystemWatcher(filePath);
 
         this._vsManifestFileWatcher.onDidChange(async (uri) => {
@@ -98,7 +100,7 @@ class CastleFileWatcher {
             this._castleConfig.recompilationNeeded = true;
             await this._castlePlugin.updateLanguageServer();
         });
-        
+
         context.subscriptions.push(this._vsManifestFileWatcher);
     }
 }

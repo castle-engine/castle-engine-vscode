@@ -1,4 +1,5 @@
 const vscode = require("vscode");
+const castlePath = require('./castlePath.js');
 
 // eslint-disable-next-line no-unused-vars
 const castleConfiguration = require('./castleConfiguration.js');
@@ -14,10 +15,11 @@ class CastleTaskProvider {
 	}
 
 	createTasks() {
+		let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
 		try {
 			this._compileTask = new vscode.Task(
 				{ type: 'cge-tasks' },
-				vscode.workspace.workspaceFolders[0],
+				bestWorkspaceFolder,
 				'compile-cge-game-task', // task name
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution(this._castleConfig.buildToolPath, ['compile', '--mode=' + this._castleConfig.buildMode.buildTool]), // what to do
@@ -27,7 +29,7 @@ class CastleTaskProvider {
 
 			this._runTask = new vscode.Task(
 				{ type: 'cge-tasks' },
-				vscode.workspace.workspaceFolders[0],
+				bestWorkspaceFolder,
 				'run-cge-game-task', // task name
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution(this._castleConfig.buildToolPath, [' compile-run', '--mode=' + this._castleConfig.buildMode.buildTool]), // what to do
@@ -36,7 +38,7 @@ class CastleTaskProvider {
 
 			this._cleanTask = new vscode.Task(
 				{ type: 'cge-tasks' },
-				vscode.workspace.workspaceFolders[0],
+				bestWorkspaceFolder,
 				'clean-cge-game-task', // task name
 				'CGE', // prefix for all tasks
 				new vscode.ShellExecution(this._castleConfig.buildToolPath, ['clean']), // what to do

@@ -7,7 +7,7 @@ const execFile = util.promisify(require('child_process').execFile);
 const castlePath = require('./castlePath.js');
 
 /**
- * Executes command and returns stdout as string (empty string on error, 
+ * Executes command and returns stdout as string (empty string on error,
  * but shows showErrorMessage()). Changes current working dir to project directory.
  * @param {string} command command to run
  * @returns {Promise<string>} stdout or empty string on error
@@ -17,9 +17,10 @@ async function executeCommandAndReturnValue(command) {
 
 	let options = {};
 
-	if (vscode.workspace.workspaceFolders !== undefined) {
-		console.log(vscode.workspace.workspaceFolders[0].uri.path);
-		options.cwd = castlePath.pathForExecCommandCwd(vscode.workspace.workspaceFolders[0].uri.path);
+	let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
+	if (bestWorkspaceFolder !== undefined) {
+		console.log("bestWorkspaceFolder:" + bestWorkspaceFolder.uri.path);
+		options.cwd = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
 	}
 
 	try {
@@ -37,7 +38,7 @@ async function executeCommandAndReturnValue(command) {
 }
 
 /**
- * Executes file and returns stdout as string (empty string on error, 
+ * Executes file and returns stdout as string (empty string on error,
  * but shows showErrorMessage()). Changes current working dir to project directory.
  * @param {string} executableFile file to execute
  * @param {string[]} args execution arguments
@@ -48,9 +49,10 @@ async function executeFileAndReturnValue(executableFile, args) {
 
 	let options = {};
 
-	if (vscode.workspace.workspaceFolders !== undefined) {
-		console.log(vscode.workspace.workspaceFolders[0].uri.path);
-		options.cwd = castlePath.pathForExecCommandCwd(vscode.workspace.workspaceFolders[0].uri.path);
+	let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
+	if (bestWorkspaceFolder !== undefined) {
+		console.log("bestWorkspaceFolder:" + bestWorkspaceFolder.uri.path);
+		options.cwd = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
 	}
 
 	try {
@@ -74,9 +76,10 @@ async function executeFileAndReturnValue(executableFile, args) {
 async function executeCommand(command) {
 	let options = {};
 
-	if (vscode.workspace.workspaceFolders !== undefined) {
-		console.log(vscode.workspace.workspaceFolders[0].uri.path);
-		options.cwd = castlePath.pathForExecCommandCwd(vscode.workspace.workspaceFolders[0].uri.path);
+	let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
+	if (bestWorkspaceFolder !== undefined) {
+		console.log("bestWorkspaceFolder:" + bestWorkspaceFolder.uri.path);
+		options.cwd = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
 	}
 
 	try {
@@ -94,9 +97,10 @@ async function executeCommand(command) {
 async function executeFile(executableFile, args) {
 	let options = {};
 
-	if (vscode.workspace.workspaceFolders !== undefined) {
-		console.log(vscode.workspace.workspaceFolders[0].uri.path);
-		options.cwd = castlePath.pathForExecCommandCwd(vscode.workspace.workspaceFolders[0].uri.path);
+	let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
+	if (bestWorkspaceFolder !== undefined) {
+		console.log("bestWorkspaceFolder:" + bestWorkspaceFolder.uri.path);
+		options.cwd = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
 	}
 
 	try {
@@ -107,7 +111,7 @@ async function executeFile(executableFile, args) {
 }
 
 /**
- * Checks current platform do not need extension in executable files 
+ * Checks current platform do not need extension in executable files
  * @param {string} executableFile file to add extension
  * @returns {string} file with extension when needed
  */
