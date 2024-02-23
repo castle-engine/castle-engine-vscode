@@ -1,4 +1,21 @@
-# Welcome to your VS Code Extension
+# Developing this VS Code Extension
+
+## CGE notes
+
+- Publishing:
+  - Use `vsce`, see [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
+  - Update `CHANGELOG.md` with new version number and changes.
+  - Comment out `## [Unreleased]` section in `CHANGELOG.md` to `<!-- ## [Unreleased] -->`.
+  - Publish using `vsce publish <new-version-number> -m "Publish version %s" `, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.
+  - Remember to push tags, `git push --tags`.
+
+- Consult JS API on https://vscode-api.js.org/ .
+
+  E.g. https://vscode-api.js.org/modules/vscode.workspace.html#getWorkspaceFolder .
+
+- `package.json` options: https://code.visualstudio.com/api/references/extension-manifest
+
+# Helpful information from the original README.md
 
 ## What's in the folder
 
@@ -40,13 +57,3 @@
  * [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) on the VS Code extension marketplace.
  * Automate builds by setting up [Continuous Integration](https://code.visualstudio.com/api/working-with-extensions/continuous-integration).
 
-## CGE notes
-
-- Publishing:
-  - Update `CHANGELOG.md` with new version number and changes.
-  - Publish using `vsce publish <new-version-number>`, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.
-  - Add again `## [Unreleased]` section to `CHANGELOG.md`.
-
-- API is on https://vscode-api.js.org/ , e.g. https://vscode-api.js.org/modules/vscode.workspace.html#getWorkspaceFolder .
-
-- `package.json` options: https://code.visualstudio.com/api/references/extension-manifest

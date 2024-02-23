@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [0.0.5]
+
+- Add catagories.
+
 ## [0.0.4]
 
 ### Fixed
