@@ -39,3 +39,10 @@
  * [Follow UX guidelines](https://code.visualstudio.com/api/ux-guidelines/overview) to create extensions that seamlessly integrate with VS Code's native interface and patterns.
  * [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) on the VS Code extension marketplace.
  * Automate builds by setting up [Continuous Integration](https://code.visualstudio.com/api/working-with-extensions/continuous-integration).
+
+## CGE notes
+
+- Publishing:
+  - Update `CHANGELOG.md` with new version number and changes.
+  - Publish using `vsce publish <new-version-number>`, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.
+  - Add again `## [Unreleased]` section to `CHANGELOG.md`.
