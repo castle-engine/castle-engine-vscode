@@ -14,9 +14,51 @@ function pathForExecCommandCwd(path) {
 }
 
 /**
+ * Returns true if folder is a CGE project (contains CastleEngineManifest.xml)
+ * @param {vscode.WorkspaceFolder} folder
+ * @returns {boolean}
+ */
+function folderIsCgeProject(folder) {
+    let manifestUri = folder.uri.with({ path: folder.uri.path + "/CastleEngineManifest.xml" });
+
+    /* Using fs from Node.js is not advised, but turning this
+       into async function is too bothersome.
+       See also https://stackoverflow.com/questions/58451856/vscode-api-check-if-path-exists */
+
+    return fs.existsSync(manifestUri.fsPath);
+
+    /*
+    try {
+        await vscode.workspace.fs.stat(manifestUri);
+        return true;
+    } catch (e) {
+        return false;
+    }
+    */
+}
+
+/**
+ * Returns WorkspaceFolder that is a CGE project (contains CastleEngineManifest.xml),
+ * or undefined if none.
+ */
+function bestWorkspaceFolderStrict()
+{
+    for (const workspaceFolder of vscode.workspace.workspaceFolders) {
+        if (folderIsCgeProject(workspaceFolder)) {
+            return workspaceFolder;
+        }
+    }
+    return undefined;
+}
+
+/**
  * Returns WorkspaceFolder that has a best change of being a CGE project
  * and we should use it as a default for various operations.
  * Returns undefined if none.
+ *
+ * Compared to bestWorkspaceFolderStrict, this function may return a folder
+ * that is not a CGE project.
+ * But it is also faster in typical case of single-root workspace.
  *
  * Is there any other way to handle multi-root workspaces
  * when you want to only handle folders with specific filenames?
@@ -36,32 +78,18 @@ function bestWorkspaceFolder()
 
     // scan the workspaceFolders list for one that contains CastleEngineManifest.xml
     for (const workspaceFolder of vscode.workspace.workspaceFolders) {
-        let manifestUri = workspaceFolder.uri.with({ path: workspaceFolder.uri.path + "/CastleEngineManifest.xml" });
-
-        /* Using fs from Node.js is not advised, but turning this
-           into async function is too bothersome.
-           See also https://stackoverflow.com/questions/58451856/vscode-api-check-if-path-exists */
-
-        if (fs.existsSync(manifestUri.fsPath)) {
-            // OK, this folder contains CastleEngineManifest.xml
+        if (folderIsCgeProject(workspaceFolder)) {
             return workspaceFolder;
-        } else {
-            // ignore, this folder doesn't contain CastleEngineManifest.xml
         }
-
-        /*
-        try {
-            await vscode.workspace.fs.stat(manifestUri);
-            // OK, this folder contains CastleEngineManifest.xml
-            return workspaceFolder;
-        } catch (e) {
-            // ignore, this folder doesn't contain CastleEngineManifest.xml
-        }
-        */
     }
 
     // Nothing matched? For now, return arbitrary first folder (not undefined).
     return vscode.workspace.workspaceFolders[0];
 }
 
-module.exports = { pathForExecCommandCwd, bestWorkspaceFolder };
+module.exports = {
+    pathForExecCommandCwd,
+    folderIsCgeProject,
+    bestWorkspaceFolderStrict,
+    bestWorkspaceFolder
+};

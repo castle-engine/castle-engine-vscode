@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [0.0.4]
+
+### Fixed
+
+- Do not show CGE buttons for non-CGE projects.
+
 ## [0.0.3]
 
 ### Added

@@ -4,6 +4,7 @@ const castleConfiguration = require('./castleConfiguration.js');
 const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
 // eslint-disable-next-line no-unused-vars
 const CastleTaskProvider = require('./castleTaskProvider.js');
+const castlePath = require('./castlePath.js');
 
 class CastleStatusBar {
 
@@ -111,6 +112,21 @@ class CastleStatusBar {
     }
 
     updateButtonsVisibility() {
+        let cgeFolder = castlePath.bestWorkspaceFolderStrict();
+        if (cgeFolder === undefined) {
+            /* Not a CGE project, so don't show any status buttons.
+               We handle this case, since we may get activated in such case,
+               e.g. if someone invokes CGE command from palette.
+            */
+            this._compileButton.hide();
+            this._runButton.hide();
+            this._debugButton.hide();
+            this._cleanButton.hide();
+            this._openInEditorButton.hide();
+            this._openSettingsButton.hide();
+            return;
+        }
+
         if (this._castleConfig.buildToolPath === '') {
             this._compileButton.hide();
             this._runButton.hide();
