@@ -47,7 +47,7 @@ class CastlePlugin {
     }
 
     /**
-     * Deacitvates plugin when deactivate() is called.
+     * Deactivates plugin when deactivate() is called.
      */
     async deactivatePlugin() {
         await this._castleLanguageServer.destroyLanguageClient();
@@ -137,7 +137,7 @@ class CastlePlugin {
         }
         else {
             if (this._taskCommandsRegistered === true) {
-                // when there is no build tool availble
+                // when there is no build tool available
                 this._disposableCompile.dispose();
                 this._disposableCompile = null;
 
