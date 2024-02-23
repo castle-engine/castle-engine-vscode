@@ -6,7 +6,7 @@
   - Use `vsce`, see [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
   - Update `CHANGELOG.md` with new version number and changes.
   - Comment out `## [Unreleased]` section in `CHANGELOG.md` to `<!-- ## [Unreleased] -->`.
-  - Publish using `vsce publish <new-version-number> -m "Publish version %s" `, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.
+  - Publish using `vsce publish <new-version-number> -m "Publish version %s"`, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.
   - Remember to push tags, `git push --tags`.
 
 - Consult JS API on https://vscode-api.js.org/ .
