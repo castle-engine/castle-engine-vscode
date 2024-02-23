@@ -1,6 +1,7 @@
 {
     "cSpell.enabled": true,
     "cSpell.words": [
+        "aarch",
         "castleDebug",
         "cnoc",
         "FPCDIR",
@@ -14,6 +15,7 @@
         "lazsrc",
         "markdowndescription",
         "pasls",
-        "theangryepicbanana"
+        "theangryepicbanana",
+        "unregisters"
     ]
 }

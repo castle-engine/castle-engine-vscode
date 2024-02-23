@@ -5,7 +5,7 @@ const path = require('path');
 const castleExec = require('./castleExec.js');
 
 /**
- * Consts for build modes.
+ * Constants for build modes.
  * name - for showing in ui
  * buildTool - used as a parameter in our build tool
  */
@@ -15,7 +15,7 @@ const CastleBuildModes = Object.freeze({
 });
 
 /**
- * Our plugin configuration and paths autodetection.
+ * Our plugin configuration and paths auto-detection.
  */
 class CastleConfiguration {
 
@@ -111,14 +111,14 @@ class CastleConfiguration {
     }
 
     /**
-     * @returns {boolean} Is the plugin in engine develper mode? Curently only add engine sources to workspace symbols
+     * @returns {boolean} Is the plugin in engine developer mode? Currently only add engine sources to workspace symbols
      */
     get engineDeveloperMode() {
         return this._engineDeveloperMode;
     }
 
     /**
-     * Searching target cpu archtecture
+     * Searching target cpu architecture
      */
     findFpcTargetCpu() {
         let fpcDefaultArch = process.arch;

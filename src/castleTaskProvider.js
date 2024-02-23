@@ -3,7 +3,7 @@ const vscode = require("vscode");
 // eslint-disable-next-line no-unused-vars
 const castleConfiguration = require('./castleConfiguration.js');
 
-class CastleTaskProvder {
+class CastleTaskProvider {
 
 	/**
 	 * @param {castleConfiguration.CastleConfiguration} castleConfig
@@ -106,4 +106,4 @@ class CastleTaskProvder {
 	}
 }
 
-module.exports = CastleTaskProvder;
+module.exports = CastleTaskProvider;

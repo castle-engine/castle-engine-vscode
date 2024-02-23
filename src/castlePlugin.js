@@ -4,7 +4,7 @@ const vscode = require('vscode');
 const CastleFileWatcher = require('./castleFileWatcher.js');
 const castleExec = require('./castleExec.js');
 const CastleDebugProvider = require('./castleDebugProvider.js');
-const CastleTaskProvder = require('./castleTaskProvider.js');
+const CastleTaskProvider = require('./castleTaskProvider.js');
 const castleConfiguration = require('./castleConfiguration.js');
 const CastleStatusBar = require('./castleStatusBar.js');
 const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
@@ -100,14 +100,14 @@ class CastlePlugin {
     }
 
     /**
-     * When called first time creates and registers CastleTaskProvder. And registers/unregisters VSCode commands.
+     * When called first time creates and registers CastleTaskProvider. And registers/unregisters VSCode commands.
      * Subsequent runs update the tasks and registers/unregisters VSCode commands
      * depending on whether we have access to build tool.
      */
     updateTaskProvider() {
         if (this._castleConfig.buildToolPath !== '') {
             if (this._castleTaskProvider == undefined) {
-                this._castleTaskProvider = new CastleTaskProvder(this._castleConfig);
+                this._castleTaskProvider = new CastleTaskProvider(this._castleConfig);
                 let disposable = vscode.tasks.registerTaskProvider('cge-tasks', this._castleTaskProvider);
                 this._context.subscriptions.push(disposable);
             }
@@ -277,8 +277,8 @@ class CastlePlugin {
                 if (this._castleConfig.buildToolPath === '') {
                     if (!wasWarning) {
                         vscode.window.showInformationMessage(
-                            'The path to engine is set but there is no buildtool (castle-engine' +
-                            this.executableFileExtension() + ') in bin subfolder.');
+                            'The path to engine is set but there is no build tool (castle-engine' +
+                            this.executableFileExtension() + ') in bin subdirectory.');
                         wasWarning = true;
                     }
                 }

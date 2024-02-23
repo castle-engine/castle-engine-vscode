@@ -3,7 +3,7 @@ const castleConfiguration = require('./castleConfiguration.js');
 // eslint-disable-next-line no-unused-vars
 const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
 // eslint-disable-next-line no-unused-vars
-const CastleTaskProvder = require('./castleTaskProvider.js');
+const CastleTaskProvider = require('./castleTaskProvider.js');
 
 class CastleStatusBar {
 
@@ -12,13 +12,13 @@ class CastleStatusBar {
      * @param {vscode.ExtensionContext} context
      * @param {castleConfiguration.CastleConfiguration} castleConfig
      * @param {castleLanguageServer.castleLanguageServer} castleLanguageServer
-     * @param {CastleTaskProvder.castleTaskProvder} castleTaskProvder
+     * @param {CastleTaskProvider.castleTaskProvider} castleTaskProvider
      */
-    constructor(context, castleConfig, castleLanguageServer, castleTaskProvder) {
+    constructor(context, castleConfig, castleLanguageServer, castleTaskProvider) {
         this._castleConfig = castleConfig;
         this._context = context;
         this._castleLanguageServer = castleLanguageServer;
-        this._castleTaskProvder = castleTaskProvder;
+        this._castleTaskProvider = castleTaskProvider;
         this.createBuildModeSwitch();
         this.createCompileButton();
         this.createDebugButton();
@@ -31,15 +31,15 @@ class CastleStatusBar {
 
     createBuildModeSwitch() {
         let command = vscode.commands.registerCommand(this._castleConfig.commandId.showBuildModes, async () => {
-            const choosenBuildMode = await vscode.window.showQuickPick(['Debug', 'Release'], { placeHolder: 'Select build type' });
-            if (!choosenBuildMode === undefined)
+            const chosenBuildMode = await vscode.window.showQuickPick(['Debug', 'Release'], { placeHolder: 'Select build type' });
+            if (!chosenBuildMode === undefined)
                 return;
-            if (choosenBuildMode === 'Release')
+            if (chosenBuildMode === 'Release')
                 this._castleConfig.buildMode = castleConfiguration.CastleBuildModes.RELEASE;
             else
                 this._castleConfig.buildMode = castleConfiguration.CastleBuildModes.DEBUG;
             this.updateBuildModesButtonText();
-            this._castleTaskProvder.updateCastleTasks();
+            this._castleTaskProvider.updateCastleTasks();
         });
         this._context.subscriptions.push(command);
         this._buildModesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 20);
