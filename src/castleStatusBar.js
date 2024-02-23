@@ -78,7 +78,7 @@ class CastleStatusBar {
         this._runButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._runButton);
         this._runButton.command = this._castleConfig.commandId.run;
-        this._runButton.tooltip = 'Run Castle Game Engine Project';
+        this._runButton.tooltip = 'Compile and Run Castle Game Engine Project';
         this._runButton.text = '$(run) Run';
         this._runButton.show();
     }
