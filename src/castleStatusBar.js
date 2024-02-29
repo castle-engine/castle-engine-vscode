@@ -118,6 +118,7 @@ class CastleStatusBar {
                We handle this case, since we may get activated in such case,
                e.g. if someone invokes CGE command from palette.
             */
+            this._buildModesButton.hide();
             this._compileButton.hide();
             this._runButton.hide();
             this._debugButton.hide();
@@ -128,6 +129,7 @@ class CastleStatusBar {
         }
 
         if (this._castleConfig.buildToolPath === '') {
+            this._buildModesButton.hide();
             this._compileButton.hide();
             this._runButton.hide();
             this._debugButton.hide();
@@ -138,6 +140,7 @@ class CastleStatusBar {
                 this._openSettingsButton.show();
         }
         else {
+            this._buildModesButton.show();
             this._compileButton.show();
             this._runButton.show();
             this._debugButton.show();
