@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [0.0.7]
+
+### Fixed
+
+- Activate on Pascal files, to provide code completion using our LSP server even when not inside CGE project.
+
 ## [0.0.6]
 
 ### Fixed

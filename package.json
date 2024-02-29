@@ -37,7 +37,8 @@
     "Debuggers"
   ],
   "activationEvents": [
-    "workspaceContains:CastleEngineManifest.xml"
+    "workspaceContains:CastleEngineManifest.xml",
+    "onLanguage:pascal"
   ],
   "main": "./src/extension.js",
   "capabilities": {
@@ -54,7 +55,8 @@
           ".pas",
           ".pp",
           ".inc",
-          ".lpr"
+          ".lpr",
+          ".dpr"
         ]
       }
     ],

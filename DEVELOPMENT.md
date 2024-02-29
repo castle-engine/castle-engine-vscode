@@ -15,6 +15,10 @@
 
 - `package.json` options: https://code.visualstudio.com/api/references/extension-manifest
 
+### Notes about JSON files (because comments inside them are in general not allowed...)
+
+- `package.json`: has `"onLanguage:pascal"` to activate when the user opens a Pascal file, even if not in CGE project. This way we can provide code completion using our LSP server, even if not inside CGE project.
+
 # Helpful information from the original README.md
 
 ## What's in the folder
