@@ -10,9 +10,7 @@ This extension provides support for [Castle Game Engine](https://castle-engine.i
 
 First of all, [download](https://castle-engine.io/download) and [install](https://castle-engine.io/install) the engine.
 
-Then configure the extension by setting the path to the engine.
-
-The extension uses a [Pascal Language Server](https://github.com/castle-engine/pascal-language-server) that adds code completion for Pascal projects. Language server executable `pasls` (or `pasls.exe` on Windows) should already be in `bin` directory of the engine, if you downloaded and installed the engine. The extension tries to automatically guess the appropriate settings, but in special cases it may be necessary to set the path to the [Free Pascal Compiler](https://www.freepascal.org/), its sources and [Lazarus](https://www.lazarus-ide.org/) sources.
+Then configure the extension by setting the path to the engine (_"Engine Path"_). All the other settings should be detected automatically, though you may want to customize them in special cases. E.g. customize path to the [Free Pascal Compiler](https://www.freepascal.org/) and its sources if you use a different FPC than bundled with the engine.
 
 ## Features
 
@@ -41,6 +39,8 @@ We provide Pascal code highlighting and completion:
    ![Procedure list screen](images/findfilesymbol.png)
    - Use _Ctrl + T_ to list all symbols in the project.
    - Just to identifiers (_Ctrl + Click_).
+   - The extension uses a [Pascal Language Server](https://github.com/castle-engine/pascal-language-server) that adds code completion for Pascal projects. Language server executable `pasls` (or `pasls.exe` on Windows) should already be in `bin` directory of the engine.
+   - The provided Pascal code completion works for any Pascal file -- whether it's part of a _Castle Game Engine_ project or not.
 - [Pascal Magic](https://marketplace.visualstudio.com/items?itemName=theangryepicbanana.language-pascal) is used for syntax highlighting.
 
 Other features:
