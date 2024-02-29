@@ -6,6 +6,7 @@ const vscodelangclient = require('vscode-languageclient');
 const castleConfiguration = require('./castleConfiguration.js');
 const castleExec = require('./castleExec.js');
 const path = require('path');
+const castlePath = require('./castlePath.js');
 
 /**
  * A class for managing the Pascal Language Server
@@ -105,7 +106,7 @@ class CastlePascalLanguageServer {
     }
 
     /**
-     * Reads search paths form Castle Manifest XML file.
+     * Reads search paths form CastleEngineManifest.xml file.
      * @returns {Promise<string>} paths split by new line chars
      */
     async getSearchPathsFromProjectManifest() {
@@ -153,7 +154,12 @@ class CastlePascalLanguageServer {
         }
 
         let initializationOptions = {};
-        initializationOptions.projectSearchPaths = await this.getSearchPathsFromProjectManifest();
+
+        let cgeFolder = castlePath.bestWorkspaceFolderStrict();
+        if (cgeFolder !== undefined) {
+            initializationOptions.projectSearchPaths = await this.getSearchPathsFromProjectManifest();
+        }
+
         initializationOptions.engineDevMode = this._castleConfig.engineDeveloperMode;
 
         let hasFpcCfg = await this.hasFpcCfgFile(this.environmentForPascalServer['PP']);
