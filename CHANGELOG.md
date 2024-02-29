@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [0.0.8]
+
+### Fixed
+
+- Streamline LSP description in README.
+
 ## [0.0.7]
 
 ### Fixed
