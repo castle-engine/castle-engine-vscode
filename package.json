@@ -111,7 +111,7 @@
         },
         "castleEngine.pascalLanguageServer.PP": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or to try use auto-detection.",
+          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or use auto-detection. In particular we will auto-detect FPC bundled with CGE.",
           "order": 1
         },
         "castleEngine.pascalLanguageServer.FPCDIR": {
@@ -121,7 +121,7 @@
         },
         "castleEngine.pascalLanguageServer.LAZARUSDIR": {
           "type": "string",
-          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or use auto-detection.",
+          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or use auto-detection. Note that Lazarus is optional, only used for code completion of LCL units.",
           "order": 3
         },
         "castleEngine.pascalLanguageServer.FPCTARGET": {
