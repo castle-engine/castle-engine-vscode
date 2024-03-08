@@ -6,6 +6,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.0.0]
+
+### Improved
+
+- README description.
+- Also, announcing the extension now on [Castle Game Engine News](https://castle-engine.io/wp/) along with a [YouTube Video](https://www.youtube.com/watch?v=24I-DPaYvlo). Let's be bold and bump the version to 1.0.0!
+
 ## [0.0.8]
 
 ### Fixed
