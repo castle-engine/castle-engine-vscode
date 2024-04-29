@@ -5,7 +5,6 @@ const vscodelangclient = require('vscode-languageclient');
 // eslint-disable-next-line no-unused-vars
 const castleConfiguration = require('./castleConfiguration.js');
 const castleExec = require('./castleExec.js');
-const path = require('path');
 const castlePath = require('./castlePath.js');
 
 /**
@@ -83,29 +82,6 @@ class CastlePascalLanguageServer {
     }
 
     /**
-     * Check for fpc.cfg - fixes pasls with our bundle
-     * @param {string} fpcExecutable fpc execution file for which we are looking fpc.cfg
-     * @returns {Promise<bool>}
-     * @retval true fpc installation has fpc.cfg
-     * @retval false fpc installation does not have fpc.cfg
-     */
-    async hasFpcCfgFile(fpcExecutable)
-    {
-        // currently checked only for windows
-        if (process.platform !== 'win32')
-            return true;
-        let realCompilerPath = await castleExec.executeFileAndReturnValue(fpcExecutable, ['-PB']);
-        let fpcCfgFile = path.dirname(realCompilerPath) + '\\fpc.cfg'
-        try {
-            fs.accessSync(fpcCfgFile, fs.constants.F_OK)
-        }
-        catch (err) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Reads search paths form CastleEngineManifest.xml file.
      * @returns {Promise<string>} paths split by new line chars
      */
@@ -162,9 +138,8 @@ class CastlePascalLanguageServer {
 
         initializationOptions.engineDevMode = this._castleConfig.engineDeveloperMode;
 
-        let hasFpcCfg = await this.hasFpcCfgFile(this.environmentForPascalServer['PP']);
-        if (!hasFpcCfg)
-            initializationOptions.fpcStandardUnitsPaths = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-standard-units-path']);
+        initializationOptions.fpcStandardUnitsPaths = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-standard-units-path']);
+        console.log('FPC standard units paths: ', initializationOptions.fpcStandardUnitsPaths);
 
         clientOptions.initializationOptions = initializationOptions;
         this._pascalServerClient = new vscodelangclient.LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
@@ -223,53 +198,57 @@ class CastlePascalLanguageServer {
         if (fpcCompilerExec === '')
             return '';
 
-        if (process.platform === 'linux') {
-            // check current fpc is not done by fpcupdeluxe
+        // Find sources if FPC is bundled with CGE
+        {
             let sourcesDir = fpcCompilerExec;
-            let index = sourcesDir.indexOf('fpc/bin');
-            if (index > 0) {
-                sourcesDir = sourcesDir.substring(0, index) + 'fpcsrc';
+
+            // Look for both Unix and Windows paths
+            let index = sourcesDir.lastIndexOf('/bin/');
+            if (index < 0) {
+                index = sourcesDir.lastIndexOf('\\bin\\');
+            }
+
+            if (index >= 0) {
+                sourcesDir = sourcesDir.substring(0, index) + '/src';
                 if (this.isCompilerSourcesFolder(sourcesDir)) {
-                    console.log('Found fpc sources:', sourcesDir);
+                    console.log('Found FPC sources (FPC bundled with CGE):', sourcesDir);
                     return sourcesDir;
                 }
             }
+        }
 
+        // Find sources if FPC is provided by fpcupdeluxe.
+        {
+            let sourcesDir = fpcCompilerExec;
+
+            // Look for both Unix and Windows paths
+            let index = sourcesDir.lastIndexOf('/fpc/bin/');
+            if (index < 0) {
+                index = sourcesDir.lastIndexOf('\\fpc\\bin\\');
+            }
+
+            if (index >= 0) {
+                sourcesDir = sourcesDir.substring(0, index) + '/fpcsrc';
+                if (this.isCompilerSourcesFolder(sourcesDir)) {
+                    console.log('Found FPC sources (FPC looks like provided by fpcupdeluxe):', sourcesDir);
+                    return sourcesDir;
+                }
+            }
+        }
+
+        // Find sources if FPC is installed system-wide on Unix.
+        if (process.platform === 'linux') {
             // when fpc-src is installed from fpc-src debian package
             // sources are in directory like /usr/share/fpcsrc/3.2.2/
             // https://packages.debian.org/bookworm/all/fpc-source-3.2.2/filelist
             let compilerVersion = await castleExec.executeFileAndReturnValue(fpcCompilerExec, ['-iV']);
-            console.log('Compiler Version', compilerVersion);
-            sourcesDir = '/usr/share/fpcsrc/' + compilerVersion + '/';
+            console.log('FPC Version', compilerVersion);
+            let sourcesDir = '/usr/share/fpcsrc/' + compilerVersion + '/';
             if (this.isCompilerSourcesFolder(sourcesDir)) {
-                console.log('Found lazarus sources:', sourcesDir);
+                console.log('Found FPC sources (FPC installed system-wide on Unix):', sourcesDir);
                 return sourcesDir;
             }
-
-        } else
-            if (process.platform === 'win32') {
-                // check current fpc is not done by fpcupdeluxe
-                let sourcesDir = fpcCompilerExec;
-                let index = sourcesDir.indexOf('fpc\\bin');
-                if (index > 0) {
-                    sourcesDir = sourcesDir.substring(0, index) + 'fpcsrc';
-                    if (this.isCompilerSourcesFolder(sourcesDir)) {
-                        console.log('Found fpc sources:', sourcesDir);
-                        return sourcesDir;
-                    }
-                }
-                // check is it bundled fpc
-                sourcesDir = fpcCompilerExec;
-                index = sourcesDir.indexOf('bin');
-                sourcesDir = sourcesDir.substring(0, index) + 'src';
-                if (this.isCompilerSourcesFolder(sourcesDir)) {
-                    console.log('Found fpc sources:', sourcesDir);
-                    return sourcesDir;
-                }
-            } else
-                if (process.platform === 'darwin') {
-                    //TODO: macos support
-                }
+        }
 
         // sources not found
         return '';
