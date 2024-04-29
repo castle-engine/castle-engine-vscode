@@ -6,6 +6,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.1.0]
+
+### Fixed
+
+- Fixed code-completion, in particular when using on Linux with FPC bundled with CGE. Details:
+  - Fixed searching for standard FPC units (active on all platforms now).
+  - Fixed searching for FPC sources (try "FPC bundled with CGE" on all platforms now).
+
 ## [1.0.0]
 
 ### Improved

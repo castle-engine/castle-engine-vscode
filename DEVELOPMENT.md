@@ -15,6 +15,8 @@
 
 - `package.json` options: https://code.visualstudio.com/api/references/extension-manifest
 
+- The `console.log` output from extension is visible in the _"Extension Host"_ category in JS console (_"Toggle Developer Console"_ in VS Code to see it). This is the easiest way to debug the extension.
+
 ### Notes about JSON files (because comments inside them are in general not allowed...)
 
 - `package.json`: has `"onLanguage:pascal"` to activate when the user opens a Pascal file, even if not in CGE project. This way we can provide code completion using our LSP server, even if not inside CGE project.
