@@ -60,7 +60,7 @@ class CastleDebugProvider {
 
 
 			if (this._castleConfig.buildMode === castleConfiguration.CastleBuildModes.RELEASE)
-				vscode.window.showWarningMessage('Running debuger with release build, consider to change build type.');
+				vscode.window.showWarningMessage('Running debugger in "release" mode. To get better debug information, change the mode to "debug".');
 			// we run compilation only when is needed
 			if (this._castleConfig.recompilationNeeded)
 				config.preLaunchTask = 'CGE: compile-cge-game-task';
