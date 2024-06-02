@@ -106,37 +106,37 @@
       "properties": {
         "castleEngine.enginePath": {
           "type": "string",
-          "markdowndescription": "Path to the Castle Game Engine location. Leave blank to load from an environment variable (`CASTLE_ENGINE_PATH`).",
+          "markdownDescription": "Path where Castle Game Engine is installed. Leave blank to auto-detect (looks at the environment variable `CASTLE_ENGINE_PATH`).",
           "order": 0
         },
         "castleEngine.pascalLanguageServer.PP": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal compiler (e.g. `/usr/local/bin/fpc`). Leave blank to load from an environment variable (`PP`) or use auto-detection. In particular we will auto-detect FPC bundled with CGE.",
+          "markdownDescription": "Path to Free Pascal Compiler executable, ending like `fpc`, `fpc.exe`, `fpc.sh`. Leave blank to auto-detect (will detect e.g. FPC bundled with CGE).",
           "order": 1
         },
         "castleEngine.pascalLanguageServer.FPCDIR": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal sources (e.g. `/usr/local/share/fpcsrc`). Leave blank to load from an environment variable (`FPCDIR`) or use auto-detection.",
+          "markdownDescription": "Path to Free Pascal Compiler sources, used for code completion. Leave Leave blank to auto-detect (will detect e.g. FPC bundled with CGE, will also look at environment variable `FPCDIR`).",
           "order": 2
         },
         "castleEngine.pascalLanguageServer.LAZARUSDIR": {
           "type": "string",
-          "markdownDescription": "Path to Lazarus sources (e.g. `/usr/local/share/lazsrc`). Leave blank to load from an environment variable (`LAZARUSDIR`) or use auto-detection. Note that Lazarus is optional, only used for code completion of LCL units.",
+          "markdownDescription": "Path to Lazarus sources. Leave blank to auto-detect (will lok at environment variable `LAZARUSDIR`). Note that having Lazarus (and setting this) is not necessary for Castle Game Engine. This is only used for completion in code using LCL units.",
           "order": 3
         },
         "castleEngine.pascalLanguageServer.FPCTARGET": {
           "type": "string",
-          "markdownDescription": "Target platform (`windows`, `linux`, `darwin`). Leave blank for auto-detection.",
+          "markdownDescription": "Target OS (operating system; e.g. `win64`, `linux`, `darwin`). Leave blank to auto-detect.",
           "order": 4
         },
         "castleEngine.pascalLanguageServer.FPCTARGETCPU": {
           "type": "string",
-          "markdownDescription": "Target CPU (e.g. `x86_64`). Leave blank for auto-detection.",
+          "markdownDescription": "Target CPU (processor; e.g. `x86_64`). Leave blank to auto-detect.",
           "order": 5
         },
         "castleEngine.engineDeveloperMode": {
           "type": "boolean",
-          "markdowndescription": "Adds engine symbols to project symbols, to easily jump to engine source code.",
+          "markdownDescription": "Adds engine symbols to project symbols, to easily jump from project to engine source code.",
           "default": false,
           "order": 6
         }
