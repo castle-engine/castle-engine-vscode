@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.1.1]
+
+### Fixed
+
+- Fixed various settings descriptions.
+
 ## [1.1.0]
 
 ### Fixed
