@@ -6,6 +6,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.2.0]
+
+### Fixed
+
+- Important fix to pass engine path properly to the LSP (`pasls`) when the engine path has been configured as _VS Code_ extension setting.
+
+    Previously, our VS Code extension only worked if you had set `CASTLE_ENGINE_PATH` environment variable... which was not our intention, this was just a bug. To be clear, we work a lot to not require regular users from ever setting `CASTLE_ENGINE_PATH` environment variable (or any other environment variable, for that matter, like `PATH`). Because setting environment variables, in a way that is applied to all applications run in any way (also e.g. GUI applications not run from a shell), and on all operating systems (Windows, Linux/FreeBSD, macOS)... is not that trivial, as experience shows.
+
 ## [1.1.1]
 
 ### Fixed
