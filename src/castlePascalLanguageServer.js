@@ -72,13 +72,27 @@ class CastlePascalLanguageServer {
         }
 
         let fpcDefaultTarget = process.platform;
-        // win32 can be 32 or 64 bit windows
-        if (fpcDefaultTarget === 'win32')
-            fpcDefaultTarget = 'windows'
+        /* To make it easier for users, we treat both 'win32' and 'win64'
+           the same, as just generic 'windows'. The LSP (pasls) then treats
+           OS == 'windows' specially, actually changing to 'win32' or 'win64'
+           depending on CPU.
+           This means that users can specify either win32, or win64,
+           regardless of whether they are on 32 or 64-bit Windows. */
+        if (fpcDefaultTarget === 'win32' || fpcDefaultTarget === 'win64') {
+            fpcDefaultTarget = 'windows';
+        }
 
         this.environmentForPascalServer['FPCTARGET'] = this.getEnvSetting('FPCTARGET', fpcDefaultTarget);
 
         this.environmentForPascalServer['FPCTARGETCPU'] = this._castleConfig.fpcTargetCpu;
+
+        /* We need to set environment variable CASTLE_ENGINE_PATH, this is
+           how we pass engine path (maybe from $CASTLE_ENGINE_PATH, maybe from
+           VS extension config) to pasls. */
+        let enginePath = this._castleConfig.enginePath;
+        if (enginePath !== '') {
+            this.environmentForPascalServer['CASTLE_ENGINE_PATH'] = this._castleConfig.enginePath;
+        }
     }
 
     /**
