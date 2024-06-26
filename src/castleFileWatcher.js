@@ -57,17 +57,18 @@ class CastleFileWatcher {
         this._vsFileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.{pas,pp,inc,dpr,lpr}');
 
         this._vsFileSystemWatcher.onDidChange((uri) => {
-            console.log(`Change in file: ${uri.fsPath}`);
+            // Too spammy log, occurs too often and can fill the console in developer tools
+            //console.log(`Pascal file changed: ${uri.fsPath}`);
             this._castleConfig.recompilationNeeded = true;
         });
 
         this._vsFileSystemWatcher.onDidCreate((uri) => {
-            console.log(`New file created: ${uri.fsPath}`);
+            console.log(`Pascal file created: ${uri.fsPath}`);
             this._castleConfig.recompilationNeeded = true;
         });
 
         this._vsFileSystemWatcher.onDidDelete((uri) => {
-            console.log(`Source file deleted: ${uri.fsPath}`);
+            console.log(`Pascal file deleted: ${uri.fsPath}`);
             this._castleConfig.recompilationNeeded = true;
         });
 
