@@ -263,6 +263,14 @@ class CastlePascalLanguageServer {
                 return sourcesDir;
             }
         }
+        // Find sources if FPC is installed using the default installer on macOS.
+        if (process.platform === 'darwin') {
+            let sourcesDir = '/usr/local/share/fpcsrc';
+            if (this.isCompilerSourcesFolder(sourcesDir)) {
+                console.log('Found FPC sources (FPC installed system-wide on macOS):', sourcesDir);
+                return sourcesDir;
+            }
+        }
 
         // sources not found
         return '';
@@ -360,7 +368,13 @@ class CastlePascalLanguageServer {
                 }
             } else
                 if (process.platform === 'darwin') {
-                    //TODO: macos support
+                    // check the default install folder on macOS
+                    let sourcesDir = '/Applications/Lazarus';
+                    if (this.isLazarusSourcesFolder(sourcesDir)) {
+                        console.log('Found lazarus sources:', sourcesDir);
+                        return sourcesDir;
+                    }
+                    //TODO: better macos support
                 }
 
         // no sources dir found
