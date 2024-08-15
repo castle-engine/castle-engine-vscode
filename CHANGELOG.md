@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.2.1]
+
+### Fixed
+
+- Improved auto-detection on macOS (Darwin):
+
+    - Auto-detect FPC sources in `/usr/local/share/fpcsrc` (if FPC is installed using the default installer on macOS).
+
+    - Auto-detect Lazarus sources in `/Applications/Lazarus`.
+
 ## [1.2.0]
 
 ### Fixed
