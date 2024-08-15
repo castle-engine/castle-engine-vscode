@@ -10,7 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Improved
 
-- Improved auto-detection on macOS (Darwin):
+- Improved auto-detection on macOS (Darwin) (thank you to _Jan Adamec_):
 
     - Auto-detect FPC sources in `/usr/local/share/fpcsrc` (if FPC is installed using the default installer on macOS).
 
