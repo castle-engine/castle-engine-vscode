@@ -12,6 +12,12 @@ First of all, [download](https://castle-engine.io/download) and [install](https:
 
 Then configure the extension by setting the path to the engine (_"Engine Path"_). All the other settings should be detected automatically, though you may want to customize them in special cases. E.g. customize path to the [Free Pascal Compiler](https://www.freepascal.org/) and its sources if you use a different FPC than bundled with the engine.
 
+## What to put in "Engine Path"?
+
+If you are unsure what is the correct _"Engine Path"_ but you can run _Castle Game Engine_ editor: Just take a look at the engine path in editor _"Preferences -> General"_. See the screenshot below, that also happens to show the default path after using the default installer on Windows:
+
+![VScode with Castle Game Engine extension](images/engine_path.png)
+
 ## Features
 
 We want to simplify working with _Castle Game Engine_ projects in _Visual Studio Code_ as much as possible. All of the extension features are enabled when you open a directory with a _Castle Game Engine_ project (`CastleEngineManifest.xml` file). Some of the extension features (like Pascal code completion) are available in any Pascal file, even if it's not part of a _Castle Game Engine_ project.
