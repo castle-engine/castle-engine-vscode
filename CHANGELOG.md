@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.2.2]
+
+### Improved
+
+- Show how to learn engine path in README.
+
 ## [1.2.1]
 
 ### Improved
