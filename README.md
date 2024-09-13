@@ -86,10 +86,10 @@ If you like this extension and Castle Game Engine itself, please [support us on 
 
 This extension contributes the following settings:
 
-* `castleEngine.enginePath`: Path where Castle Game Engine is installed. Leave blank to auto-detect (looks at the environment variable `CASTLE_ENGINE_PATH`).
-* `castleEngine.pascalLanguageServer.PP`: Path to Free Pascal Compiler executable, ending like `fpc`, `fpc.exe`, `fpc.sh`. Leave blank to auto-detect (will detect e.g. FPC bundled with CGE).
-* `castleEngine.pascalLanguageServer.FPCDIR`: Path to Free Pascal Compiler sources, used for code completion. Leave Leave blank to auto-detect (will detect e.g. FPC bundled with CGE, will also look at environment variable `FPCDIR`).
-* `castleEngine.pascalLanguageServer.LAZARUSDIR`: Path to Lazarus sources. Leave blank to auto-detect (will lok at environment variable `LAZARUSDIR`). Note that having Lazarus (and setting this) is not necessary for Castle Game Engine. This is only used for completion in code using LCL units.
+* `castleEngine.enginePath`: Path where _Castle Game Engine_ is installed. Leave blank to auto-detect (looks at the environment variable `CASTLE_ENGINE_PATH`).
+* `castleEngine.pascalLanguageServer.PP`: Full filename of the _Free Pascal Compiler_ executable. This should include the file name at the end, like `fpc.exe` (Windows) or `fpc` (Unix without FpcUpDeluxe) or `fpc.sh` (Unix with FpcUpDeluxe). Leave blank to auto-detect (will detect e.g. FPC bundled with CGE).
+* `castleEngine.pascalLanguageServer.FPCDIR`: Path to _Free Pascal Compiler_ sources, used for code completion. Leave Leave blank to auto-detect (will detect e.g. FPC bundled with CGE, will also look at environment variable `FPCDIR`).
+* `castleEngine.pascalLanguageServer.LAZARUSDIR`: Path to _Lazarus_ sources. Leave blank to auto-detect (will lok at environment variable `LAZARUSDIR`). Note that having Lazarus (and setting this) is not necessary for Castle Game Engine. This is only used for completion in code using LCL units.
 * `castleEngine.pascalLanguageServer.FPCTARGET`: Target OS (operating system; e.g. `win64`, `linux`, `darwin`). Leave blank to auto-detect.
 * `castleEngine.pascalLanguageServer.FPCTARGETCPU`: Target CPU (processor; e.g. `x86_64`). Leave blank to auto-detect.
 * `castleEngine.engineDeveloperMode`: Boolean (`true` or `false`). Adds engine symbols to project symbols, to easily jump from project to engine source code.

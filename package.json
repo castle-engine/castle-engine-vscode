@@ -106,22 +106,22 @@
       "properties": {
         "castleEngine.enginePath": {
           "type": "string",
-          "markdownDescription": "Path where Castle Game Engine is installed. Leave blank to auto-detect (looks at the environment variable `CASTLE_ENGINE_PATH`).",
+          "markdownDescription": "Path where _Castle Game Engine_ is installed. Leave blank to auto-detect (looks at the environment variable `CASTLE_ENGINE_PATH`).",
           "order": 0
         },
         "castleEngine.pascalLanguageServer.PP": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal Compiler executable, ending like `fpc`, `fpc.exe`, `fpc.sh`. Leave blank to auto-detect (will detect e.g. FPC bundled with CGE).",
+          "markdownDescription": "Full filename of the _Free Pascal Compiler_ executable. This should include the file name at the end, like `fpc.exe` (Windows) or `fpc` (Unix without FpcUpDeluxe) or `fpc.sh` (Unix with FpcUpDeluxe). Leave blank to auto-detect (will detect e.g. FPC bundled with CGE).",
           "order": 1
         },
         "castleEngine.pascalLanguageServer.FPCDIR": {
           "type": "string",
-          "markdownDescription": "Path to Free Pascal Compiler sources, used for code completion. Leave Leave blank to auto-detect (will detect e.g. FPC bundled with CGE, will also look at environment variable `FPCDIR`).",
+          "markdownDescription": "Path to _Free Pascal Compiler_ sources, used for code completion. Leave Leave blank to auto-detect (will detect e.g. FPC bundled with CGE, will also look at environment variable `FPCDIR`).",
           "order": 2
         },
         "castleEngine.pascalLanguageServer.LAZARUSDIR": {
           "type": "string",
-          "markdownDescription": "Path to Lazarus sources. Leave blank to auto-detect (will lok at environment variable `LAZARUSDIR`). Note that having Lazarus (and setting this) is not necessary for Castle Game Engine. This is only used for completion in code using LCL units.",
+          "markdownDescription": "Path to _Lazarus_ sources. Leave blank to auto-detect (will lok at environment variable `LAZARUSDIR`). Note that having Lazarus (and setting this) is not necessary for Castle Game Engine. This is only used for completion in code using LCL units.",
           "order": 3
         },
         "castleEngine.pascalLanguageServer.FPCTARGET": {
