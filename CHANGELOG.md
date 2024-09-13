@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.2.3]
+
+### Improved
+
+- Better PP configuration option description (see [this thread](https://forum.castle-engine.io/t/i-cant-compile-with-visual-code/1342)).
+
 ## [1.2.2]
 
 ### Improved
