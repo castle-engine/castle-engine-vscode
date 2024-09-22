@@ -13,10 +13,12 @@
         "freepascal",
         "gamedev",
         "LAZARUSDIR",
+        "lazbuild",
         "lazsrc",
         "markdowndescription",
         "pasls",
         "theangryepicbanana",
+        "Typecheck",
         "unregisters"
     ]
 }
