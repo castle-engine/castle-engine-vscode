@@ -199,6 +199,14 @@ class CastleConfiguration {
             return '';
         }
 
+        if (process.platform === 'win32') {
+            /* Replace \ with / on Windows.
+               This allows using bash (from Cygwin) shell in VS Code,
+               and still execute the CGE operations like "compile-run".
+               Other tools don't care, on Windows / is also valid path separator. */
+            buildTool = buildTool.replaceAll('\\', '/');
+        }
+
         return buildTool;
     }
 

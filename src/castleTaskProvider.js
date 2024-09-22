@@ -32,7 +32,6 @@ class CastleTaskProvider {
 			overrideEnv.CASTLE_ENGINE_PATH = this._castleConfig.enginePath;
 		};
 		// TODO: extend PATH with FPC and Lazarus
-		// TODO: why build tool path is not passed as full?
 		// console.log(`buildShellExecutionOptions: overrideEnv = ${overrideEnv}`);
 		// console.log('existing PATH = ' + process.env.PATH);
 		let result = { // : vscode.ShellExecutionOptions =
