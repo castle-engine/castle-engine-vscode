@@ -53,7 +53,7 @@ function bestWorkspaceFolderStrict()
 }
 
 /**
- * Returns WorkspaceFolder that has a best change of being a CGE project
+ * Returns WorkspaceFolder that has a best chance of being a CGE project
  * and we should use it as a default for various operations.
  * Returns undefined if none.
  *
