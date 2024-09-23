@@ -4,6 +4,7 @@ const vscode = require("vscode");
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const execFile = util.promisify(require('child_process').execFile);
+
 const castlePath = require('./castlePath.js');
 
 /**
@@ -110,15 +111,4 @@ async function executeFile(executableFile, args) {
 	}
 }
 
-/**
- * Checks current platform do not need extension in executable files
- * @param {string} executableFile file to add extension
- * @returns {string} file with extension when needed
- */
-function addExtensionToExecutableFile(executableFile) {
-	if (process.platform === 'win32')
-		return executableFile += '.exe';
-	return executableFile
-}
-
-module.exports = { executeCommandAndReturnValue, executeFileAndReturnValue, executeCommand, executeFile, addExtensionToExecutableFile};
+module.exports = { executeCommandAndReturnValue, executeFileAndReturnValue, executeCommand, executeFile };

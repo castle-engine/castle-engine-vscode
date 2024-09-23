@@ -42,10 +42,19 @@ class CastlePascalLanguageServer {
         // read settings when and fallback to defaultCompilerExePath
         this.environmentForPascalServer['PP'] = this.getEnvSetting('PP', defaultCompilerExePath);
 
-        // when build tool did not return fpc path for example when this is old build tool
-        // try simply run fpc -PB
-        if (this.environmentForPascalServer['PP'] === '')
-            this.environmentForPascalServer['PP'] = await castleExec.executeFileAndReturnValue(castleExec.addExtensionToExecutableFile('fpc'), ['-PB']);
+        /* When build tool did not return FPC path, and VS Code setting PP is unset,
+           try to search on PATH ourselves.
+           This is potentially unnecessary, as the build tool already looked for FPC on $PATH?
+        */
+        if (this.environmentForPascalServer['PP'] === '') {
+            this.environmentForPascalServer['PP'] = castlePath.findExe('fpc');
+        }
+
+        // exit with clear error message when FPC compiler not found
+        if (this.environmentForPascalServer['PP'] === '') {
+            vscode.window.showErrorMessage('FPC compiler executable not configured and not found on the PATH. Configure the FPC compiler location in the extension settings.');
+            return false;
+        }
 
         // Check compiler really exists and can be executed
         try {
@@ -59,16 +68,15 @@ class CastlePascalLanguageServer {
         this.environmentForPascalServer['FPCDIR'] = this.getEnvSetting('FPCDIR', '');
 
         if (this.environmentForPascalServer['FPCDIR'] === '') {
-            // try to find fpc sources
-            let realCompilerPath = await castleExec.executeFileAndReturnValue(this.environmentForPascalServer['PP'], ['-PB']);
-            this.environmentForPascalServer['FPCDIR'] = await this.tryToFindFpcSources(realCompilerPath);
+            this.environmentForPascalServer['FPCDIR'] =
+                await this.tryToFindFpcSources(this.environmentForPascalServer['PP']);
         }
 
         this.environmentForPascalServer['LAZARUSDIR'] = this.getEnvSetting('LAZARUSDIR', '');
 
         if (this.environmentForPascalServer['LAZARUSDIR'] === '') {
-            let realCompilerPath = await castleExec.executeFileAndReturnValue(this.environmentForPascalServer['PP'], ['-PB']);
-            this.environmentForPascalServer['LAZARUSDIR'] = await this.tryToFindLazarusSources(realCompilerPath);
+            this.environmentForPascalServer['LAZARUSDIR'] =
+                await this.tryToFindLazarusSources(this.environmentForPascalServer['PP']);
         }
 
         let fpcDefaultTarget = process.platform;

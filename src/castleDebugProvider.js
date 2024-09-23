@@ -1,6 +1,7 @@
 const vscode = require("vscode");
 const castleExec = require('./castleExec.js');
 const castleConfiguration = require('./castleConfiguration.js');
+const castlePath = require('./castlePath.js');
 
 /**
  * Castle Debug Provider that uses fpDebug to start debug session without
@@ -35,7 +36,7 @@ class CastleDebugProvider {
 			config.name = 'Debug CGE Game with fpDebug';
 			config.request = 'launch';
 			let executableName = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output', 'executable-name']);
-			executableName = castleExec.addExtensionToExecutableFile(executableName);
+			executableName = executableName  + castlePath.exeExtension();
 			config.program = '${workspaceFolder}/' + executableName;
 			config.stopOnEntry = true;
 			config.workingdirectory = '${workspaceFolder}';
@@ -79,7 +80,7 @@ class CastleDebugProvider {
 	 * @param {undefined | WorkspaceFolder} folder
 	 * @param {CancellationToken} token
 	 */
-	provideDebugConfigurations(folder, token) {
+	provideDebugConfigurations(/*folder, token*/ /* unused */) {
 		console.log('provideDebugConfigurations - START');
 		console.log('provideDebugConfigurations - STOP');
 	}

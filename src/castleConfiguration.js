@@ -2,7 +2,8 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const castleExec = require('./castleExec.js');
+// const castleExec = require('./castleExec.js'); // unused
+const castlePath = require('./castlePath.js');
 
 /**
  * Constants for build modes.
@@ -188,8 +189,9 @@ class CastleConfiguration {
      * @returns {string} path to build tool or empty string when not found
      */
     findBuildToolPath() {
-        let buildTool = this._enginePath + path.sep + 'bin' + path.sep + 'castle-engine';
-        buildTool = castleExec.addExtensionToExecutableFile(buildTool);
+        let buildTool = this._enginePath + path.sep +
+            'bin' + path.sep +
+            'castle-engine' + castlePath.exeExtension();
 
         try {
             fs.accessSync(buildTool, fs.constants.F_OK)
@@ -215,8 +217,9 @@ class CastleConfiguration {
      * @returns {string} path to pasls or empty string when not found
      */
     findPascalServerPath() {
-        let pasServer = this._enginePath + path.sep + 'bin' + path.sep + 'pasls';
-        pasServer = castleExec.addExtensionToExecutableFile(pasServer);
+        let pasServer = this._enginePath + path.sep +
+            'bin' + path.sep +
+            'pasls' + castlePath.exeExtension();
 
         try {
             fs.accessSync(pasServer, fs.constants.F_OK)

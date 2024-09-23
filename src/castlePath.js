@@ -1,5 +1,6 @@
 const vscode = require("vscode");
 const fs = require('fs');
+const path = require('path');
 
 /**
  * Prepares path that works in option.cwd in exec (it can't have "\" as first character)
@@ -87,9 +88,39 @@ function bestWorkspaceFolder()
     return vscode.workspace.workspaceFolders[0];
 }
 
+/**
+ * Returns executable extension, if any, on this platform.
+ * Just ".exe" on Windows, empty string on other platforms.
+ * Consistent with Castle Game Engine Pascal CastleUtils.ExeExtension.
+ * @returns {string}
+ */
+function exeExtension()
+{
+    return process.platform === 'win32' ? '.exe' : '';
+}
+
+/**
+ * Find a file on the PATH environment variable.
+ * Consistent with Castle Game Engine Pascal CastleFilesUtils.FindExe.
+ * @param {string} exeBaseName File name to find (without path, without .exe extension).
+ * @returns {string} Full path to the file, or empty string if not found.
+ */
+function findExe(exeBaseName)
+{
+    process.env.PATH.split(path.delimiter).forEach(function (dir) {
+        let exePath = path.join(dir, exeBaseName + exeExtension());
+        if (fs.existsSync(exePath)) {
+            return exePath;
+        }
+    });
+    return '';
+}
+
 module.exports = {
     pathForExecCommandCwd,
     folderIsCgeProject,
     bestWorkspaceFolderStrict,
-    bestWorkspaceFolder
+    bestWorkspaceFolder,
+    exeExtension,
+    findExe
 };

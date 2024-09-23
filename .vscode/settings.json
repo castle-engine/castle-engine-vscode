@@ -10,6 +10,7 @@
         "FPCTARGETCPU",
         "fpcupdeluxe",
         "fpdebug",
+        "fpdserver",
         "freepascal",
         "gamedev",
         "LAZARUSDIR",
@@ -19,6 +20,8 @@
         "pasls",
         "theangryepicbanana",
         "Typecheck",
-        "unregisters"
+        "unregisters",
+        "vscodelangclient",
+        "workingdirectory"
     ]
 }
