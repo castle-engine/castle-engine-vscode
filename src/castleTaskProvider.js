@@ -116,7 +116,7 @@ class CastleTaskProvider {
 	 * Updates the tasks to
 	 * - use proper build mode
 	 * - proper buildToolPath
-	 * - follow recompileNeeded flag
+	 * - follow recompilationNeeded flag in config
 	 */
 	updateCastleTasks() {
 		this._compileTask.execution = this.executionCompile();
