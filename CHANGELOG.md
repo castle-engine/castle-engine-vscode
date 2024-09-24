@@ -6,6 +6,22 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.3.0]
+
+### Improved
+
+- The FPC, Lazarus and _Castle Game Engine_ paths are now passed to the underlying build tool (executed when you press e.g. _"Compile"_ or _"Run"_).
+
+    This means that VS Code configuration is used by the build tool better:
+
+    - FPC exe location is not only for `pasls` (code completion) anymore. Now it affects the compiler used by the CGE build tool too, which makes sense, it allows user to configure "FPC for everything" from VS Code settings. We do this by prepending FPC location to `PATH`.
+
+    - Lazarus location is also known to the build tool. This is useful if you build a project with `build_using_lazbuild="true"` in `CastleEngineManifest.xml`. We do this by prepending Lazarus location to `PATH`.
+
+    - CGE location is passed to the build tool. This means that build tool for sure knows the same CGE location as was set in VS Code. We do this by setting `CASTLE_ENGINE_PATH` environment variable when executing the build tool (regardless if it was or not set for VS Code process).
+
+    Underlying code was refactored, it is also simpler and does less work under the hood. Previous code was sometimes executing build tool / FPC to query for some paths multiple times and/or when it was not necessary.
+
 ## [1.2.3]
 
 ### Improved
