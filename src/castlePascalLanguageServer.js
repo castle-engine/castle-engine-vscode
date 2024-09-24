@@ -46,6 +46,14 @@ class CastlePascalLanguageServer {
         this.environmentForPascalServer['FPCTARGET'] = this._castleConfig.fpcTargetOs;
         this.environmentForPascalServer['FPCTARGETCPU'] = this._castleConfig.fpcTargetCpu;
 
+        /* pasls cannot work without FPC executable.
+           Testcase: without this line, editing settings of PP back and forth
+           from valid to invalid FPC executable location, would cause a number
+           of errors that pasls cannot be stopped because it is still starting. */
+        if (this._castleConfig.fpcExecutablePath === '') {
+            return false;
+        }
+
         /* We need to set environment variable CASTLE_ENGINE_PATH, this is
            how we pass engine path (maybe from $CASTLE_ENGINE_PATH, maybe from
            VS extension config) to pasls. */

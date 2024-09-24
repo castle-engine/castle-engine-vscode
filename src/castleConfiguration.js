@@ -362,7 +362,6 @@ class CastleConfiguration {
 
         // exit with clear error message when FPC compiler not found
         if (fpcExe === '') {
-
             vscode.window.showErrorMessage('FPC compiler executable not configured and not found on the PATH. Configure the FPC compiler location in the extension settings.');
             return;
         }
