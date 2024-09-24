@@ -56,7 +56,7 @@ class CastleFileWatcher {
     createPascalSourceFilesWatcher(context) {
         this._vsFileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.{pas,pp,inc,dpr,lpr}');
 
-        this._vsFileSystemWatcher.onDidChange((uri) => {
+        this._vsFileSystemWatcher.onDidChange((/*uri*/ /* unused */) => {
             // Too spammy log, occurs too often and can fill the console in developer tools
             //console.log(`Pascal file changed: ${uri.fsPath}`);
             this._castleConfig.recompilationNeeded = true;
