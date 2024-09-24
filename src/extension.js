@@ -30,6 +30,8 @@ async function activate(context) {
 		) {
 			await castlePlugin.updateConfiguration();
 			await castlePlugin.updateLanguageServer();
+			// tasks definition depends on configuration, as we pass to task modified PATH with FPC/Lazarus
+			castlePlugin.updateTaskProvider();
 			castlePlugin.updateStatusBar();
 		}
 	});

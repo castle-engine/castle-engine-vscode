@@ -1,8 +1,8 @@
 const vscode = require("vscode");
-const castlePath = require('./castlePath.js');
+const path = require('path');
 
-// eslint-disable-next-line no-unused-vars
-const castleConfiguration = require('./castleConfiguration.js');
+const castlePath = require('./castlePath.js');
+// const castleConfiguration = require('./castleConfiguration.js'); // unused
 
 class CastleTaskProvider
 {
@@ -31,9 +31,20 @@ class CastleTaskProvider
         if (this._castleConfig.enginePath !== '') {
             overrideEnv.CASTLE_ENGINE_PATH = this._castleConfig.enginePath;
         };
-        // TODO: extend PATH with FPC and Lazarus
-        // console.log(`buildShellExecutionOptions: overrideEnv = ${overrideEnv}`);
-        // console.log('existing PATH = ' + process.env.PATH);
+
+        let newPathList = process.env.PATH.split(path.delimiter);
+        // build tool may want to run FPC, so extend PATH with FPC directory
+        if (this._castleConfig.fpcExecutablePath !== '') {
+            newPathList.unshift(path.dirname(this._castleConfig.fpcExecutablePath));
+        }
+        // build tool may want to run lazbuild, so extend PATH with Lazarus directory.
+        // We assume here that lazarusSourcesPath is also Lazarus binary directory.
+        if (this._castleConfig.lazarusSourcesPath !== '') {
+            newPathList.unshift(this._castleConfig.lazarusSourcesPath);
+        }
+        overrideEnv.PATH = newPathList.join(path.delimiter);
+        console.log(`Extended execution environment PATH (to add FPC, Lazarus paths): ${overrideEnv.PATH}`);
+
         let result = { // : vscode.ShellExecutionOptions =
             env: overrideEnv
         };
