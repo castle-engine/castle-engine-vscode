@@ -107,12 +107,14 @@ function exeExtension()
  */
 function findExe(exeBaseName)
 {
-    process.env.PATH.split(path.delimiter).forEach(function (dir) {
+    let pathList = process.env.PATH.split(path.delimiter);
+    for (let i = 0; i < pathList.length; i++) {
+        let dir = pathList[i];
         let exePath = path.join(dir, exeBaseName + exeExtension());
         if (fs.existsSync(exePath)) {
             return exePath;
         }
-    });
+    }
     return '';
 }
 

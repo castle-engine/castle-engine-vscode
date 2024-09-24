@@ -17,6 +17,8 @@
 
 - The `console.log` output from extension is visible in the _"Extension Host"_ category in JS console (_"Toggle Developer Console"_ in VS Code to see it). This is the easiest way to debug the extension.
 
+- Run auto-tests by `npm run test` (see https://code.visualstudio.com/api/working-with-extensions/testing-extension ).
+
 TODO:
 
 - Convert to TypeScript? Declare types explicitly. Have explicit `private` and `public`, instead of `_xxx` for private.
