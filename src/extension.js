@@ -28,6 +28,7 @@ async function activate(context) {
 			event.affectsConfiguration('castleEngine.pascalLanguageServer.FPCTARGETCPU') ||
 			event.affectsConfiguration('castleEngine.engineDeveloperMode')
 		) {
+			await castlePlugin.updateConfiguration();
 			await castlePlugin.updateLanguageServer();
 			castlePlugin.updateStatusBar();
 		}

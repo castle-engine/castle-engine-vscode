@@ -28,7 +28,7 @@ class CastlePlugin {
      * Activates plugin when activate(context) is called.
      */
     async activatePlugin() {
-        this.updateConfiguration();
+        await this.updateConfiguration();
         await this.updateLanguageServer();
         this.updateFileWatcher();
         this.updateTaskProvider();
@@ -57,12 +57,13 @@ class CastlePlugin {
      * When called first time creates CastleConfiguration object and reads/finds configuration.
      * In other cases only reloads configuration.
      */
-    updateConfiguration() {
-        if (this._castleConfig == undefined)
+    async updateConfiguration() {
+        if (this._castleConfig == undefined) {
             this._castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
-
-        this._castleConfig.findPaths();
-        this._castleConfig.findFpcTargetCpu();
+        }
+        await this._castleConfig.findPaths();
+        this._castleConfig.updateFpcTargetCpu();
+        this._castleConfig.updateFpcTargetOs();
         this._castleConfig.updateDeveloperMode();
     }
 
@@ -234,7 +235,7 @@ class CastlePlugin {
                             const message = event.data;
 
                             switch (message.command) {
-                                case 'cgeback':
+                                case 'castle-go-back':
                                     goBack();
                                     break;
                             }
@@ -252,7 +253,7 @@ class CastlePlugin {
 
             this._disposableBackInApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.backInApiReference, () => {
                 if (this._referencePanel !== undefined) {
-                    this._referencePanel.webview.postMessage({command: 'cgeback'});
+                    this._referencePanel.webview.postMessage({command: 'castle-go-back'});
                 }
             });
             this._searchInApiReferenceCommandsRegistered = true;
