@@ -44,7 +44,7 @@ We provide Pascal code highlighting and completion:
    - Use _Ctrl + Shift + O_ to jump to symbol definition in current file.
    ![Procedure list screen](images/findfilesymbol.png)
    - Use _Ctrl + T_ to list all symbols in the project.
-   - Just to identifiers (_Ctrl + Click_).
+   - Jump to identifiers (_Ctrl + Click_).
    - The extension uses a [Pascal Language Server](https://github.com/castle-engine/pascal-language-server) that adds code completion for Pascal projects. Language server executable `pasls` (or `pasls.exe` on Windows) should already be in `bin` directory of the engine.
    - Include files are supported perfectly too. Just make sure to use `{%MainUnit xxx.pas}` at the top of each include file.
    - The provided Pascal code completion works for any Pascal file -- whether it's part of a _Castle Game Engine_ project or not.
