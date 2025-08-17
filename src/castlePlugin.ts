@@ -1,9 +1,8 @@
-
-const vscode = require('vscode');
+import vscode from 'vscode';
+import { CastleDebugProvider } from './castleDebugProvider';
 
 const CastleFileWatcher = require('./castleFileWatcher.js');
 const castleExec = require('./castleExec.js');
-const CastleDebugProvider = require('./castleDebugProvider.js');
 const CastleTaskProvider = require('./castleTaskProvider.js');
 const castleConfiguration = require('./castleConfiguration.js');
 const CastleStatusBar = require('./castleStatusBar.js');
@@ -14,7 +13,26 @@ const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
  *
  * The most important functions are activatePlugin(), updatePlugin() and deactivatePlugin().
  */
-class CastlePlugin {
+export class CastlePlugin
+{
+    private _context;
+    private _castleConfig;
+    private _castleLanguageServer;
+    private _castleFileWatcher;
+    private _castleTaskProvider;
+    private _castleDebugProvider;
+    private _disposableDebugConfProvider;
+    private _disposableCompile;
+    private _disposableRun;
+    private _disposableClean;
+    private _disposableOpenInEditor;
+    private _referencePanel;
+    private _castleStatusBar;
+    private _taskCommandsRegistered;
+    private _editorCommandsRegistered;
+    private _searchInApiReferenceCommandsRegistered;
+    private _validateCommandsRegistered;
+
     constructor(context) {
         this._context = context;
         this._taskCommandsRegistered = false;
@@ -177,7 +195,8 @@ class CastlePlugin {
 
     updateSearchInApiReferenceCommands()  {
         if (this._searchInApiReferenceCommandsRegistered === false) {
-            this._disposableSearchInApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.searchInApiReference, () => {
+            /*this._disposableSearchInApiReference = */
+            vscode.commands.registerCommand(this._castleConfig.commandId.searchInApiReference, () => {
                 let wordToSearch = '';
                 const editor = vscode.window.activeTextEditor;
                 if (editor) {
@@ -251,7 +270,8 @@ class CastlePlugin {
 
             });
 
-            this._disposableBackInApiReference = vscode.commands.registerCommand(this._castleConfig.commandId.backInApiReference, () => {
+            /*this._disposableBackInApiReference = */
+            vscode.commands.registerCommand(this._castleConfig.commandId.backInApiReference, () => {
                 if (this._referencePanel !== undefined) {
                     this._referencePanel.webview.postMessage({command: 'castle-go-back'});
                 }
@@ -321,6 +341,8 @@ class CastlePlugin {
                 this._disposableDebugConfProvider = vscode.debug.registerDebugConfigurationProvider('castleDebug', this._castleDebugProvider);
                 this._context.subscriptions.push(this._disposableDebugConfProvider);
             }
+        } else {
+            console.log('updateDebugProvider - buildToolPath is empty, not doing anything');
         }
     }
 
@@ -347,5 +369,3 @@ class CastlePlugin {
         return '';
     }
 }
-
-module.exports = CastlePlugin;

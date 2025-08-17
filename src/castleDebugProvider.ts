@@ -1,4 +1,4 @@
-const vscode = require("vscode");
+import vscode from 'vscode';
 const castleExec = require('./castleExec.js');
 const castleConfiguration = require('./castleConfiguration.js');
 const castlePath = require('./castlePath.js');
@@ -6,8 +6,12 @@ const castlePath = require('./castlePath.js');
 /**
  * Castle Debug Provider that uses fpDebug to start debug session without
  * configuration. Just choose "castleDebug" after hitting F5.
+ * This class implements VS Code DebugConfigurationProvider interface
+ * and instance of it can be provided to the vscode.debug.registerDebugConfigurationProvider.
  */
-class CastleDebugProvider {
+export class CastleDebugProvider implements vscode.DebugConfigurationProvider
+{
+	private _castleConfig;
 
 	/**
 	 * @param {castleConfiguration.CastleConfiguration} castleConfig
@@ -22,15 +26,17 @@ class CastleDebugProvider {
 	}*/
 
 	async resolveDebugConfiguration(folder, config/*, token*/) {
-		console.log('resolveDebugConfiguration - START');
+		console.log('CastleDebugProvider.resolveDebugConfiguration');
 
 		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
 
 			// this._castleConfig.buildToolPath can be changed when
 			// debug configuration provider is created and
 			// new configuration can be not valid when buildToolPath === ''
-			if (this._castleConfig.buildToolPath === '')
+			if (this._castleConfig.buildToolPath === '') {
+				console.log('resolveDebugConfiguration aborted - cannot find build tool');
 				return undefined; // abort launch
+			}
 
 			config.type = 'fpDebug'; // castleDebug is used only as alias for fpDebug
 			config.name = 'Debug CGE Game with fpDebug';
@@ -74,16 +80,4 @@ class CastleDebugProvider {
 			return config;
 		}
 	}
-
-	/**
-	 * This function does nothing but must be defined to show castleDebug outside Pascal files e.g. after open folder in vscode.
-	 * @param {undefined | WorkspaceFolder} folder
-	 * @param {CancellationToken} token
-	 */
-	provideDebugConfigurations(/*folder, token*/ /* unused */) {
-		console.log('provideDebugConfigurations - START');
-		console.log('provideDebugConfigurations - STOP');
-	}
 }
-
-module.exports = CastleDebugProvider;

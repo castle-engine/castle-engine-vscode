@@ -1,17 +1,16 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-const vscode = require('vscode');
+import * as vscode from 'vscode';
 
-const CastlePlugin = require('./castlePlugin.js');
+import { CastlePlugin } from './castlePlugin';
 
 let castlePlugin;
 
 /**
  * This method is called when your extension is activated. Extension is activated
  * the very first time the command is executed
- * @param {vscode.ExtensionContext} context
  */
-async function activate(context) {
+export async function activate(context: vscode.ExtensionContext) {
 	console.log('Castle Engine Extension - Activate - START');
 
 	castlePlugin = new CastlePlugin(context);
@@ -47,13 +46,8 @@ async function activate(context) {
 /**
  * Called when your extension is deactivated
  */
-async function deactivate() {
+export async function deactivate() {
 	console.log('Castle Engine Extension - Deactivation - START');
 	await castlePlugin.deactivatePlugin();
 	console.log('Castle Engine Extension - Deactivation - DONE');
- }
-
-module.exports = {
-	activate,
-	deactivate
 }

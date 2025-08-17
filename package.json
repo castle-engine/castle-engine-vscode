@@ -40,7 +40,7 @@
     "workspaceContains:CastleEngineManifest.xml",
     "onLanguage:pascal"
   ],
-  "main": "./src/extension.js",
+  "main": "./out/extension.js",
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": false,
