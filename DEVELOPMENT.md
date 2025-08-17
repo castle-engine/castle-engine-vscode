@@ -21,7 +21,7 @@
 
 TODO:
 
-- Convert to TypeScript. Declare types explicitly. Have explicit `private` and `public`, instead of `_xxx` for private. Once ready, compare with empty extension made by generator -- we want to be as close as makes sense, only differ from standard when it is justified for our functionality.
+- Convert to TypeScript. Declare types explicitly. Have explicit `private` and `public`, instead of `_xxx` for private.
 - Use consistent indentation by 4 spaces. Right now it's a mix of 2 and 4 spaces and tabs.
 
 ### Notes about JSON files (because comments inside them are in general not allowed...)

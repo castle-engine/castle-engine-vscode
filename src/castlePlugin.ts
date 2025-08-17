@@ -93,8 +93,9 @@ export class CastlePlugin
      */
     async updateLanguageServer() {
         this._castleConfig.updateDeveloperMode();
-        if (this._castleLanguageServer == undefined)
+        if (this._castleLanguageServer == undefined) {
             this._castleLanguageServer = new CastlePascalLanguageServer(this._castleConfig);
+        }
 
         // When there is no pascal language server we still can run the extension
         // but there will be no code completion etc.
@@ -114,8 +115,9 @@ export class CastlePlugin
      * Subsequent launches currently do nothing.
      */
     updateFileWatcher() {
-        if (this._castleFileWatcher == undefined)
+        if (this._castleFileWatcher == undefined) {
             this._castleFileWatcher = new CastleFileWatcher(this._context, this._castleConfig, this);
+        }
     }
 
     /**
@@ -222,7 +224,7 @@ export class CastlePlugin
                         () => {
                             this._referencePanel = undefined;
                         }
-                    )
+                    );
                 }
                 this._referencePanel.webview.html = `
                 <html>
@@ -364,7 +366,7 @@ export class CastlePlugin
      */
     executableFileExtension() {
         if (process.platform === 'win32') {
-            return '.exe'
+            return '.exe';
         }
         return '';
     }

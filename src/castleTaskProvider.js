@@ -157,8 +157,9 @@ class CastleTaskProvider
 
     provideTasks() {
         try {
-            if (this._castleConfig.buildToolPath === '')
-              return [];
+            if (this._castleConfig.buildToolPath === '') {
+                return [];
+            }
             this.updateCastleTasks();
             return [this._compileTask, this._runTask, this._cleanTask];
         }
