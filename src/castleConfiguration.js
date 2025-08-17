@@ -68,8 +68,9 @@ class CastleConfiguration {
                 this.recompilationNeeded = true;
             }
         }
-        else
+        else {
             throw Error('Incorrect build mode.');
+        }
     }
 
     /**
@@ -236,7 +237,7 @@ class CastleConfiguration {
             'castle-engine' + castlePath.exeExtension();
 
         try {
-            fs.accessSync(buildTool, fs.constants.F_OK)
+            fs.accessSync(buildTool, fs.constants.F_OK);
         }
         catch (err) {
             vscode.window.showErrorMessage(`Build Tool for Castle Game Engine not found (${buildTool}). ${err}`);
@@ -266,7 +267,7 @@ class CastleConfiguration {
             'pasls' + castlePath.exeExtension();
 
         try {
-            fs.accessSync(pasServer, fs.constants.F_OK)
+            fs.accessSync(pasServer, fs.constants.F_OK);
         }
         catch (err) {
             vscode.window.showErrorMessage(`Pascal Language Server for Castle Game Engine not found (${pasServer}). ${err}`);
@@ -412,9 +413,9 @@ class CastleConfiguration {
     _isCompilerSourcesFolder(folder)
     {
         try {
-            fs.accessSync(folder, fs.constants.F_OK)
-            fs.accessSync(folder + '/rtl', fs.constants.F_OK)
-            fs.accessSync(folder + '/packages', fs.constants.F_OK)
+            fs.accessSync(folder, fs.constants.F_OK);
+            fs.accessSync(folder + '/rtl', fs.constants.F_OK);
+            fs.accessSync(folder + '/packages', fs.constants.F_OK);
             return true;
         }
         catch (err) {
@@ -429,8 +430,9 @@ class CastleConfiguration {
      */
     async _tryToFindFpcSources(fpcCompilerExec)
     {
-        if (fpcCompilerExec === '')
+        if (fpcCompilerExec === '') {
             return '';
+        }
 
         // Find sources if FPC is bundled with CGE
         {
@@ -503,10 +505,10 @@ class CastleConfiguration {
      */
     _isLazarusSourcesFolder(folder) {
         try {
-            fs.accessSync(folder, fs.constants.F_OK)
-            fs.accessSync(folder + '/lcl', fs.constants.F_OK)
-            fs.accessSync(folder + '/ide', fs.constants.F_OK)
-            fs.accessSync(folder + '/components', fs.constants.F_OK)
+            fs.accessSync(folder, fs.constants.F_OK);
+            fs.accessSync(folder + '/lcl', fs.constants.F_OK);
+            fs.accessSync(folder + '/ide', fs.constants.F_OK);
+            fs.accessSync(folder + '/components', fs.constants.F_OK);
             return true;
         }
         catch (err) {
@@ -548,8 +550,9 @@ class CastleConfiguration {
      * @returns {Promise<string>} path to lazarus sources
      */
     async _tryToFindLazarusSources(fpcCompilerExec) {
-        if (fpcCompilerExec === '')
+        if (fpcCompilerExec === '') {
             return '';
+        }
 
         if (process.platform === 'linux') {
             // check current fpc is not done by fpcupdeluxe then lazarus is in lazarus subfolder

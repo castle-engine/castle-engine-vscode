@@ -28,6 +28,16 @@ TODO:
 
 - `package.json`: has `"onLanguage:pascal"` to activate when the user opens a Pascal file, even if not in CGE project. This way we can provide code completion using our LSP server, even if not inside CGE project.
 
+## Run some checks
+
+See `scripts` in `package.json`.
+
+```
+npm run compile
+npm run lint
+npm run test
+```
+
 # Helpful information from the original README.md
 
 ## What's in the folder
