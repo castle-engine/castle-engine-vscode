@@ -1,6 +1,5 @@
 const vscode = require("vscode");
 const path = require('path');
-// eslint-disable-next-line no-unused-vars
 const CastlePlugin = require("./castlePlugin");
 const castlePath = require('./castlePath.js');
 

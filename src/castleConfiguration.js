@@ -525,7 +525,7 @@ class CastleConfiguration {
     _findFullLazarusSourcesFolder(folder)
     {
         try {
-            fs.accessSync(folder, fs.constants.R_OK)
+            fs.accessSync(folder, fs.constants.R_OK);
         }
         catch (err) {
             return '';

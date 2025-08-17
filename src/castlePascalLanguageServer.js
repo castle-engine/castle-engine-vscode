@@ -1,8 +1,6 @@
 // const fs = require('fs'); // unused
 const vscode = require('vscode');
 const vscodelangclient = require('vscode-languageclient');
-
-// eslint-disable-next-line no-unused-vars
 const castleConfiguration = require('./castleConfiguration.js');
 const castleExec = require('./castleExec.js');
 const castlePath = require('./castlePath.js');
@@ -85,8 +83,9 @@ class CastlePascalLanguageServer {
     }
 
     async createLanguageClient() {
-        if (await this.loadOrDetectSettings() === false)
+        if (await this.loadOrDetectSettings() === false) {
             return false;
+        }
 
         let run = {
             command: this._castleConfig.pascalServerPath,
@@ -109,7 +108,7 @@ class CastlePascalLanguageServer {
             //		initializationOptions : {
             //			option: 'value',
             //		}
-        }
+        };
 
         let initializationOptions = {};
 

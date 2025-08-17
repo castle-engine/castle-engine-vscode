@@ -25,7 +25,7 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
 		console.log('provideDebugConfigurations - START');
 	}*/
 
-	async resolveDebugConfiguration(folder, config/*, token*/) {
+	async resolveDebugConfiguration(folder, config /*, token*/) {
 		console.log('CastleDebugProvider.resolveDebugConfiguration');
 
 		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
@@ -51,26 +51,29 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
 			// workaround fpDebug 0.6 bug with fpdserver executable not set properly
 			if (process.platform === 'win32') {
 				let fpDebugExtPath = vscode.extensions.getExtension("cnoc.fpdebug").extensionPath;
-				if (this._castleConfig.fpcTargetCpu === 'x86_64')
+				if (this._castleConfig.fpcTargetCpu === 'x86_64') {
 					config.fpdserver = { executable: fpDebugExtPath + '\\bin\\fpdserver-x86_64.exe' };
-				else if (this._castleConfig.fpcTargetCpu === 'i386')
+				} else if (this._castleConfig.fpcTargetCpu === 'i386') {
 					config.fpdserver = { executable: fpDebugExtPath + '\\bin\\fpdserver-i386.exe' };
-				else {
+				} else {
 					return vscode.window.showInformationMessage('fpDebug supports only x86_64 and i386 architecture on windows').then(() => {
 						return undefined; // abort launch
 					});
 				}
-			} else if (process.platform === 'linux' && this._castleConfig.fpcTargetCpu !== 'x86_64')
+			} else if (process.platform === 'linux' && this._castleConfig.fpcTargetCpu !== 'x86_64') {
 				return vscode.window.showInformationMessage('fpDebug supports only x86_64 architecture on linux').then(() => {
 					return undefined; // abort launch
 				});
+			}
 
-
-			if (this._castleConfig.buildMode === castleConfiguration.CastleBuildModes.RELEASE)
+			if (this._castleConfig.buildMode === castleConfiguration.CastleBuildModes.RELEASE) {
 				vscode.window.showWarningMessage('Running debugger in "release" mode. To get better debug information, change the mode to "debug".');
+			}
+
 			// we run compilation only when is needed
-			if (this._castleConfig.recompilationNeeded)
+			if (this._castleConfig.recompilationNeeded) {
 				config.preLaunchTask = 'CGE: compile-cge-game-task';
+			}
 
 			if (!config.program) {
 				return vscode.window.showInformationMessage('Cannot find a program to debug').then(() => {

@@ -1,8 +1,6 @@
 const vscode = require("vscode");
 const castleConfiguration = require('./castleConfiguration.js');
-// eslint-disable-next-line no-unused-vars
 const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
-// eslint-disable-next-line no-unused-vars
 const CastleTaskProvider = require('./castleTaskProvider.js');
 const castlePath = require('./castlePath.js');
 
@@ -33,12 +31,14 @@ class CastleStatusBar {
     createBuildModeSwitch() {
         let command = vscode.commands.registerCommand(this._castleConfig.commandId.showBuildModes, async () => {
             const chosenBuildMode = await vscode.window.showQuickPick(['Debug', 'Release'], { placeHolder: 'Select build type' });
-            if (!chosenBuildMode === undefined)
+            if (!chosenBuildMode === undefined) {
                 return;
-            if (chosenBuildMode === 'Release')
+            }
+            if (chosenBuildMode === 'Release') {
                 this._castleConfig.buildMode = castleConfiguration.CastleBuildModes.RELEASE;
-            else
+            } else {
                 this._castleConfig.buildMode = castleConfiguration.CastleBuildModes.DEBUG;
+            }
             this.updateBuildModesButtonText();
             this._castleTaskProvider.updateCastleTasks();
         });
@@ -136,8 +136,9 @@ class CastleStatusBar {
             this._cleanButton.hide();
             this._openInEditorButton.hide();
             // when engine path is not valid show config button
-            if (this._castleConfig.enginePath === '')
+            if (this._castleConfig.enginePath === '') {
                 this._openSettingsButton.show();
+            }
         }
         else {
             this._buildModesButton.show();
@@ -149,10 +150,11 @@ class CastleStatusBar {
 
             // when pascalServerPath is valid but pascalServerClient is undefined or null
             // there is problem with pasls config
-            if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined))
+            if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined)) {
                 this._openSettingsButton.show();
-            else
+            } else {
                 this._openSettingsButton.hide();
+            }
         }
     }
 }
