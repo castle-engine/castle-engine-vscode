@@ -33,21 +33,22 @@ We recognize Castle Game Engine (CGE) projects and provide ready commands to:
 - Open CGE editor.
 - Switch build mode (debug / release).
 - Debug. Choose `castleDebug` when asked for debugger type. We use [Free Pascal (FPC) Debugger](https://marketplace.visualstudio.com/items?itemName=CNOC.fpdebug) under the hood. We will automatically rebuild the project if something changed before running the debug session.
-- There no need to write any `tasks.json` or `launch.json` files for above.
+- There is no need to manually write config files like `tasks.json` or `launch.json` to make above working.
 - The most common commands are available on status bar:
    ![Status bar](images/vscode_status_bar.png)
 
 We provide Pascal code highlighting and completion:
 
-- Pascal Language Server (`pasls`) as provided by CGE is automatically used for code completion.
+- Pascal Language Server (`pasls`) that is installed along with [Castle Game Engine](https://castle-engine.io/) is automatically used for code completion.
    - Use _Ctrl + Space_ to complete identifiers, members (properties, methods).
    - Use _Ctrl + Shift + O_ to jump to symbol definition in current file.
    ![Procedure list screen](images/findfilesymbol.png)
    - Use _Ctrl + T_ to list all symbols in the project.
    - Jump to identifiers (_Ctrl + Click_).
-   - The extension uses a [Pascal Language Server](https://github.com/castle-engine/pascal-language-server) that adds code completion for Pascal projects. Language server executable `pasls` (or `pasls.exe` on Windows) should already be in `bin` directory of the engine.
+   - The extension uses a [Pascal Language Server](https://github.com/castle-engine/pascal-language-server) that adds code completion for Pascal projects. Language server executable `pasls` (or `pasls.exe` on Windows) should already be in `bin` directory of the _Castle Game Engine_.
    - Include files are supported perfectly too. Just make sure to use `{%MainUnit xxx.pas}` at the top of each include file.
    - The provided Pascal code completion works for any Pascal file -- whether it's part of a _Castle Game Engine_ project or not.
+
 - [Pascal Magic](https://marketplace.visualstudio.com/items?itemName=theangryepicbanana.language-pascal) is used for syntax highlighting.
 
 Other features:
