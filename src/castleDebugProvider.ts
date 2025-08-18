@@ -11,21 +11,13 @@ const castlePath = require('./castlePath.js');
  */
 export class CastleDebugProvider implements vscode.DebugConfigurationProvider
 {
-	private _castleConfig;
+	private _castleConfig: CastleConfiguration;
 
-	/**
-	 * @param {castleConfiguration.CastleConfiguration} castleConfig
-	 */
-	constructor(castleConfig) {
+	constructor(castleConfig: CastleConfiguration) {
 		this._castleConfig = castleConfig;
 	}
 
-	// not used
-	/*provideDebugConfigurations(folder, token) {
-		console.log('provideDebugConfigurations - START');
-	}*/
-
-	async resolveDebugConfiguration(folder, config /*, token*/) {
+	async resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration /*, token*/) {
 		console.log('CastleDebugProvider.resolveDebugConfiguration');
 
 		if ((config.type === undefined) &&
