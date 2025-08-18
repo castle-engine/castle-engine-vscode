@@ -340,7 +340,10 @@ export class CastlePlugin
             if (this._castleDebugProvider === undefined) {
                 this._castleDebugProvider = new CastleDebugProvider(this._castleConfig);
 
-                this._disposableDebugConfProvider = vscode.debug.registerDebugConfigurationProvider('castleDebug', this._castleDebugProvider);
+                console.log('registering CGE debug provider');
+                this._disposableDebugConfProvider = vscode.debug.registerDebugConfigurationProvider(
+                    'castleDebug', this._castleDebugProvider,
+                    vscode.DebugConfigurationProviderTriggerKind.Dynamic);
                 this._context.subscriptions.push(this._disposableDebugConfProvider);
             }
         } else {
