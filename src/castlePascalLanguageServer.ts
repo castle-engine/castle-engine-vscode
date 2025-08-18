@@ -9,7 +9,7 @@ import * as castlePath from './castlePath';
  */
 export class CastlePascalLanguageServer {
     private _castleConfig;
-    private _pascalServerClient;
+    private _pascalServerClient : LanguageClient | null = null;
     private _environmentForPascalServer;
 
     /**
@@ -17,7 +17,6 @@ export class CastlePascalLanguageServer {
      */
     constructor(castleConfig: CastleConfiguration) {
         this._castleConfig = castleConfig;
-        this._pascalServerClient = null;
     }
 
     /**
@@ -134,7 +133,7 @@ export class CastlePascalLanguageServer {
      * Destroys _pascalServerClient. Used when configuration changes.
      */
     async destroyLanguageClient() {
-        if (this._pascalServerClient !== undefined) {
+        if (this._pascalServerClient !== null) {
             try {
                 await this._pascalServerClient.stop();
 

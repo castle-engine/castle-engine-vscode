@@ -38,7 +38,6 @@ export class CastlePlugin
         this._editorCommandsRegistered = false;
         this._searchInApiReferenceCommandsRegistered = false;
         this._validateCommandsRegistered = false;
-        this._referencePanel = null;
     }
 
     /**
@@ -159,13 +158,13 @@ export class CastlePlugin
             if (this._taskCommandsRegistered === true) {
                 // when there is no build tool available
                 this._disposableCompile.dispose();
-                this._disposableCompile = null;
+                this._disposableCompile = undefined;
 
                 this._disposableRun.dispose();
-                this._disposableRun = null;
+                this._disposableRun = undefined;
 
                 this._disposableClean.dispose();
-                this._disposableClean = null;
+                this._disposableClean = undefined;
 
                 this._taskCommandsRegistered = false;
             }
@@ -180,7 +179,7 @@ export class CastlePlugin
         if (this._castleConfig.buildToolPath === '') {
             if (this._editorCommandsRegistered) {
                 this._disposableOpenInEditor.dispose();
-                this._disposableOpenInEditor = null;
+                this._disposableOpenInEditor = undefined;
                 this._editorCommandsRegistered = false;
             }
         } else {

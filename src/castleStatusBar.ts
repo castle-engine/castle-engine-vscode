@@ -157,9 +157,9 @@ export class CastleStatusBar {
             this._cleanButton.show();
             this._openInEditorButton.show();
 
-            // when pascalServerPath is valid but pascalServerClient is undefined or null
+            // when pascalServerPath is valid but pascalServerClient is null
             // there is problem with pasls config
-            if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient === undefined)) {
+            if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient === null)) {
                 this._openSettingsButton.show();
             } else {
                 this._openSettingsButton.hide();
