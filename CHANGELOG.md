@@ -6,6 +6,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.4.0]
+
+### Improved
+
+- Underlying extension source code has been converted to TypeScript.
+    - This will allow us to extend the extension in the future more easily, as type annotations and other TypeScript features help us catch errors earlier.
+    - Please note that it implies rather significant code change. As always [we appreciate if you report any bugs](https://github.com/castle-engine/castle-engine-vscode).
+
 ## [1.3.1]
 
 ### Fixed
