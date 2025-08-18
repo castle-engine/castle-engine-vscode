@@ -119,11 +119,13 @@ export class CastlePlugin
     }
 
     /**
-     * When called first time creates and registers CastleTaskProvider. And registers/unregisters VSCode commands.
+     * When called first time creates and registers CastleTaskProvider.
+     * And registers/unregisters VSCode commands.
      * Subsequent runs update the tasks and registers/unregisters VSCode commands
      * depending on whether we have access to build tool.
      */
-    updateTaskProvider() {
+    updateTaskProvider()
+    {
         if (this._castleConfig.buildToolPath !== '') {
             if (this._castleTaskProvider === undefined) {
                 this._castleTaskProvider = new CastleTaskProvider(this._castleConfig);
@@ -142,7 +144,7 @@ export class CastlePlugin
 
                 this._disposableRun = vscode.commands.registerCommand(this._castleConfig.commandId.run, () => {
                     this._castleTaskProvider.updateCastleTasks();
-                    vscode.tasks.executeTask(this._castleTaskProvider.runTask);
+                    vscode.tasks.executeTask(this._castleTaskProvider.compileIfNecessaryAndRunTask());
                 });
                 this._context.subscriptions.push(this._disposableRun);
 

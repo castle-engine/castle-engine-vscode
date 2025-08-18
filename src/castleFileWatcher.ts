@@ -1,25 +1,23 @@
-const vscode = require("vscode");
-const path = require('path');
-const CastlePlugin = require("./castlePlugin");
-const castlePath = require('./castlePath.js');
+import * as vscode from 'vscode';
+import * as path from 'path';
+import * as castlePath from './castlePath';
+import { CastleConfiguration } from './castleConfiguration';
+import { CastlePlugin } from './castlePlugin';
 
 /**
  * Observes file system for changes in files and sets castleConfig.recompilationNeeded to true
  * after a source file is created/deleted.modified.
  * After recompilation sets it to false.
  */
-export class CastleFileWatcher {
-    private _castleConfig;
-    private _castlePlugin;
-    private _vsFileSystemWatcher;
-    private _vsManifestFileWatcher;
+export class CastleFileWatcher
+{
+    private _castleConfig: CastleConfiguration;
+    private _castlePlugin: CastlePlugin;
+    private _vsFileSystemWatcher: vscode.FileSystemWatcher;
+    private _vsManifestFileWatcher: vscode.FileSystemWatcher;
 
-    /**
-    * @param {vscode.ExtensionContext} context
-    * @param {castleConfiguration.CastleConfiguration} castleConfig
-    * @param {CastlePlugin} castlePlugin
-    */
-    constructor(context, castleConfig, castlePlugin) {
+    constructor(context: vscode.ExtensionContext, castleConfig: CastleConfiguration, castlePlugin: CastlePlugin)
+    {
         this._castleConfig = castleConfig;
         this._castlePlugin = castlePlugin;
 
@@ -39,24 +37,21 @@ export class CastleFileWatcher {
                     vscode.window.showErrorMessage("CGE: Compilation failed");
                 }
             } else
-                if (atask.execution.task.name === "clean-cge-game-task") {
-                    this._castleConfig.recompilationNeeded = true;
-                }
-                else
-                    if (atask.execution.task.name === "run-cge-game-task") {
-                        if ((atask.execution.task.execution.commandLine.indexOf('compile-run') > 0) && (atask.exitCode === 0)) {
-                            console.log("Compilation with running success");
-                            this._castleConfig.recompilationNeeded = false;
-                        }
-                    }
+            if (atask.execution.task.name === "clean-cge-game-task") {
+                this._castleConfig.recompilationNeeded = true;
+            } else
+            if (atask.execution.task.name === "compile-and-run-cge-game-task") {
+                console.log("Compilation and run success");
+                this._castleConfig.recompilationNeeded = false;
+            }
         });
     }
 
     /**
      * Creates source files (pas,pp,inc,dpr,lpr) file watcher
-     * @param {vscode.ExtensionContext} context plugin context
      */
-    createPascalSourceFilesWatcher(context) {
+    createPascalSourceFilesWatcher(context: vscode.ExtensionContext): void
+    {
         this._vsFileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.{pas,pp,inc,dpr,lpr}');
 
         this._vsFileSystemWatcher.onDidChange((/*uri*/ /* unused */) => {
@@ -80,9 +75,9 @@ export class CastleFileWatcher {
 
     /**
      * Creates manifest file watcher
-     * @param {vscode.ExtensionContext} context
      */
-    createManifestFileWatcher(context) {
+    createManifestFileWatcher(context: vscode.ExtensionContext): void
+    {
         let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
         const filePath = path.join(bestWorkspaceFolder.uri.fsPath, 'CastleEngineManifest.xml');
         this._vsManifestFileWatcher = vscode.workspace.createFileSystemWatcher(filePath);

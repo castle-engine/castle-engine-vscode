@@ -3,11 +3,12 @@ import * as path from 'path';
 import * as castlePath from './castlePath';
 import { CastleConfiguration } from './castleConfiguration';
 
-export class CastleTaskProvider
+export class CastleTaskProvider implements vscode.TaskProvider
 {
     private _castleConfig: CastleConfiguration;
     private _compileTask: vscode.Task;
-    private _runTask: vscode.Task;
+    private _onlyRunTask: vscode.Task;
+    private _compileAndRunTask: vscode.Task;
     private _cleanTask: vscode.Task;
 
     /**
@@ -19,7 +20,7 @@ export class CastleTaskProvider
     }
 
     /* Return ShellExecutionOptions for all build tasks. */
-    buildShellExecutionOptions()
+    private buildShellExecutionOptions(): vscode.ShellExecutionOptions
     {
         let overrideEnv = {
         };
@@ -56,7 +57,7 @@ export class CastleTaskProvider
     }
 
     /* Create vscode.ShellExecution for compile task. */
-    executionCompile()
+    private executionCompile(): vscode.ShellExecution
     {
         return new vscode.ShellExecution(
             this._castleConfig.buildToolPath,
@@ -65,21 +66,29 @@ export class CastleTaskProvider
         );
     }
 
-    /* Create vscode.ShellExecution for "compile and run" task.
-    * @param {boolean} recompilationNeeded - if true, we will execute compile-run, otherwise just run.
-    */
-    executionRun(recompilationNeeded)
+    /* Create vscode.ShellExecution for "run" task.
+     */
+    private executionOnlyRun(): vscode.ShellExecution
     {
-        let command = recompilationNeeded ? 'compile-run' : 'run';
         return new vscode.ShellExecution(
             this._castleConfig.buildToolPath,
-            [command, '--mode=' + this._castleConfig.buildMode.buildTool],
+            ['run', '--mode=' + this._castleConfig.buildMode.buildTool],
+            this.buildShellExecutionOptions()
+        );
+    }
+
+    /* Create vscode.ShellExecution for "compile and run" task. */
+    private executionCompileAndRun(): vscode.ShellExecution
+    {
+        return new vscode.ShellExecution(
+            this._castleConfig.buildToolPath,
+            ['compile-run', '--mode=' + this._castleConfig.buildMode.buildTool],
             this.buildShellExecutionOptions()
         );
     }
 
     /* Create vscode.ShellExecution for clean task. */
-    executionClean()
+    private executionClean(): vscode.ShellExecution
     {
         return new vscode.ShellExecution(
             this._castleConfig.buildToolPath,
@@ -88,7 +97,8 @@ export class CastleTaskProvider
         );
     }
 
-    createTasks() {
+    private createTasks(): void
+    {
         let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
         try {
             this._compileTask = new vscode.Task(
@@ -101,12 +111,21 @@ export class CastleTaskProvider
             );
             this._compileTask.group = vscode.TaskGroup.Build;
 
-            this._runTask = new vscode.Task(
+            this._onlyRunTask = new vscode.Task(
                 { type: 'cge-tasks' },
                 bestWorkspaceFolder,
-                'run-cge-game-task', // task name
+                'only-run-cge-game-task', // task name
                 'CGE', // prefix for all tasks
-                this.executionRun(true),
+                this.executionOnlyRun(),
+                '$cge-problem-matcher'
+            );
+
+            this._compileAndRunTask = new vscode.Task(
+                { type: 'cge-tasks' },
+                bestWorkspaceFolder,
+                'compile-and-run-cge-game-task', // task name
+                'CGE', // prefix for all tasks
+                this.executionCompileAndRun(),
                 '$cge-problem-matcher'
             );
 
@@ -122,7 +141,6 @@ export class CastleTaskProvider
         }
         catch (err) {
             vscode.window.showErrorMessage(`createTasks - EXCEPTION: ${err}`);
-            return;
         }
     }
 
@@ -130,50 +148,70 @@ export class CastleTaskProvider
      * Updates the tasks to
      * - use proper build mode
      * - proper buildToolPath
-     * - follow recompilationNeeded flag in config
      */
-    updateCastleTasks() {
+    updateCastleTasks(): void
+    {
         this._compileTask.execution = this.executionCompile();
-        this._runTask.execution = this.executionRun(this._castleConfig.recompilationNeeded);
+        this._onlyRunTask.execution = this.executionOnlyRun();
+        this._compileAndRunTask.execution = this.executionCompileAndRun();
         this._cleanTask.execution = this.executionClean();
     }
 
     /**
      * @returns {vscode.Task} compile task
      */
-    get compileTask() {
+    get compileTask(): vscode.Task {
         return this._compileTask;
     }
 
     /**
      * @returns {vscode.Task} run task
      */
-    get runTask() {
-        return this._runTask;
+    get onlyRunTask(): vscode.Task {
+        return this._onlyRunTask;
+    }
+
+    /**
+     * @returns {vscode.Task} compile and run task
+     */
+    get compileAndRunTask(): vscode.Task {
+        return this._compileAndRunTask;
     }
 
     /**
       * @returns {vscode.Task} clean sources task
       */
-    get cleanTask() {
+    get cleanTask(): vscode.Task {
         return this._cleanTask;
     }
 
-    provideTasks() {
+    /* Return either "only run" or "compile and run" task,
+     * depending on whether _castleConfig.recompilationNeeded is true.
+     */
+    public compileIfNecessaryAndRunTask(): vscode.Task {
+        return this._castleConfig.recompilationNeeded ? this._compileAndRunTask : this._onlyRunTask;
+    }
+
+    provideTasks(): vscode.Task[]
+    {
         try {
             if (this._castleConfig.buildToolPath === '') {
                 return [];
             }
             this.updateCastleTasks();
-            return [this._compileTask, this._runTask, this._cleanTask];
+            return [
+                this._compileTask,
+                this.compileIfNecessaryAndRunTask(),
+                this._cleanTask
+            ];
         }
         catch (err) {
             vscode.window.showErrorMessage(`provideTasks - EXCEPTION: ${err}`);
-            return;
+            return [];
         }
     }
 
-    resolveTask(_task) {
+    resolveTask(_task: vscode.Task): vscode.Task | undefined {
         return _task;
     }
 }

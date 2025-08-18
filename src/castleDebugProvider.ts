@@ -1,7 +1,7 @@
 import vscode from 'vscode';
-const castleExec = require('./castleExec.js');
+import * as castleExec from './castleExec';
 import { CastleConfiguration, CastleBuildModes } from './castleConfiguration';
-const castlePath = require('./castlePath.js');
+import * as castlePath from './castlePath';
 
 /**
  * Castle Debug Provider that uses fpDebug to start debug session without
