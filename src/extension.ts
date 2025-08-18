@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 
 import { CastlePlugin } from './castlePlugin';
 
-let castlePlugin;
+let castlePlugin: CastlePlugin;
 
 /**
  * This method is called when your extension is activated. Extension is activated

@@ -1,14 +1,14 @@
-const vscode = require("vscode");
-const fs = require('fs');
-const path = require('path');
+import vscode from 'vscode';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Prepares path that works in option.cwd in exec (it can't have "\" as first character)
  * @param {string} path path to fix
  * @returns {string} path ready to use with option.cwd
  */
-function pathForExecCommandCwd(path) {
-    if (process.platform === 'win32' && path.length > 0 && path[0] == '/' ) {
+export function pathForExecCommandCwd(path) {
+    if (process.platform === 'win32' && path.length > 0 && path[0] === '/' ) {
         return path.substring(1); // remove first \ from path with that exec not working on windows
     }
 
@@ -20,7 +20,7 @@ function pathForExecCommandCwd(path) {
  * @param {vscode.WorkspaceFolder} folder
  * @returns {boolean}
  */
-function folderIsCgeProject(folder) {
+export function folderIsCgeProject(folder) {
     let manifestUri = folder.uri.with({ path: folder.uri.path + "/CastleEngineManifest.xml" });
 
     /* Using fs from Node.js is not advised, but turning this
@@ -43,7 +43,7 @@ function folderIsCgeProject(folder) {
  * Returns WorkspaceFolder that is a CGE project (contains CastleEngineManifest.xml),
  * or undefined if none.
  */
-function bestWorkspaceFolderStrict()
+export function bestWorkspaceFolderStrict()
 {
     for (const workspaceFolder of vscode.workspace.workspaceFolders) {
         if (folderIsCgeProject(workspaceFolder)) {
@@ -68,7 +68,7 @@ function bestWorkspaceFolderStrict()
  * https://github.com/Microsoft/vscode/issues/39132
  * discusses a similar case, but nothing conclusive was implemented as a result of it.
  */
-function bestWorkspaceFolder()
+export function bestWorkspaceFolder()
 {
     // quickly do easy cases
     if (vscode.workspace.workspaceFolders === undefined) {
@@ -95,7 +95,7 @@ function bestWorkspaceFolder()
  * Consistent with Castle Game Engine Pascal CastleUtils.ExeExtension.
  * @returns {string}
  */
-function exeExtension()
+export function exeExtension()
 {
     return process.platform === 'win32' ? '.exe' : '';
 }
@@ -106,7 +106,7 @@ function exeExtension()
  * @param {string} exeBaseName File name to find (without path, without .exe extension).
  * @returns {string} Full path to the file, or empty string if not found.
  */
-function findExe(exeBaseName)
+export function findExe(exeBaseName)
 {
     let pathList = process.env.PATH.split(path.delimiter);
     for (let i = 0; i < pathList.length; i++) {
@@ -118,12 +118,3 @@ function findExe(exeBaseName)
     }
     return '';
 }
-
-module.exports = {
-    pathForExecCommandCwd,
-    folderIsCgeProject,
-    bestWorkspaceFolderStrict,
-    bestWorkspaceFolder,
-    exeExtension,
-    findExe
-};

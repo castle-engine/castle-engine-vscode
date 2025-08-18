@@ -1,10 +1,19 @@
-const vscode = require("vscode");
-const castleConfiguration = require('./castleConfiguration.js');
-const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
-const CastleTaskProvider = require('./castleTaskProvider.js');
-const castlePath = require('./castlePath.js');
+import * as vscode from 'vscode';
+import { CastleConfiguration, CastleBuildModes } from './castleConfiguration';
+import * as castlePath from './castlePath';
 
-class CastleStatusBar {
+export class CastleStatusBar {
+    private _castleConfig;
+    private _context;
+    private _castleLanguageServer;
+    private _castleTaskProvider;
+    private _buildModesButton: vscode.StatusBarItem;
+    private _compileButton: vscode.StatusBarItem;
+    private _runButton: vscode.StatusBarItem;
+    private _debugButton: vscode.StatusBarItem;
+    private _cleanButton: vscode.StatusBarItem;
+    private _openInEditorButton: vscode.StatusBarItem;
+    private _openSettingsButton: vscode.StatusBarItem;
 
     /**
      * Constructor
@@ -35,9 +44,9 @@ class CastleStatusBar {
                 return;
             }
             if (chosenBuildMode === 'Release') {
-                this._castleConfig.buildMode = castleConfiguration.CastleBuildModes.RELEASE;
+                this._castleConfig.buildMode = CastleBuildModes.RELEASE;
             } else {
-                this._castleConfig.buildMode = castleConfiguration.CastleBuildModes.DEBUG;
+                this._castleConfig.buildMode = CastleBuildModes.DEBUG;
             }
             this.updateBuildModesButtonText();
             this._castleTaskProvider.updateCastleTasks();
@@ -150,7 +159,7 @@ class CastleStatusBar {
 
             // when pascalServerPath is valid but pascalServerClient is undefined or null
             // there is problem with pasls config
-            if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined)) {
+            if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient === undefined)) {
                 this._openSettingsButton.show();
             } else {
                 this._openSettingsButton.hide();
@@ -159,4 +168,3 @@ class CastleStatusBar {
     }
 }
 
-module.exports = CastleStatusBar;

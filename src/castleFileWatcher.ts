@@ -8,7 +8,11 @@ const castlePath = require('./castlePath.js');
  * after a source file is created/deleted.modified.
  * After recompilation sets it to false.
  */
-class CastleFileWatcher {
+export class CastleFileWatcher {
+    private _castleConfig;
+    private _castlePlugin;
+    private _vsFileSystemWatcher;
+    private _vsManifestFileWatcher;
 
     /**
     * @param {vscode.ExtensionContext} context
@@ -104,5 +108,3 @@ class CastleFileWatcher {
         context.subscriptions.push(this._vsManifestFileWatcher);
     }
 }
-
-module.exports = CastleFileWatcher;

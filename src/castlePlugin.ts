@@ -1,12 +1,11 @@
 import vscode from 'vscode';
 import { CastleDebugProvider } from './castleDebugProvider';
-
-const CastleFileWatcher = require('./castleFileWatcher.js');
-const castleExec = require('./castleExec.js');
-const CastleTaskProvider = require('./castleTaskProvider.js');
-const castleConfiguration = require('./castleConfiguration.js');
-const CastleStatusBar = require('./castleStatusBar.js');
-const CastlePascalLanguageServer = require('./castlePascalLanguageServer.js');
+import { CastleConfiguration, CastleBuildModes } from './castleConfiguration';
+import { CastleFileWatcher } from './castleFileWatcher';
+import { CastleTaskProvider } from './castleTaskProvider';
+import { CastleStatusBar } from './castleStatusBar';
+import { CastlePascalLanguageServer } from './castlePascalLanguageServer';
+import * as castleExec from './castleExec';
 
 /**
  * Main class of plugin that encapsulates everything and manages the plugin's state.
@@ -76,8 +75,8 @@ export class CastlePlugin
      * In other cases only reloads configuration.
      */
     async updateConfiguration() {
-        if (this._castleConfig == undefined) {
-            this._castleConfig = new castleConfiguration.CastleConfiguration(castleConfiguration.CastleBuildModes.DEBUG);
+        if (this._castleConfig === undefined) {
+            this._castleConfig = new CastleConfiguration(CastleBuildModes.DEBUG);
         }
         await this._castleConfig.findPaths();
         this._castleConfig.updateFpcTargetCpu();
@@ -93,7 +92,7 @@ export class CastlePlugin
      */
     async updateLanguageServer() {
         this._castleConfig.updateDeveloperMode();
-        if (this._castleLanguageServer == undefined) {
+        if (this._castleLanguageServer === undefined) {
             this._castleLanguageServer = new CastlePascalLanguageServer(this._castleConfig);
         }
 
@@ -104,7 +103,7 @@ export class CastlePlugin
             await this._castleLanguageServer.createLanguageClient();
         } else {
             // when configuration changes we should rerun language client
-            if (this._castleLanguageServer != undefined) {
+            if (this._castleLanguageServer !== undefined) {
                 await this._castleLanguageServer.destroyLanguageClient();
             }
         }
@@ -115,7 +114,7 @@ export class CastlePlugin
      * Subsequent launches currently do nothing.
      */
     updateFileWatcher() {
-        if (this._castleFileWatcher == undefined) {
+        if (this._castleFileWatcher === undefined) {
             this._castleFileWatcher = new CastleFileWatcher(this._context, this._castleConfig, this);
         }
     }
@@ -127,7 +126,7 @@ export class CastlePlugin
      */
     updateTaskProvider() {
         if (this._castleConfig.buildToolPath !== '') {
-            if (this._castleTaskProvider == undefined) {
+            if (this._castleTaskProvider === undefined) {
                 this._castleTaskProvider = new CastleTaskProvider(this._castleConfig);
                 let disposable = vscode.tasks.registerTaskProvider('cge-tasks', this._castleTaskProvider);
                 this._context.subscriptions.push(disposable);
@@ -214,7 +213,7 @@ export class CastlePlugin
                     return; // no active editor
                 }
 
-                if (this._referencePanel == undefined) {
+                if (this._referencePanel === undefined) {
                     this._referencePanel = vscode.window.createWebviewPanel('cge_api_reference',
                     'Castle Game Engine Api Reference',
                     vscode.ViewColumn.Beside,
@@ -315,7 +314,7 @@ export class CastlePlugin
                         }
                 }
 
-                if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient == undefined)) {
+                if ((this._castleConfig.pascalServerPath !== '') && (this._castleLanguageServer.pascalServerClient === undefined)) {
                     if (!wasWarning) {
                         vscode.window.showInformationMessage(
                             'Path to engine and pascal language server look correct, but some pasls' +
@@ -337,7 +336,7 @@ export class CastlePlugin
      */
     updateDebugProvider() {
         if (this._castleConfig.buildToolPath !== '') {
-            if (this._castleDebugProvider == undefined) {
+            if (this._castleDebugProvider === undefined) {
                 this._castleDebugProvider = new CastleDebugProvider(this._castleConfig);
 
                 this._disposableDebugConfProvider = vscode.debug.registerDebugConfigurationProvider('castleDebug', this._castleDebugProvider);
@@ -354,7 +353,7 @@ export class CastlePlugin
      * Subsequent runs only updates buttons visibility based on the current configuration state.
      */
     updateStatusBar() {
-        if (this._castleStatusBar == undefined) {
+        if (this._castleStatusBar === undefined) {
             this._castleStatusBar = new CastleStatusBar(this._context, this._castleConfig, this._castleLanguageServer, this._castleTaskProvider);
         }
         this._castleStatusBar.updateButtonsVisibility();

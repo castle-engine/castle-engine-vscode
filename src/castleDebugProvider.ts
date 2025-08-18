@@ -1,6 +1,6 @@
 import vscode from 'vscode';
 const castleExec = require('./castleExec.js');
-const castleConfiguration = require('./castleConfiguration.js');
+import { CastleConfiguration, CastleBuildModes } from './castleConfiguration';
 const castlePath = require('./castlePath.js');
 
 /**
@@ -28,7 +28,9 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
 	async resolveDebugConfiguration(folder, config /*, token*/) {
 		console.log('CastleDebugProvider.resolveDebugConfiguration');
 
-		if ((config.type == undefined) && (config.request == undefined) && (config.name == undefined)) {
+		if ((config.type === undefined) &&
+		    (config.request === undefined) &&
+				(config.name === undefined)) {
 
 			// this._castleConfig.buildToolPath can be changed when
 			// debug configuration provider is created and
@@ -41,7 +43,7 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
 			config.type = 'fpDebug'; // castleDebug is used only as alias for fpDebug
 			config.name = 'Debug CGE Game with fpDebug';
 			config.request = 'launch';
-			let executableName = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output', 'executable-name']);
+			let executableName: string = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output', 'executable-name']);
 			executableName = executableName  + castlePath.exeExtension();
 			config.program = '${workspaceFolder}/' + executableName;
 			config.stopOnEntry = true;
@@ -66,7 +68,7 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
 				});
 			}
 
-			if (this._castleConfig.buildMode === castleConfiguration.CastleBuildModes.RELEASE) {
+			if (this._castleConfig.buildMode === CastleBuildModes.RELEASE) {
 				vscode.window.showWarningMessage('Running debugger in "release" mode. To get better debug information, change the mode to "debug".');
 			}
 
