@@ -1,16 +1,22 @@
-const vscode = require('vscode');
-const fs = require('fs');
-const path = require('path');
+import vscode from 'vscode';
+import fs from 'fs';
+import path from 'path';
+import * as castleExec from './castleExec';
+import * as castlePath from './castlePath';
 
-const castleExec = require('./castleExec.js');
-const castlePath = require('./castlePath.js');
+/*
+export class CastleBuildMode {
+    public name: string = '';
+    public buildTool: string = '';
+}
+*/
 
 /**
  * Constants for build modes.
  * name - for showing in ui
  * buildTool - used as a parameter in our build tool
  */
-const CastleBuildModes = Object.freeze({
+export const CastleBuildModes = Object.freeze({
     DEBUG: { name: "Debug", buildTool: "debug" },
     RELEASE: { name: "Release", buildTool: "release" },
 });
@@ -18,7 +24,21 @@ const CastleBuildModes = Object.freeze({
 /**
  * Our plugin configuration and paths auto-detection.
  */
-class CastleConfiguration {
+export class CastleConfiguration
+{
+    private _buildMode;
+    private _commandId;
+    private _buildToolPath;
+    private _enginePath;
+    private _pascalServerPath;
+    private _fpcExecutablePath;
+    private _fpcSourcesPath;
+    private _fpcTargetCpu: string = '';
+    private _fpcTargetOs: string = '';
+    private _lazarusSourcesPath;
+    private _engineDeveloperMode;
+
+    public recompilationNeeded;
 
     /**
      *
@@ -125,23 +145,38 @@ class CastleConfiguration {
         return this._lazarusSourcesPath;
     }
 
+    /* Current CPU of this process, with name compatible with FPC and CGE tools. */
+    private currentCpu(): string
+    {
+        let result: string = process.arch;
+        // Convert some NodeJS Architecture names to FPC/CGE names
+        if (result === 'x64') {
+            result = 'x86_64';
+        } else
+        if (result === 'arm64') {
+            result = 'aarch64';
+        } else
+        if (result === 'x32') {
+            result = 'i386';
+        }
+        return result;
+    }
+
+    private currentOs(): string
+    {
+        let result: string = process.platform;
+        // Convert some NodeJS Architecture names to FPC/CGE names.
+        // No need for any conversion now actually.
+        return result;
+    }
+
     /**
      * Update this.fpcTargetCpu value.
      * Should be called after the configuration changed.
      */
-    updateFpcTargetCpu() {
-        let defaultValue = process.arch;
-        if (defaultValue === 'x64') {
-            defaultValue = 'x86_64';
-        } else
-        if (defaultValue === 'arm64') {
-            defaultValue = 'aarch64';
-        } else
-        if (defaultValue === 'x32') {
-            defaultValue = 'i386';
-        } else {
-            defaultValue = '';
-        }
+    updateFpcTargetCpu()
+    {
+        let defaultValue: string = this.currentCpu();
         this._fpcTargetCpu = this.getConfOrEnvSettingLang('FPCTARGETCPU', defaultValue);
     }
 
@@ -151,16 +186,7 @@ class CastleConfiguration {
      */
     updateFpcTargetOs()
     {
-        let defaultValue = process.platform;
-        /* To make it easier for users, we treat both 'win32' and 'win64'
-           the same, as just generic 'windows'. The LSP (pasls) then treats
-           OS == 'windows' specially, actually changing to 'win32' or 'win64'
-           depending on CPU.
-           This means that users can specify either win32, or win64,
-           regardless of whether they are on 32 or 64-bit Windows. */
-        if (defaultValue === 'win32' || defaultValue === 'win64') {
-            defaultValue = 'windows';
-        }
+        let defaultValue: string = this.currentOs();
         this._fpcTargetOs = this.getConfOrEnvSettingLang('FPCTARGET', defaultValue);
     }
 
@@ -199,7 +225,7 @@ class CastleConfiguration {
         // we will set it to non-empty later in this function, once we have valid value
         this._enginePath = '';
 
-        let enginePath = vscode.workspace.getConfiguration('castleEngine').get('enginePath');
+        let enginePath: string = vscode.workspace.getConfiguration('castleEngine').get('enginePath');
         console.log(`Engine path from configuration: ${enginePath}`);
 
         if (enginePath.trim() === '') {
@@ -301,7 +327,7 @@ class CastleConfiguration {
      */
     getConfOrEnvSetting(configSection, envVarName, defaultValue) {
         // First check configuration
-        let varValue = vscode.workspace.getConfiguration(configSection).get(envVarName);
+        let varValue: string = vscode.workspace.getConfiguration(configSection).get(envVarName);
 
         if (varValue.trim() === '') {
             // Then check environment variable
@@ -604,5 +630,3 @@ class CastleConfiguration {
         return '';
     }
 }
-
-module.exports = { CastleBuildModes, CastleConfiguration };

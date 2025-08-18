@@ -1,25 +1,27 @@
-// const fs = require('fs'); // unused
-const vscode = require('vscode');
-const vscodelangclient = require('vscode-languageclient');
-const castleConfiguration = require('./castleConfiguration.js');
-const castleExec = require('./castleExec.js');
-const castlePath = require('./castlePath.js');
+import * as vscode from 'vscode';
+import { LanguageClient, LanguageClientOptions } from 'vscode-languageclient/node';
+import { CastleConfiguration } from './castleConfiguration';
+import * as castleExec from './castleExec';
+import * as castlePath from './castlePath';
 
 /**
  * A class for managing the Pascal Language Server
  */
-class CastlePascalLanguageServer {
+export class CastlePascalLanguageServer {
+    private _castleConfig;
+    private _pascalServerClient;
+    private _environmentForPascalServer;
 
     /**
      * @param {castleConfiguration.CastleConfiguration} castleConfig
      */
-    constructor(castleConfig) {
+    constructor(castleConfig: CastleConfiguration) {
         this._castleConfig = castleConfig;
         this._pascalServerClient = null;
     }
 
     /**
-     * @returns {vscodelangclient.LanguageClient|null} LanguageClient or null when not available
+     * @returns {LanguageClient|null} LanguageClient or null when not available
      */
     get pascalServerClient() {
         return this._pascalServerClient;
@@ -31,18 +33,18 @@ class CastlePascalLanguageServer {
      */
     async loadOrDetectSettings()
     {
-        this.environmentForPascalServer = {};
+        this._environmentForPascalServer = {};
 
         if (this._castleConfig.pascalServerPath === '' ||
             this._castleConfig.buildToolPath === '') {
             return false;
         }
 
-        this.environmentForPascalServer['PP'] = this._castleConfig.fpcExecutablePath;
-        this.environmentForPascalServer['FPCDIR'] = this._castleConfig.fpcSourcesPath;
-        this.environmentForPascalServer['LAZARUSDIR'] = this._castleConfig.lazarusSourcesPath;
-        this.environmentForPascalServer['FPCTARGET'] = this._castleConfig.fpcTargetOs;
-        this.environmentForPascalServer['FPCTARGETCPU'] = this._castleConfig.fpcTargetCpu;
+        this._environmentForPascalServer['PP'] = this._castleConfig.fpcExecutablePath;
+        this._environmentForPascalServer['FPCDIR'] = this._castleConfig.fpcSourcesPath;
+        this._environmentForPascalServer['LAZARUSDIR'] = this._castleConfig.lazarusSourcesPath;
+        this._environmentForPascalServer['FPCTARGET'] = this._castleConfig.fpcTargetOs;
+        this._environmentForPascalServer['FPCTARGETCPU'] = this._castleConfig.fpcTargetCpu;
 
         /* pasls cannot work without FPC executable.
            Testcase: without this line, editing settings of PP back and forth
@@ -57,7 +59,7 @@ class CastlePascalLanguageServer {
            VS extension config) to pasls. */
         let enginePath = this._castleConfig.enginePath;
         if (enginePath !== '') {
-            this.environmentForPascalServer['CASTLE_ENGINE_PATH'] = this._castleConfig.enginePath;
+            this._environmentForPascalServer['CASTLE_ENGINE_PATH'] = this._castleConfig.enginePath;
         }
     }
 
@@ -90,7 +92,7 @@ class CastlePascalLanguageServer {
         let run = {
             command: this._castleConfig.pascalServerPath,
             options: {
-                env: this.environmentForPascalServer
+                env: this._environmentForPascalServer
             }
         };
 
@@ -100,7 +102,7 @@ class CastlePascalLanguageServer {
             debug: debug
         };
 
-        let clientOptions = {
+        let clientOptions: LanguageClientOptions = {
             documentSelector: [
                 { scheme: 'file', language: 'pascal' },
                 { scheme: 'untitled', language: 'pascal' }
@@ -114,16 +116,16 @@ class CastlePascalLanguageServer {
 
         let cgeFolder = castlePath.bestWorkspaceFolderStrict();
         if (cgeFolder !== undefined) {
-            initializationOptions.projectSearchPaths = await this.getSearchPathsFromProjectManifest();
+            initializationOptions['projectSearchPaths'] = await this.getSearchPathsFromProjectManifest();
         }
 
-        initializationOptions.engineDevMode = this._castleConfig.engineDeveloperMode;
+        initializationOptions['engineDevMode'] = this._castleConfig.engineDeveloperMode;
 
-        initializationOptions.fpcStandardUnitsPaths = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-standard-units-path']);
-        console.log('FPC standard units paths: ', initializationOptions.fpcStandardUnitsPaths);
+        initializationOptions['fpcStandardUnitsPaths'] = await castleExec.executeFileAndReturnValue(this._castleConfig.buildToolPath, ['output-environment', 'fpc-standard-units-path']);
+        console.log('FPC standard units paths: ', initializationOptions['fpcStandardUnitsPaths']);
 
         clientOptions.initializationOptions = initializationOptions;
-        this._pascalServerClient = new vscodelangclient.LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
+        this._pascalServerClient = new LanguageClient('pascal-language-server', 'Pascal Language Server', serverOptions, clientOptions);
         await this._pascalServerClient.start();
         return true;
     }
@@ -132,7 +134,7 @@ class CastlePascalLanguageServer {
      * Destroys _pascalServerClient. Used when configuration changes.
      */
     async destroyLanguageClient() {
-        if (this._pascalServerClient != undefined) {
+        if (this._pascalServerClient !== undefined) {
             try {
                 await this._pascalServerClient.stop();
 
@@ -143,5 +145,3 @@ class CastlePascalLanguageServer {
         }
     }
 }
-
-module.exports = CastlePascalLanguageServer;

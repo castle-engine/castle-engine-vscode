@@ -1,11 +1,8 @@
-const vscode = require("vscode");
-
-// https://stackoverflow.com/questions/30763496/how-to-promisify-nodes-child-process-exec-and-child-process-execfile-functions
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-const execFile = util.promisify(require('child_process').execFile);
-
-const castlePath = require('./castlePath.js');
+import vscode from 'vscode';
+import util from 'util';
+import { exec, execFile } from 'child_process';
+import * as castlePath from './castlePath';
+import { text } from 'stream/consumers';
 
 /**
  * Executes command and returns stdout as string (empty string on error,
@@ -13,22 +10,24 @@ const castlePath = require('./castlePath.js');
  * @param {string} command command to run
  * @returns {Promise<string>} stdout or empty string on error
  */
-async function executeCommandAndReturnValue(command) {
-	let result = '';
+export async function executeCommandAndReturnValue(command: string)
+{
+	let result: string = '';
 
 	let options = {};
 
 	let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
 	if (bestWorkspaceFolder !== undefined) {
 		console.log("bestWorkspaceFolder:" + bestWorkspaceFolder.uri.path);
-		options.cwd = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
+		options['cwd'] = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
 	}
 
 	try {
 		const { stdout, stderr } = await exec(command, options);
 		console.log('stderr:', stderr);
 
-		result = stdout.trim();
+		result = await text(stdout);
+		result = result.trim();
 		console.log('stdout: ', result);
 		return result;
 
@@ -45,22 +44,24 @@ async function executeCommandAndReturnValue(command) {
  * @param {string[]} args execution arguments
  * @returns {Promise<string>} stdout or empty string on error
  */
-async function executeFileAndReturnValue(executableFile, args) {
-	let result = '';
+export async function executeFileAndReturnValue(executableFile: string, args: string[])
+{
+	let result: string = '';
 
 	let options = {};
 
 	let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
 	if (bestWorkspaceFolder !== undefined) {
 		console.log("bestWorkspaceFolder:" + bestWorkspaceFolder.uri.path);
-		options.cwd = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
+		options['cwd'] = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
 	}
 
 	try {
 		const { stdout, stderr } = await execFile(executableFile, args, options);
 		console.log('stderr:', stderr);
 
-		result = stdout.trim();
+		result = await text(stdout);
+		result = result.trim();
 		console.log('stdout: ', result);
 		return result;
 
@@ -74,13 +75,13 @@ async function executeFileAndReturnValue(executableFile, args) {
  * Executes command, shows error in vscode error message.
  * @param {string} command command to run
  */
-async function executeCommand(command) {
+export async function executeCommand(command) {
 	let options = {};
 
 	let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
 	if (bestWorkspaceFolder !== undefined) {
 		console.log("bestWorkspaceFolder:" + bestWorkspaceFolder.uri.path);
-		options.cwd = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
+		options['cwd'] = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
 	}
 
 	try {
@@ -95,13 +96,13 @@ async function executeCommand(command) {
  * @param {string} executableFile file to execute
  * @param {string[]} args execution arguments
  */
-async function executeFile(executableFile, args) {
+export async function executeFile(executableFile: string, args: string[]) {
 	let options = {};
 
 	let bestWorkspaceFolder = castlePath.bestWorkspaceFolder();
 	if (bestWorkspaceFolder !== undefined) {
 		console.log("bestWorkspaceFolder:" + bestWorkspaceFolder.uri.path);
-		options.cwd = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
+		options['cwd'] = castlePath.pathForExecCommandCwd(bestWorkspaceFolder.uri.path);
 	}
 
 	try {
@@ -111,4 +112,3 @@ async function executeFile(executableFile, args) {
 	}
 }
 
-module.exports = { executeCommandAndReturnValue, executeFileAndReturnValue, executeCommand, executeFile };

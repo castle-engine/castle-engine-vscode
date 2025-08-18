@@ -1,15 +1,19 @@
-const vscode = require("vscode");
-const path = require('path');
+import * as vscode from 'vscode';
+import * as path from 'path';
+import * as castlePath from './castlePath';
+import { CastleConfiguration } from './castleConfiguration';
 
-const castlePath = require('./castlePath.js');
-// const castleConfiguration = require('./castleConfiguration.js'); // unused
-
-class CastleTaskProvider
+export class CastleTaskProvider
 {
+    private _castleConfig: CastleConfiguration;
+    private _compileTask: vscode.Task;
+    private _runTask: vscode.Task;
+    private _cleanTask: vscode.Task;
+
     /**
-     * @param {castleConfiguration.CastleConfiguration} castleConfig
+     * @param {CastleConfiguration} castleConfig
      */
-    constructor(castleConfig) {
+    constructor(castleConfig: CastleConfiguration) {
         this._castleConfig = castleConfig;
         this.createTasks();
     }
@@ -29,7 +33,7 @@ class CastleTaskProvider
           (see https://github.com/castle-engine/castle-engine/blob/25fc71afc3a3686e44d8e162b57d83bef217cd5f/tools/castle-editor/code/editorutils.pas#L435 ).
         */
         if (this._castleConfig.enginePath !== '') {
-            overrideEnv.CASTLE_ENGINE_PATH = this._castleConfig.enginePath;
+            overrideEnv['CASTLE_ENGINE_PATH'] = this._castleConfig.enginePath;
         };
 
         let newPathList = process.env.PATH.split(path.delimiter);
@@ -42,8 +46,8 @@ class CastleTaskProvider
         if (this._castleConfig.lazarusSourcesPath !== '') {
             newPathList.unshift(this._castleConfig.lazarusSourcesPath);
         }
-        overrideEnv.PATH = newPathList.join(path.delimiter);
-        console.log(`Extended execution environment PATH (to add FPC, Lazarus paths): ${overrideEnv.PATH}`);
+        overrideEnv['PATH'] = newPathList.join(path.delimiter);
+        console.log(`Extended execution environment PATH (to add FPC, Lazarus paths): ${overrideEnv['PATH']}`);
 
         let result = { // : vscode.ShellExecutionOptions =
             env: overrideEnv
@@ -173,5 +177,3 @@ class CastleTaskProvider
         return _task;
     }
 }
-
-module.exports = CastleTaskProvider;
