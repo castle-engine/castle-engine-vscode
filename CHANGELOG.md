@@ -13,6 +13,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Underlying extension source code has been converted to TypeScript.
     - This will allow us to extend the extension in the future more easily, as type annotations and other TypeScript features help us catch errors earlier.
     - Please note that it implies rather significant code change. As always [we appreciate if you report any bugs](https://github.com/castle-engine/castle-engine-vscode).
+- Our "debug provider" now works in different, more reliable way.
+    - Click _"Run And Debug"_ in your project.
+    - Choose _"More Debug Castle Game Engine Project options..."_.
+    - Choose _"Debug Castle Game Engine application (`application name`)"_.
 
 ## [1.3.1]
 
