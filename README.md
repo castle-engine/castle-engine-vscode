@@ -32,7 +32,7 @@ We recognize Castle Game Engine (CGE) projects and provide ready commands to:
 - Run.
 - Open CGE editor.
 - Switch build mode (debug / release).
-- Debug. Choose `castleDebug` when asked for debugger type. We use [Free Pascal (FPC) Debugger](https://marketplace.visualstudio.com/items?itemName=CNOC.fpdebug) under the hood. We will automatically rebuild the project if something changed before running the debug session.
+- Debug (use _"Debug Castle Game Engine Project"_ option, see below for more detailed instructions).
 - There is no need to manually write config files like `tasks.json` or `launch.json` to make above working.
 - The most common commands are available on status bar:
    ![Status bar](images/vscode_status_bar.png)
@@ -68,6 +68,29 @@ Other features:
 * Works on Windows, Linux and macOS.
 
     macOS note: debugger on macOS is not yet functional.
+
+## Debugging
+
+Usage:
+
+- Switch to the _"Run And Debug"_ panel.
+
+- Use the _"Run And Debug"_ button (if this button is shown in the panel).
+    - Choose _"More Debug Castle Game Engine Project options..."_.
+    - Choose _"Debug Castle Game Engine application (`application name`)"_.
+
+- Or use the combo box with debugger choices, if that's shown in the panel.
+    - Pick _"Debug Castle Game Engine Project"_ there.
+
+- Open some Pascal file (any unit `.pas` or main program like `.dpr` or `.lpr`) if options above don't show the _"Debug Castle Game Engine Project"_ option.
+
+Under the hood, we use [Free Pascal (FPC) Debugger](https://marketplace.visualstudio.com/itemsitemName=CNOC.fpdebug) for debugging. The available platforms are limited to:
+
+- Windows/i386
+- Windows/x86_64
+- Linux/x86_64
+
+We will automatically rebuild the project if something changed before running the debug session.
 
 ## Other extensions pulled as dependencies
 
