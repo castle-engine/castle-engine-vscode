@@ -18,17 +18,34 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
         this._castleConfig = castleConfig;
     }
 
-    async provideDebugConfigurations(folder: vscode.WorkspaceFolder | undefined /*, token*/)
+    async provideDebugConfigurations(folder: vscode.WorkspaceFolder | undefined, token?: vscode.CancellationToken): Promise<vscode.DebugConfiguration[]>
     {
-        console.log('CastleDebugProvider.provideDebugConfigurations');
         let config = await this.getDebugConfig();
         if (config !== undefined) {
+            //console.log('CastleDebugProvider.provideDebugConfigurations, returning 1 config, debugging is available');
             return [config];
         } else {
+            //console.log('CastleDebugProvider.provideDebugConfigurations, returning 0 configs, debugging is NOT available');
             return undefined;
         }
     }
 
+    async resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, debugConfiguration: vscode.DebugConfiguration, token?: vscode.CancellationToken): Promise<vscode.DebugConfiguration>
+    {
+        //console.log('CastleDebugProvider.resolveDebugConfiguration', debugConfiguration);
+        return debugConfiguration;
+
+        // debug:
+        // to only generate template return null.
+        // Also use vscode.DebugConfigurationProviderTriggerKind.Initial
+        // at registerDebugConfigurationProvider
+        // return null;
+    }
+
+    /**
+     * Return DebugConfiguration representing debugging current application
+     * using fpDebug.
+     */
     private async getDebugConfig(): Promise<vscode.DebugConfiguration>
     {
         let result: vscode.DebugConfiguration = {
@@ -53,6 +70,7 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
             this._castleConfig.buildToolPath, ['output', 'executable-name']);
         executableName = executableName  + castlePath.exeExtension();
         result.program = '${workspaceFolder}/' + executableName;
+        //console.log('resolveDebugConfiguration got program name as ' + result.program);
 
         // workaround fpDebug 0.6 bug with fpdserver executable not set properly
         if (process.platform === 'win32') {

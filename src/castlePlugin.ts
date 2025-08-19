@@ -343,6 +343,10 @@ export class CastlePlugin
                 console.log('registering CGE debug provider');
                 this._disposableDebugConfProvider = vscode.debug.registerDebugConfigurationProvider(
                     'castleDebug', this._castleDebugProvider,
+                    // debug: switch to
+                    // vscode.DebugConfigurationProviderTriggerKind.Initial
+                    // and return null from resolveDebugConfiguration to just
+                    // generate template for launch.json.
                     vscode.DebugConfigurationProviderTriggerKind.Dynamic);
                 this._context.subscriptions.push(this._disposableDebugConfProvider);
             }
