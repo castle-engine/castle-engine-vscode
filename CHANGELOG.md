@@ -13,11 +13,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Underlying extension source code has been converted to TypeScript.
     - This will allow us to extend the extension in the future more easily, as type annotations and other TypeScript features help us catch errors earlier.
     - Please note that it implies rather significant code change. As always [we appreciate if you report any bugs](https://github.com/castle-engine/castle-engine-vscode).
-- Our "debug provider" now works in different, more reliable way.
-    - Click _"Run And Debug"_ in your project.
-    - Choose _"More Debug Castle Game Engine Project options..."_.
-    - Choose _"Debug Castle Game Engine application (`application name`)"_.
-    - See _"Debugging"_ section in README for more details about usage.
+- Our "debug provider" is now registered in a more reliable way. Usage (instructions below are also repeated in the README):
+    - Switch to the _"Run And Debug"_ panel.
+    - Use the _"Run And Debug"_ button (if this button is shown in the panel).
+        - Choose _"More Debug Castle Game Engine Project options..."_.
+        - Choose _"Debug Castle Game Engine application (`application name`)"_.
+    - Or use the combo box with debugger choices, if that's shown in the panel.
+        - Pick _"Debug Castle Game Engine Project"_ there.
+    - Open some Pascal file (any unit `.pas` or main program like `.dpr` or `.lpr`) if options above don't show the _"Debug Castle Game Engine Project"_ option.
 
 ## [1.3.1]
 
