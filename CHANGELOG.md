@@ -17,6 +17,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
     - Click _"Run And Debug"_ in your project.
     - Choose _"More Debug Castle Game Engine Project options..."_.
     - Choose _"Debug Castle Game Engine application (`application name`)"_.
+    - See _"Debugging"_ section in README for more details about usage.
 
 ## [1.3.1]
 
