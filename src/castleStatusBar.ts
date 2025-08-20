@@ -1,12 +1,15 @@
 import * as vscode from 'vscode';
 import { CastleConfiguration, CastleBuildModes } from './castleConfiguration';
+import { CastlePascalLanguageServer } from './castlePascalLanguageServer';
+import { CastleTaskProvider } from './castleTaskProvider';
 import * as castlePath from './castlePath';
 
-export class CastleStatusBar {
-    private _castleConfig;
-    private _context;
-    private _castleLanguageServer;
-    private _castleTaskProvider;
+export class CastleStatusBar
+{
+    private _castleConfig: CastleConfiguration;
+    private _context: vscode.ExtensionContext;
+    private _castleLanguageServer: CastlePascalLanguageServer;
+    private _castleTaskProvider: CastleTaskProvider;
     private _buildModesButton: vscode.StatusBarItem;
     private _compileButton: vscode.StatusBarItem;
     private _runButton: vscode.StatusBarItem;
@@ -17,12 +20,9 @@ export class CastleStatusBar {
 
     /**
      * Constructor
-     * @param {vscode.ExtensionContext} context
-     * @param {castleConfiguration.CastleConfiguration} castleConfig
-     * @param {castleLanguageServer.castleLanguageServer} castleLanguageServer
-     * @param {CastleTaskProvider.castleTaskProvider} castleTaskProvider
      */
-    constructor(context, castleConfig, castleLanguageServer, castleTaskProvider) {
+    constructor(context: vscode.ExtensionContext, castleConfig: CastleConfiguration, castleLanguageServer: CastlePascalLanguageServer, castleTaskProvider: CastleTaskProvider)
+    {
         this._castleConfig = castleConfig;
         this._context = context;
         this._castleLanguageServer = castleLanguageServer;
@@ -37,7 +37,8 @@ export class CastleStatusBar {
         this.updateButtonsVisibility();
     }
 
-    createBuildModeSwitch() {
+    private createBuildModeSwitch(): void
+    {
         let command = vscode.commands.registerCommand(this._castleConfig.commandId.showBuildModes, async () => {
             const chosenBuildMode = await vscode.window.showQuickPick(['Debug', 'Release'], { placeHolder: 'Select build type' });
             if (!chosenBuildMode === undefined) {
@@ -61,11 +62,13 @@ export class CastleStatusBar {
         this._buildModesButton.tooltip = 'Click to select build mode (debug or release)';
     }
 
-    updateBuildModesButtonText() {
+    private updateBuildModesButtonText(): void
+    {
         this._buildModesButton.text = 'CGE: [' + this._castleConfig.buildMode.name + ']';
     }
 
-    createCompileButton() {
+    private createCompileButton(): void
+    {
         this._compileButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 19);
         this._context.subscriptions.push(this._compileButton);
         this._compileButton.command = this._castleConfig.commandId.compile;
@@ -74,7 +77,8 @@ export class CastleStatusBar {
         this._compileButton.show();
     }
 
-    createDebugButton() {
+    private createDebugButton(): void
+    {
         this._debugButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._runButton);
         this._debugButton.command = this._castleConfig.commandId.debug;
@@ -83,7 +87,8 @@ export class CastleStatusBar {
         this._debugButton.show();
     }
 
-    createRunButton() {
+    private createRunButton(): void
+    {
         this._runButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._runButton);
         this._runButton.command = this._castleConfig.commandId.run;
@@ -92,7 +97,8 @@ export class CastleStatusBar {
         this._runButton.show();
     }
 
-    createCleanButton() {
+    private createCleanButton(): void
+    {
         this._cleanButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._cleanButton);
         this._cleanButton.command = this._castleConfig.commandId.clean;
@@ -101,7 +107,8 @@ export class CastleStatusBar {
         this._cleanButton.show();
     }
 
-    createOpenInEditorButton() {
+    private createOpenInEditorButton(): void
+    {
         this._openInEditorButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._openInEditorButton);
         this._openInEditorButton.command = this._castleConfig.commandId.openInCastleEditor;
@@ -110,7 +117,8 @@ export class CastleStatusBar {
         this._openInEditorButton.show();
     }
 
-    createConfigErrorButton() {
+    private createConfigErrorButton(): void
+    {
         this._openSettingsButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 18);
         this._context.subscriptions.push(this._openSettingsButton);
         this._openSettingsButton.command = this._castleConfig.commandId.validateAndOpenSettings;
@@ -120,7 +128,8 @@ export class CastleStatusBar {
         this._openSettingsButton.show();
     }
 
-    updateButtonsVisibility() {
+    private updateButtonsVisibility(): void
+    {
         let cgeFolder = castlePath.bestWorkspaceFolderStrict();
         if (cgeFolder === undefined) {
             /* Not a CGE project, so don't show any status buttons.

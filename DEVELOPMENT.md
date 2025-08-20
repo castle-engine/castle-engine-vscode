@@ -38,7 +38,7 @@ See `scripts` in `package.json`.
 ```
 npm run compile
 npm run lint
-npm run test
+npm run test # actually this already runs 2 commands above, and more
 ```
 
 # Helpful information from the original README.md

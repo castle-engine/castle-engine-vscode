@@ -26,7 +26,7 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
             return [config];
         } else {
             //console.log('CastleDebugProvider.provideDebugConfigurations, returning 0 configs, debugging is NOT available');
-            return undefined;
+            return [];
         }
     }
 
@@ -46,7 +46,7 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
      * Return DebugConfiguration representing debugging current application
      * using fpDebug.
      */
-    private async getDebugConfig(): Promise<vscode.DebugConfiguration>
+    private async getDebugConfig(): Promise<vscode.DebugConfiguration | undefined>
     {
         let result: vscode.DebugConfiguration = {
             type: 'fpDebug', // castleDebug is used only as alias for fpDebug
@@ -62,7 +62,7 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
         // debug configuration provider is created and
         // new configuration can be not valid when buildToolPath === ''
         if (this._castleConfig.buildToolPath === '') {
-            console.log('resolveDebugConfiguration aborted - cannot find build tool');
+            console.log('getDebugConfig aborted - cannot find build tool');
             return undefined; // abort launch
         }
 
@@ -70,11 +70,16 @@ export class CastleDebugProvider implements vscode.DebugConfigurationProvider
             this._castleConfig.buildToolPath, ['output', 'executable-name']);
         executableName = executableName  + castlePath.exeExtension();
         result.program = '${workspaceFolder}/' + executableName;
-        //console.log('resolveDebugConfiguration got program name as ' + result.program);
+        //console.log('getDebugConfig got program name as ' + result.program);
 
         // workaround fpDebug 0.6 bug with fpdserver executable not set properly
         if (process.platform === 'win32') {
-            let fpDebugExtPath = vscode.extensions.getExtension("cnoc.fpdebug").extensionPath;
+            let fpDebugExtension: vscode.Extension<any> | undefined = vscode.extensions.getExtension("cnoc.fpdebug");
+            if (fpDebugExtension === undefined) {
+                console.log('getDebugConfig aborted - fpDebug not installed');
+                return undefined; // abort launch
+            }
+            let fpDebugExtPath = fpDebugExtension.extensionPath;
             if (this._castleConfig.fpcTargetCpu === 'x86_64') {
                 result.fpdserver = { executable: fpDebugExtPath + '\\bin\\fpdserver-x86_64.exe' };
             } else if (this._castleConfig.fpcTargetCpu === 'i386') {
