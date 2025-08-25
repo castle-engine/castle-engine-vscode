@@ -21,11 +21,11 @@
 
 TODO:
 
-- Convert to TypeScript 100%.
+- Finish converting to strict TypeScript 100%.
     - Declare all types explicitly.
     - Use `"strict": true` in `tsconfig.json`
     - Right now we have some leftovers from vanilla JS.
-- Use consistent indentation by 4 spaces. Right now it's a mix of 2 and 4 spaces and tabs.
+- Use consistent indentation by 4 spaces. Right now we have a mix of 2 and 4 spaces and tabs.
 
 ### Notes about JSON files (because comments inside them are in general not allowed...)
 

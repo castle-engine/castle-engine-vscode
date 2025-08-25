@@ -13,6 +13,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Underlying extension source code has been converted to TypeScript.
     - This will allow us to extend the extension in the future more easily, as type annotations and other TypeScript features help us catch errors earlier.
     - Please note that it implies rather significant code change. As always [we appreciate if you report any bugs](https://github.com/castle-engine/castle-engine-vscode).
+
 - Our "debug provider" is now registered in a more reliable way. Usage (instructions below are also repeated in the README):
     - Switch to the _"Run And Debug"_ panel.
     - Use the _"Run And Debug"_ button (if this button is shown in the panel).
