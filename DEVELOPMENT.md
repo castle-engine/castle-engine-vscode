@@ -3,7 +3,7 @@
 ## CGE notes
 
 - Publishing:
-  - Use `vsce`, see [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
+  - Use `vsce`, see [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) (`npm install -g @vscode/vsce`).
   - Update `CHANGELOG.md` with new version number and changes.
   - Comment out `## [Unreleased]` section in `CHANGELOG.md` to `<!-- ## [Unreleased] -->`.
   - Publish using `vsce publish <new-version-number> -m "Publish version %s"`, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.

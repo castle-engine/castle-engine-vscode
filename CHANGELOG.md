@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.4.1]
+
+- Minor update of dependencies.
+- See what happens with [weird message in VS Code](https://forum.castle-engine.io/t/vs-code-extension-no-longer-avaliable/2025/2).
+
 ## [1.4.0]
 
 ### Improved
