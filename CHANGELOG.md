@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.4.2]
+
+- Another minor update of dependencies, use [vsce 3.6.2](https://www.npmjs.com/package/@vscode/vsce).
+
 ## [1.4.1]
 
 - Minor update of dependencies.
