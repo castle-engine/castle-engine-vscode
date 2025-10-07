@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.5.0]
+
+### Fixed
+
+Target OS calculation (used for CodeTools, FPC, build tool) was broken on Windows, now fixed.
+
+- Details: due to mistake, we always used NodeJS `win32` instead of differentiating between 32-bit and 64-bit Windows, which means we should use `win32` for 32-bit Windows and `win64` for 64-bit Windows. CodeTools, FPC, build tool assume you make this differentiation, so use `win32` really only for 32-bit Windows.
+
+- This could result in "jump to declaration" and other CodeTools features not working properly on WindowsV -- as we had invalid OS/CPU combination for CodeTools.
+
 ## [1.4.2]
 
 - Another minor update of dependencies, use [vsce 3.6.2](https://www.npmjs.com/package/@vscode/vsce).

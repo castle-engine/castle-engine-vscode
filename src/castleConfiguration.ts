@@ -166,7 +166,10 @@ export class CastleConfiguration
     {
         let result: string = process.platform;
         // Convert some NodeJS Architecture names to FPC/CGE names.
-        // No need for any conversion now actually.
+        // NodeJS uses win32 for both 32-bit and 64-bit Windows.
+        if (process.arch === 'x64') {
+            result = 'win64';
+        }
         return result;
     }
 
