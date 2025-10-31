@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 <!-- ## [Unreleased] -->
 
+## [1.6.0]
+
+### Improve
+
+- In addition to the [VS Code marketplace](https://marketplace.visualstudio.com/items?itemName=castle-engine-team.castle-engine), we're now also in [OpenVSX marketplace (e.g. for VS Codium)](https://open-vsx.org/extension/castle-engine-team/castle-engine). This means that you can use this extension in [VS Codium](https://vscodium.com/) and other forks of VS Code that don't allow extensions from the VS Code marketplace.
+
+### Fixed
+
+- Regression in previous release caused problems with code completion on non-Windows platforms with `x86_64` CPU. At one place, we mistakenly treated them as `win64`. Fixed now.
+
 ## [1.5.0]
 
 ### Fixed
