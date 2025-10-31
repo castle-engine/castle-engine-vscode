@@ -71,6 +71,8 @@ Other features:
 
 ## Debugging
 
+_Note: This section is exclusive to VS Code, and not to forks using OpenVSX, like VS Codium. Reason: FpDebug is not available on OpenVSX (yet). If you use OpenVSX, you can still setup debugging following [Alternative debuggers like GDB setup](https://castle-engine.io/vscode#_debugging)._
+
 Usage:
 
 - Switch to the _"Run And Debug"_ panel.
@@ -95,7 +97,7 @@ We will automatically rebuild the project if something changed before running th
 ## Other extensions pulled as dependencies
 
 This extension automatically installs two other extensions:
-* [Free Pascal (fpc) Debugger](https://marketplace.visualstudio.com/items?itemName=CNOC.fpdebug) - for Pascal code debugging.
+* [Free Pascal (fpc) Debugger](https://marketplace.visualstudio.com/items?itemName=CNOC.fpdebug) - for Pascal code debugging. (VS Code only, not OpenVSX).
 * [Pascal Magic](https://marketplace.visualstudio.com/items?itemName=theangryepicbanana.language-pascal) - for high-quality Pascal highlighting.
 
 ## Requirements

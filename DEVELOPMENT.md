@@ -3,11 +3,21 @@
 ## CGE notes
 
 - Publishing:
-  - Use `vsce`, see [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) (`npm install -g @vscode/vsce`).
   - Update `CHANGELOG.md` with new version number and changes.
   - Comment out `## [Unreleased]` section in `CHANGELOG.md` to `<!-- ## [Unreleased] -->`.
-  - Publish using `vsce publish <new-version-number> -m "Publish version %s"`, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.
-  - Remember to push tags, `git push --tags`.
+  - For VS Code:
+    - Use `vsce`, see [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) (`npm install -g @vscode/vsce`).
+    - Publish using `vsce publish <new-version-number> -m "Publish version %s"`, this also bumps version number in `package.json`, `package-lock.json`, and makes GIT tag -- this is all good.
+  - For VS Codium (OpenVSX):
+    - Use `npx ovsx`, see [Publishing on OpenVSX](https://github.com/eclipse/openvsx/wiki/Publishing-Extensions).
+    - Note that we have to temporarily remove _fpDebug_ dependency, not yet in OpenVSX.
+    - ```
+      sed --in-place -e 's|"theangryepicbanana.language-pascal",|"theangryepicbanana.language-pascal"|' package.json
+      sed --in-place -e 's|"cnoc.fpdebug"||' package.json
+      npx ovsx publish -p <token>
+      git checkout package.json
+      ```
+  - Push and push tags, `git push --tags && git push`.
 
 - Consult JS API on https://vscode-api.js.org/ .
 
